@@ -28,10 +28,7 @@ The current prototype uses static data and simulated responses. This guide maps 
 6. **Timeline Events** - Real-time event tracking and notifications
    - Files: `components/drawers/TimelineDrawer.tsx`, `lib/store.ts`
 
-7. **LGX Integration** - Handover to LOS system (Encompass)
-   - Files: `components/summary/PackageCards.tsx`, `src/pages/Summary.tsx`
-
-8. **Compliance Automation** - Risk assessment and validation
+7. **Compliance Automation** - Risk assessment and validation
    - Files: `components/summary/PackageCards.tsx`, `src/pages/Summary.tsx`
 
 ## 🛠 Backend Team Implementation Steps
@@ -45,8 +42,7 @@ The current prototype uses static data and simulated responses. This guide maps 
 7. **ask Sweens v2 Integration (Guidelines Chat)** - Integrate AI-powered compliance assistance system
 8. **Loan Record Management** - Implement CRUD operations for loan tracking and status management
 9. **Timeline Events** - Set up real-time event tracking and notification system
-10. **LGX Integration** - Implement handover system that will send completed packages to Encompass
-11. **Compliance Automation** - Automate risk assessment and regulatory compliance validation
+10. **Compliance Automation** - Automate risk assessment and regulatory compliance validation
 
 ## 📊 Data Integration Points
 
