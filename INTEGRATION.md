@@ -539,19 +539,21 @@ Each occurrence needs to be replaced with appropriate API integration.
 
 ## 📋 Production Deployment Checklist
 
+### Demo Workflow Essentials
 - [ ] Replace all `PLACEHOLDER_TEXT` and `data-placeholder` attributes
-- [ ] Implement Neo4j graph database for program matching and eligibility
-- [ ] Set up QuickQuote to Program Eligibility integration
-- [ ] Implement Loan Calculation API integration
-- [ ] Configure Selected Program to Minimum Docs mapping
+- [ ] Configure Neo4j graph database 
+- [ ] Implement Scenario + Pricing + Eligibility workflow
+- [ ] Implement Selected Program to Minimum Docs mapping (Full Loan Review)
 - [ ] Set up AWS S3 for document storage and processing
 - [ ] Implement Rack and Stack document processing pipeline
 - [ ] Integrate ask Sweens v2 for Guidelines Chat functionality
+- [ ] Configure localStorage for form inputs and user preferences
+
+### Additional Prod. Requirements (Tentative)
 - [ ] Implement Loan Record Management CRUD operations
 - [ ] Set up Timeline Events real-time tracking
-- [ ] Configure LGX Integration for Encompass handover
 - [ ] Implement Compliance Automation systems
-- [ ] Configure localStorage for form inputs and user preferences
+- [ ] Configure LGX Integration for Encompass handover
 - [ ] Add proper error handling and user feedback
 - [ ] Set up authentication and authorization
 - [ ] Configure environment variables for different environments
