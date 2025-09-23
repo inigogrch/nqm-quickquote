@@ -548,10 +548,10 @@ Each occurrence needs to be replaced with appropriate API integration.
 - [ ] Implement Rack and Stack document processing pipeline
 - [ ] Integrate ask Sweens v2 for Guidelines Chat functionality
 - [ ] Configure localStorage for form inputs and user preferences
+- [ ] Set up Timeline Events real-time tracking
 
 ### Additional Prod. Requirements (Tentative)
 - [ ] Implement Loan Record Management CRUD operations
-- [ ] Set up Timeline Events real-time tracking
 - [ ] Implement Compliance Automation systems
 - [ ] Configure LGX Integration for Encompass handover
 - [ ] Add proper error handling and user feedback
