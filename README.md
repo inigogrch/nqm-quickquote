@@ -102,7 +102,7 @@ The application will be available at `http://localhost:5173`
 
 ## 📋 User Journey
 
-1. **Dashoard** (`/`) - Overview with active loan records and quick access
+1. **Dashboard** (`/`) - Overview with active loan records and quick access
 2. **Quick Quote** (`/quickquote`) - Enter loan details and borrower information
 3. **Programs** (`/programs`) - View and select from eligible loan programs
 4. **Documents** (`/docs`) - Upload and manage required documentation with enhanced dialog
@@ -217,11 +217,12 @@ Key integration areas:
 ## 📚 Documentation
 
 - `INTEGRATION.md` - Detailed integration requirements and placeholder data mapping
+- `PAGE-MAPPING.md` - Page to UI component mapping for easier replacement
 - `components/` - Individual component documentation in JSDoc format
 - `lib/types.ts` - TypeScript interfaces and data models
 - Component examples available in each UI component file
 
-## 🤝 Contributin
+## 🤝 Contributing
 This is a prototype for demonstration purposes. For production implementation:
 
 1. Replace all placeholder data with real API integrations
@@ -238,7 +239,7 @@ Prototype for internal use. See license terms for production deployent.
 ## 📞 Support
 
 For questions about this prototype or production implementation:
-- Review `INTEGRATION.md` for technical requirements
+- Review `INTEGRATION.md` and `PAGE-MAPPING.md` for demo implementation
 - Check component documentation for implementation details
 - Refer to shadcn/ui documentation for UI component usage
 - Review Zustand documentation for state management patterns
