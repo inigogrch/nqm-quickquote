@@ -34,20 +34,13 @@ export function BreadcrumbHeader({ title, description }: BreadcrumbHeaderProps) 
       breadcrumbs.push(
         { label: 'Quick Quote', path: '/quick-quote' },
         { label: 'Programs', path: '/programs' },
-        { label: 'Documents', path: '/docs' }
-      );
-    } else if (path === '/agents') {
-      breadcrumbs.push(
-        { label: 'Quick Quote', path: '/quick-quote' },
-        { label: 'Programs', path: '/programs' },
-        { label: 'Documents', path: '/docs' },
-        { label: 'Agents', path: '/agents' }
+        { label: 'Submission', path: '/docs' }
       );
     } else if (path === '/summary') {
       breadcrumbs.push(
         { label: 'Quick Quote', path: '/quick-quote' },
         { label: 'Programs', path: '/programs' },
-        { label: 'Documents', path: '/docs' },
+        { label: 'Submission', path: '/docs' },
         { label: 'Agents', path: '/agents' },
         { label: 'Summary', path: '/summary' }
       );
