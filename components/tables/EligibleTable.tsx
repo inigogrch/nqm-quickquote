@@ -5,10 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TrendingUp, FileText, Target } from 'lucide-react';
 import { PLACEHOLDER_PERCENT, PLACEHOLDER_NUMBER } from '@/lib/fixtures';
+import { LoanProgram } from '@/lib/types';
 
 interface EligibleTableProps {
   onSelectProgram: (programId: string) => void;
   isMinimumLane: boolean;
+  programs?: LoanProgram[];
 }
 
 const eligiblePrograms = [
@@ -50,10 +52,71 @@ const eligiblePrograms = [
   }
 ];
 
-export function EligibleTable({ onSelectProgram, isMinimumLane }: EligibleTableProps) {
-  // Adjust confidence based on lane type
-  const adjustedPrograms = eligiblePrograms.map(program => ({
+export function EligibleTable({ onSelectProgram, isMinimumLane, programs = [] }: EligibleTableProps) {
+  // Extract requirements data from API response using contains matching
+  const extractRequirementValue = (requirements: any[], searchTerm: string): string => {
+    if (!requirements || requirements.length === 0) return 'N/A';
+    
+    const requirement = requirements.find(req => 
+      req.requirement && req.requirement.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    if (!requirement) return 'N/A';
+    
+    // Normalize the value formatting
+    const expected = requirement.expected;
+    
+    // Format loan amounts (numbers without $ sign)
+    if (searchTerm.toLowerCase().includes('loan') && typeof expected === 'number') {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(expected);
+    }
+    
+    // Extract numeric values for LTV and FICO
+    if (searchTerm.toLowerCase().includes('ltv')) {
+      // Extract percentage from strings like "Max LTV Purchase: ≤ 75%" or "≤ 75%"
+      const match = expected.toString().match(/(\d+(?:\.\d+)?)%/);
+      return match ? `${match[1]}%` : expected.toString();
+    }
+    
+    if (searchTerm.toLowerCase().includes('fico')) {
+      // Extract number from strings like ">= 700" or "FICO >= 700"
+      const match = expected.toString().match(/(\d+)/);
+      return match ? match[1] : expected.toString();
+    }
+    
+    // Return as-is for other values
+    return expected.toString();
+  };
+
+  // Use API data if available, otherwise fall back to placeholder data
+  const displayPrograms = programs.length > 0 ? programs.map(program => {
+    // Determine rate display based on subprograms
+    let rateDisplay = '-';
+    if (program.rateRange?.hasSubprograms) {
+      if (program.rateRange.min === program.rateRange.max) {
+        rateDisplay = `${program.rateRange.min}%`;
+      } else {
+        rateDisplay = `${program.rateRange.min}% - ${program.rateRange.max}%`;
+      }
+    }
+    
+    return {
+      id: program.id,
+      name: program.name,
+      rateDisplay: rateDisplay,
+      maxLTV: extractRequirementValue(program.passedRequirements, 'ltv'),
+      minFICO: extractRequirementValue(program.passedRequirements, 'fico'),
+      minLoanAmount: extractRequirementValue(program.passedRequirements, 'min loan'),
+      confidence: isMinimumLane ? 75.0 : 85.0
+    };
+  }) : eligiblePrograms.map(program => ({
     ...program,
+    rateDisplay: `${program.rateLow}% - ${program.rateHigh}%`,
     confidence: isMinimumLane ? program.confidence - 10 : program.confidence
   }));
 
@@ -71,25 +134,12 @@ export function EligibleTable({ onSelectProgram, isMinimumLane }: EligibleTableP
             </TableHead>
             <TableHead className="text-center">Max LTV</TableHead>
             <TableHead className="text-center">Min FICO</TableHead>
-            <TableHead className="text-center">Min Reserves</TableHead>
-            <TableHead className="text-center">Est. Points</TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center gap-1">
-                <FileText className="w-4 h-4" />
-                Docs
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center gap-1">
-                <Target className="w-4 h-4" />
-                Confidence
-              </div>
-            </TableHead>
+            <TableHead className="text-center">Min Loan Amount</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {adjustedPrograms.map((program) => (
+          {displayPrograms.map((program) => (
             <TableRow 
               key={program.id}
               className="hover:bg-slate-50/50 transition-colors"
@@ -103,47 +153,21 @@ export function EligibleTable({ onSelectProgram, isMinimumLane }: EligibleTableP
               </TableCell>
               <TableCell className="text-center">
                 <Badge variant="outline" className="bg-brand/5 text-brand border-brand/20" data-placeholder="true">
-                  {program.rateLow}% - {program.rateHigh}%
-                  {/* TODO: replace with live pricing service */}
+                  {program.rateDisplay}
+                  {/* Rate from qualified subprograms or "-" if none */}
                 </Badge>
               </TableCell>
               <TableCell className="text-center" data-placeholder="true">
-                {program.maxLTV}%
-                {/* TODO: replace with live program service */}
+                {program.maxLTV}
+                {/* Max LTV from API (already includes % sign) */}
               </TableCell>
               <TableCell className="text-center" data-placeholder="true">
                 {program.minFICO}
-                {/* TODO: replace with live program service */}
+                {/* Min FICO from API */}
               </TableCell>
               <TableCell className="text-center" data-placeholder="true">
-                {program.minReserves} mo
-                {/* TODO: replace with live program service */}
-              </TableCell>
-              <TableCell className="text-center" data-placeholder="true">
-                {program.points}
-                {/* TODO: replace with live pricing service */}
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge variant="outline" data-placeholder="true">
-                  {program.docsCount}
-                  {/* TODO: replace with live docs service */}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge 
-                  variant="outline" 
-                  className={`${
-                    program.confidence >= 80 
-                      ? 'bg-ok/10 text-ok border-ok/20'
-                      : program.confidence >= 70
-                      ? 'bg-warn/10 text-warn border-warn/20'
-                      : 'bg-slate/10 text-slate-600 border-slate/20'
-                  }`}
-                  data-placeholder="true"
-                >
-                  {program.confidence.toFixed(1)}%
-                  {/* TODO: replace with live confidence service */}
-                </Badge>
+                {program.minLoanAmount}
+                {/* Min loan amount from API - formatted as currency */}
               </TableCell>
               <TableCell>
                 <Button

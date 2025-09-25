@@ -25,7 +25,7 @@ export const PLACEHOLDER_LOAN_DETAILS = {
   propertyValue: PLACEHOLDER_NUMBER,
   creditScore: 750,
   loanToValue: PLACEHOLDER_PERCENT,
-  debtToIncome: 43.2,
+  debtToIncome: 0,
   propertyType: "Single Family Residence",
   occupancyType: "Primary Residence",
   loanPurpose: "Purchase"

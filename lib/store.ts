@@ -44,6 +44,12 @@ interface AppStore extends AppState {
   addChatMessage: (message: AppState['chatMessages'][0]) => void;
   setIsMinimumLane: (isMinimum: boolean) => void;
   
+  // New eligibility API actions
+  setEligibilityApiResponse: (response: any) => void;
+  setLoanPrograms: (programs: AppState['loanPrograms']) => void;
+  setIneligiblePrograms: (programs: AppState['ineligiblePrograms']) => void;
+  setEligibilityRules: (rules: AppState['eligibilityRules']) => void;
+  
   // New package actions
   addToPackage: (doc: PackageDocument) => void;
   removeFromPackage: (docId: string) => void;
@@ -60,14 +66,16 @@ interface AppStore extends AppState {
 const initialState: AppState = {
   currentStep: 'quick_quote',
   loanDetails: PLACEHOLDER_LOAN_DETAILS,
-  eligibilityRules: PLACEHOLDER_RULE_HITS,
+  eligibilityRules: PLACEHOLDER_RULE_HITS as any,
   loanPrograms: PLACEHOLDER_LOAN_PROGRAMS,
+  ineligiblePrograms: [],
+  eligibilityApiResponse: null,
   pricing: PLACEHOLDER_PRICING,
-  documents: PLACEHOLDER_DOCUMENTS,
-  agentSteps: PLACEHOLDER_AGENT_STEPS,
-  timelineEvents: PLACEHOLDER_TIMELINE_EVENTS,
-  loanPackage: PLACEHOLDER_PACKAGE,
-  chatMessages: PLACEHOLDER_CHAT_MESSAGES,
+  documents: PLACEHOLDER_DOCUMENTS as any,
+  agentSteps: PLACEHOLDER_AGENT_STEPS as any,
+  timelineEvents: PLACEHOLDER_TIMELINE_EVENTS as any,
+  loanPackage: PLACEHOLDER_PACKAGE as any,
+  chatMessages: PLACEHOLDER_CHAT_MESSAGES as any,
   isMinimumLane: true
 };
 
@@ -101,6 +109,12 @@ export const useAppStore = create<AppStore>((set, get) => ({
   })),
   
   setIsMinimumLane: (isMinimum) => set({ isMinimumLane: isMinimum }),
+  
+  // Eligibility API actions
+  setEligibilityApiResponse: (response) => set({ eligibilityApiResponse: response }),
+  setLoanPrograms: (programs) => set({ loanPrograms: programs }),
+  setIneligiblePrograms: (programs) => set({ ineligiblePrograms: programs }),
+  setEligibilityRules: (rules) => set({ eligibilityRules: rules }),
   
   // Package management actions
   addToPackage: (doc) => set((state) => ({
