@@ -13,17 +13,19 @@ import { useAppStore } from '../../lib/store';
 export default function Programs() {
   const navigate = useNavigate();
   const [isExplainOpen, setIsExplainOpen] = useState(false);
-  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
+  const [localSelectedProgramId, setLocalSelectedProgramId] = useState<string | null>(null);
   const { 
     loanDetails, 
     isMinimumLane, 
     addLoanRecord, 
     loanPrograms, 
     ineligiblePrograms,
-    eligibilityApiResponse 
+    eligibilityApiResponse,
+    setSelectedProgramId
   } = useAppStore();
 
   const handleSelectProgram = (programId: string) => {
+    // Store the selected program ID in the global store
     setSelectedProgramId(programId);
     
     // Find the selected program from the API data
@@ -114,7 +116,7 @@ export default function Programs() {
         <ExplainDrawer 
           isOpen={isExplainOpen}
           onClose={() => setIsExplainOpen(false)}
-          selectedProgramId={selectedProgramId}
+          selectedProgramId={localSelectedProgramId}
         />
       </div>
     </div>

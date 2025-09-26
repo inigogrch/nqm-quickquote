@@ -35,6 +35,9 @@ interface AppStore extends AppState {
   // New loan records state
   loanRecords: LoanRecord[];
   
+  // Selected program state
+  selectedProgramId: string | null;
+  
   // Actions
   setCurrentStep: (step: AppState['currentStep']) => void;
   setLoanDetails: (details: AppState['loanDetails']) => void;
@@ -60,6 +63,9 @@ interface AppStore extends AppState {
   addLoanRecord: (record: Omit<LoanRecord, 'id' | 'createdAt'>) => void;
   removeLoanRecord: (recordId: string) => void;
   
+  // Selected program actions
+  setSelectedProgramId: (programId: string | null) => void;
+  
   resetState: () => void;
 }
 
@@ -83,6 +89,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   ...initialState,
   packageDocuments: [],
   loanRecords: [],
+  selectedProgramId: null,
 
   setCurrentStep: (step) => set({ currentStep: step }),
   
@@ -151,7 +158,10 @@ export const useAppStore = create<AppStore>((set, get) => ({
     loanRecords: state.loanRecords.filter(record => record.id !== recordId)
   })),
   
-  resetState: () => set({ ...initialState, packageDocuments: [], loanRecords: [] })
+  // Selected program management
+  setSelectedProgramId: (programId) => set({ selectedProgramId: programId }),
+  
+  resetState: () => set({ ...initialState, packageDocuments: [], loanRecords: [], selectedProgramId: null })
 }));
 
 // Progress calculation helpers

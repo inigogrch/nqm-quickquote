@@ -1,6 +1,6 @@
 // API service for Neo4j eligibility engine integration
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://4j492snpn5.execute-api.ap-southeast-1.amazonaws.com/prod';
 
 export interface EligibilityApiResponse {
   status: string;
@@ -63,7 +63,10 @@ function transformLoanDetailsToApiFormat(loanDetails: any) {
     DSCRRatio: 1.0, // Default value since not in form
     PropertyType: loanDetails.propertyType || 'Single Family',
     OccupancyType: loanDetails.occupancyType || 'Primary',
-    LoanPurpose: loanDetails.loanPurpose || 'Purchase'
+    LoanPurpose: loanDetails.loanPurpose || 'Purchase',
+    
+    // Test document status fields for development (case-sensitive)
+
   };
 }
 
@@ -75,7 +78,7 @@ export async function fetchProgramEligibility(loanDetails: any): Promise<Eligibi
     
     console.log('📤 API Payload:', apiPayload);
 
-    const response = await fetch(`${API_BASE_URL}/eligibility`, {
+    const response = await fetch(`${API_BASE_URL}/evaluate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -143,7 +146,8 @@ export function transformApiResponseToFrontend(apiResponse: EligibilityApiRespon
           name: programName,
           rate: rateRange.min, // Keep for backward compatibility
           rateRange: rateRange,
-          type: programName.includes('DSCR') ? 'DSCR' : 'Conventional'
+          type: programName.includes('DSCR') ? 'DSCR' : 'Conventional',
+          originalApiKey: programKey // Store the original API key for document lookup
         };
 
         // Determine eligibility based on failed array length
@@ -213,6 +217,135 @@ export function transformApiResponseToFrontend(apiResponse: EligibilityApiRespon
     ineligible: ineligiblePrograms,
     ruleHits
   };
+}
+
+// Document status extraction and mapping
+export interface DocumentStatus {
+  id: string;
+  name: string;
+  field: string;
+  status: 'pending' | 'uploaded' | 'ai-verified';
+  value: boolean | null;
+}
+
+// Map API document field names to user-friendly names
+const DOCUMENT_FIELD_MAPPING: Record<string, string> = {
+  'Has_Initial_1003': '1003 Application',
+  'Has_Credit_Report': 'Credit Report',
+  'Has_Borrower_Certification_Form': 'Borrower Certification Form',
+  'Has_Most_Recent_Bank_statements': 'Bank Statements',
+  'Has_Title_Fee_Sheet': 'Title Fee Sheet',
+  'Has_Purchase_Agreement': 'Purchase Agreement',
+  'Has_Appraisal': 'Appraisal',
+  'Has_Income_Documentation': 'Income Documentation',
+  'Has_Asset_Documentation': 'Asset Documentation',
+  'Has_Property_Documentation': 'Property Documentation'
+};
+
+// Extract document statuses from API response for a specific program
+export function extractDocumentStatusesForProgram(
+  apiResponse: EligibilityApiResponse,
+  programId: string
+): DocumentStatus[] {
+  const documentStatuses: DocumentStatus[] = [];
+
+  if (!apiResponse.detailed_results?.program_results) {
+    return documentStatuses;
+  }
+
+  // Find the program data - try both the programId and variations
+  const programKeys = Object.keys(apiResponse.detailed_results.program_results);
+  const programKey = programKeys.find(key => {
+    // Generate the same ID transformation we use when creating programs
+    const keyAsId = key.toLowerCase().replace(/\s+/g, '_').replace('_program', '');
+    const keyAsIdVariant = key.replace(' Program', '').toLowerCase().replace(/\s+/g, '_');
+    
+    return (
+      key.toLowerCase().includes(programId.toLowerCase()) ||
+      programId.toLowerCase().includes(key.toLowerCase()) ||
+      keyAsId === programId.toLowerCase() ||
+      keyAsIdVariant === programId.toLowerCase() ||
+      key.replace(/\s+/g, '_').toLowerCase() === programId.toLowerCase()
+    );
+  });
+
+  if (!programKey) {
+    console.warn(`Program not found in API response: ${programId}`);
+    console.warn('Available program keys:', programKeys);
+    console.warn('Attempting to match against:', {
+      programId: programId,
+      programIdLower: programId.toLowerCase(),
+      availableKeys: programKeys.map(k => ({
+        original: k,
+        lower: k.toLowerCase(),
+        normalized: k.replace(/\s+/g, '_').toLowerCase()
+      }))
+    });
+    return documentStatuses;
+  }
+
+  const programData = apiResponse.detailed_results.program_results[programKey];
+
+  // Extract document requirements from passed, failed, and missing arrays
+  const allRequirements = [
+    ...(programData.passed || []),
+    ...(programData.failed || []),
+    ...(programData.missing_fields || [])
+  ];
+
+  // Look for document-related requirements
+  allRequirements.forEach((requirement, index) => {
+    // Check if this requirement is about documents - handle both formats
+    if ('actual' in requirement) {
+      const actualValue = requirement.actual;
+      
+      // Look for Has_* pattern fields that represent document requirements
+      if (typeof actualValue === 'object' && actualValue !== null) {
+        Object.entries(actualValue).forEach(([field, value]) => {
+          if (field.startsWith('Has_') && field in DOCUMENT_FIELD_MAPPING) {
+            const documentName = DOCUMENT_FIELD_MAPPING[field];
+            
+            // Determine status based on value
+            let status: 'pending' | 'uploaded' | 'ai-verified' = 'pending';
+            
+            if (value === true) {
+              status = 'uploaded'; // Document is present
+            } else if (value === false || value === null) {
+              status = 'pending'; // Document is missing or not verified
+            }
+
+            documentStatuses.push({
+              id: `${programId}_${field}`,
+              name: documentName,
+              field: field,
+              status: status,
+              value: value as boolean | null
+            });
+          }
+        });
+      }
+    }
+  });
+
+  return documentStatuses;
+}
+
+// Extract document statuses for all programs
+export function extractDocumentStatusesForAllPrograms(
+  apiResponse: EligibilityApiResponse
+): Record<string, DocumentStatus[]> {
+  const allProgramStatuses: Record<string, DocumentStatus[]> = {};
+
+  if (!apiResponse.detailed_results?.program_results) {
+    return allProgramStatuses;
+  }
+
+  Object.keys(apiResponse.detailed_results.program_results).forEach(programKey => {
+    const programId = programKey.toLowerCase().replace(/\s+/g, '_').replace('_program', '');
+    allProgramStatuses[programId] = extractDocumentStatusesForProgram(apiResponse, programId);
+  });
+
+  return allProgramStatuses;
 }
 
 export async function checkApiHealth(): Promise<boolean> {

@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TrendingUp, FileText, Target } from 'lucide-react';
-import { PLACEHOLDER_PERCENT, PLACEHOLDER_NUMBER } from '@/lib/fixtures';
-import { LoanProgram } from '@/lib/types';
+import { PLACEHOLDER_PERCENT, PLACEHOLDER_NUMBER } from '../../lib/fixtures';
+import { LoanProgram } from '../../lib/types';
 
 interface EligibleTableProps {
   onSelectProgram: (programId: string) => void;

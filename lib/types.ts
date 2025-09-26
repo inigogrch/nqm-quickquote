@@ -32,6 +32,7 @@ export interface LoanProgram {
     hasSubprograms: boolean;
   };
   type: string;
+  originalApiKey?: string; // Store the original API key for document lookup
   failures?: Array<{
     requirement: string;
     message: string;
