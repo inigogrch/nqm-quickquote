@@ -34,8 +34,8 @@ export function Citations({ citations, className = '' }: CitationsProps) {
       </Button>
       
       {isExpanded && (
-        <Card className="mt-2 p-3 bg-slate-50/50 border-slate-200">
-          <div className="space-y-3">
+        <Card className="mt-2 p-3 bg-slate-50/50 border-slate-200 max-w-full">
+          <div className="space-y-3 break-words">
             {/* Guidelines Tree Sources */}
             {citations.guidelines_tree.length > 0 && (
               <div>
@@ -47,16 +47,16 @@ export function Citations({ citations, className = '' }: CitationsProps) {
                 </div>
                 <div className="space-y-2 pl-6">
                   {citations.guidelines_tree.map((citation, index) => (
-                    <div key={`guidelines-${index}`} className="text-xs">
-                      <div className="font-medium text-slate-800 mb-1">
+                    <div key={`guidelines-${index}`} className="text-xs break-words">
+                      <div className="font-medium text-slate-800 mb-1 break-words">
                         {citation.metadata.title}
                       </div>
-                      <div className="text-slate-600 line-clamp-2 mb-1">
+                      <div className="text-slate-600 mb-1 break-words">
                         {citation.content.substring(0, 150)}
                         {citation.content.length > 150 ? '...' : ''}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-xs px-1 py-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant="outline" className="text-xs px-1 py-0 break-all">
                           Node {citation.node_id}
                         </Badge>
                         <Badge variant="outline" className="text-xs px-1 py-0">
@@ -83,12 +83,12 @@ export function Citations({ citations, className = '' }: CitationsProps) {
                 </div>
                 <div className="space-y-2 pl-6">
                   {citations.neo4j_database.map((citation, index) => (
-                    <div key={`neo4j-${index}`} className="text-xs">
-                      <div className="font-medium text-slate-800 mb-1">
+                    <div key={`neo4j-${index}`} className="text-xs break-words">
+                      <div className="font-medium text-slate-800 mb-1 break-words">
                         {citation.metadata.properties.name || citation.node_id}
                       </div>
                       {citation.metadata.properties.value && (
-                        <div className="text-slate-600 mb-1">
+                        <div className="text-slate-600 mb-1 break-words">
                           {citation.metadata.properties.value}
                         </div>
                       )}

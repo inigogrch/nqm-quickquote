@@ -105,16 +105,19 @@ export function useEnhancedRAG(): UseEnhancedRAGReturn {
         include_citations: true
       });
 
+      // Handle nested response structure - the API returns { response: ChatResponseData, stats: ... }
+      const responseData = response.response;
+      
       // Create bot response message
       const botMessage: ExtendedMessage = {
         id: `bot_${Date.now()}`,
         role: 'assistant',
         type: 'bot',
-        content: response.response,
-        message_id: response.message_id,
-        timestamp: response.timestamp,
-        timestamp_display: new Date(response.timestamp),
-        citations: response.citations
+        content: responseData.response,
+        message_id: responseData.message_id,
+        timestamp: responseData.timestamp,
+        timestamp_display: new Date(responseData.timestamp),
+        citations: responseData.citations
       };
 
       // Replace loading message with actual response

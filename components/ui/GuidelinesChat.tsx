@@ -78,7 +78,7 @@ export function GuidelinesChat() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <Card className={`w-96 shadow-xl transition-all duration-300 ${
+      <Card className={`w-96 max-w-[90vw] shadow-xl transition-all duration-300 ${
         isMinimized ? 'h-16' : 'h-[500px]'
       } flex flex-col overflow-hidden`}>
         {/* Header */}
@@ -139,9 +139,9 @@ export function GuidelinesChat() {
                         <Bot className="w-4 h-4 text-white" />
                       </div>
                     )}
-                    <div className="max-w-[75%] flex flex-col">
+                    <div className="max-w-[75%] flex flex-col min-w-0">
                       <div
-                        className={`p-3 rounded-2xl text-sm shadow-sm ${
+                        className={`p-3 rounded-2xl text-sm shadow-sm break-words overflow-wrap-anywhere ${
                           message.type === 'user'
                             ? 'bg-brand text-white rounded-br-md'
                             : `bg-white text-slate-900 border border-slate-200 rounded-bl-md ${
@@ -164,7 +164,9 @@ export function GuidelinesChat() {
                             </Button>
                           </div>
                         )}
-                        {message.content}
+                        <div className="whitespace-pre-wrap break-words">
+                          {message.content}
+                        </div>
                       </div>
                       
                       {/* Citations */}
