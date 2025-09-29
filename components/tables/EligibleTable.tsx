@@ -57,14 +57,33 @@ export function EligibleTable({ onSelectProgram, isMinimumLane, programs = [] }:
   const extractRequirementValue = (requirements: any[], searchTerm: string): string => {
     if (!requirements || requirements.length === 0) return 'N/A';
     
-    const requirement = requirements.find(req => 
-      req.requirement && req.requirement.toLowerCase().includes(searchTerm.toLowerCase())
+    // Debug logging
+    console.log(`Searching for: "${searchTerm}" in requirements:`, requirements);
+    
+    // First, try to find a requirement that contains the exact search term with "Max" prefix
+    // This handles cases like "Max LTV", "Max FICO", "Max Loan", etc.
+    let requirement = requirements.find(req => 
+      req.requirement && req.requirement.toLowerCase().includes(`max ${searchTerm.toLowerCase()}`)
     );
     
-    if (!requirement) return 'N/A';
+    console.log(`Found with "max ${searchTerm.toLowerCase()}":`, requirement);
+    
+    // If not found, fall back to any requirement that contains the search term
+    if (!requirement) {
+      requirement = requirements.find(req => 
+        req.requirement && req.requirement.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      console.log(`Found with "${searchTerm.toLowerCase()}":`, requirement);
+    }
+    
+    if (!requirement) {
+      console.log(`No requirement found for: ${searchTerm}`);
+      return 'N/A';
+    }
     
     // Normalize the value formatting
     const expected = requirement.expected;
+    console.log(`Extracted expected value:`, expected);
     
     // Format loan amounts (numbers without $ sign)
     if (searchTerm.toLowerCase().includes('loan') && typeof expected === 'number') {
@@ -78,9 +97,23 @@ export function EligibleTable({ onSelectProgram, isMinimumLane, programs = [] }:
     
     // Extract numeric values for LTV and FICO
     if (searchTerm.toLowerCase().includes('ltv')) {
-      // Extract percentage from strings like "Max LTV Purchase: ≤ 75%" or "≤ 75%"
-      const match = expected.toString().match(/(\d+(?:\.\d+)?)%/);
-      return match ? `${match[1]}%` : expected.toString();
+      // Extract all percentages from strings like "Max LTV Purchase: ≤ 75%" or "70% NOO/Business Full Doc, Asset Utilization or DSCR; 75% Ful..."
+      const matches = expected.toString().match(/(\d+(?:\.\d+)?)%/g);
+      
+      if (matches && matches.length > 0) {
+        // Extract numeric values and find the highest
+        const percentages = matches.map(match => parseFloat(match.replace('%', '')));
+        const highestPercentage = Math.max(...percentages);
+        const result = `${highestPercentage}%`;
+        console.log(`LTV extraction - found percentages: ${percentages}, using highest: ${result}`);
+        return result;
+      } else {
+        // Fallback to original logic if no percentages found
+        const match = expected.toString().match(/(\d+(?:\.\d+)?)%/);
+        const result = match ? `${match[1]}%` : expected.toString();
+        console.log(`LTV extraction result (fallback):`, result);
+        return result;
+      }
     }
     
     if (searchTerm.toLowerCase().includes('fico')) {
@@ -105,13 +138,25 @@ export function EligibleTable({ onSelectProgram, isMinimumLane, programs = [] }:
       }
     }
     
+    // Debug: Log the entire program object to see its structure
+    console.log(`Program ${program.name} full object:`, program);
+    
+    // Combine passed, failed, and missing requirements to search through all
+    const allRequirements = [
+      ...(program.passedRequirements || []),
+      ...(program.failures || []),
+      ...(program.missing_fields || [])
+    ];
+    
+    console.log(`All requirements for ${program.name}:`, allRequirements);
+
     return {
       id: program.id,
       name: program.name,
       rateDisplay: rateDisplay,
-      maxLTV: extractRequirementValue(program.passedRequirements, 'ltv'),
-      minFICO: extractRequirementValue(program.passedRequirements, 'fico'),
-      minLoanAmount: extractRequirementValue(program.passedRequirements, 'min loan'),
+      maxLTV: extractRequirementValue(allRequirements, 'ltv'),
+      minFICO: extractRequirementValue(allRequirements, 'fico'),
+      minLoanAmount: extractRequirementValue(allRequirements, 'min loan'),
       confidence: isMinimumLane ? 75.0 : 85.0
     };
   }) : eligiblePrograms.map(program => ({
