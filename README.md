@@ -21,12 +21,15 @@ A comprehensive loan origination prototype built with React, TypeScript, and sha
 - **Guidelines Chat** - AI-powered assistance for loan guidelines and compliance with Enhanced RAG API integration
 - **Explain Drawer** - Contextual help and explanations
 - **Modal Dialogs** - Document upload, sharing, and configuration
+- **Eligibility Engine Integration** - Real-time loan program eligibility analysis with API-driven data
 
 ### State Management
 - Zustand-based global state management
 - Persistent loan data across workflow steps
 - Real-time status updates and progress tracking
 - Loan records state with add/remove functionality
+- Eligibility engine state management with API response caching
+- Selected program tracking and program data persistence
 
 ## 🛠 Technology Stack
 
@@ -74,7 +77,8 @@ src/
 │   ├── types.ts          # TypeScript interfaces
 │   ├── fixtures.ts       # Placeholder data
 │   └── api/              # API integration services
-│       └── guidelines-chat.ts    # Enhanced RAG API client
+│       ├── guidelines-chat.ts    # Enhanced RAG API client
+│       └── api.ts               # Eligibility engine API client
 ├── hooks/                # Custom React hooks
 │   └── use-guidelines-chat.tsx   # Guidelines chat state management
 └── assets/               # Static assets
@@ -124,6 +128,28 @@ To enable the Guidelines Chat feature:
    - Quick question buttons for common queries
    - Conversation history and retry functionality
 
+### Eligibility Engine Setup
+To enable the Eligibility Engine integration:
+
+1. **Set up Environment Variables**:
+   ```bash
+   # Add to .env file in project root
+   echo "VITE_ELIGIBILITY_ENGINE_BASE_URL='https://4j492snpn5.execute-api.ap-southeast-1.amazonaws.com/prod'" >> .env
+   ```
+
+2. **API Integration Features**:
+   - Real-time loan program eligibility analysis
+   - Dynamic program data fetching based on loan details
+   - Document status tracking for selected programs
+   - Failed constraint analysis with detailed reasons
+   - Citation support for eligibility decisions
+
+3. **Data Flow**:
+   - Loan details are transformed and sent to eligibility engine
+   - API response is parsed and stored in global state
+   - Eligible and ineligible programs are displayed with detailed information
+   - Document requirements are extracted and displayed per program
+
 ## 📋 User Journey
 
 1. **Dashboard** (`/`) - Overview with active loan records and quick access
@@ -168,10 +194,14 @@ Create a `.env` file in the root directory:
 ```env
 # Guidelines Chat API Configuration
 VITE_ENHANCED_RAG_API_URL=https://3722635q5xu3t2jbays7fx7zwy0unkix.lambda-url.ap-southeast-1.on.aws
+
+# Eligibility Engine API Configuration
+VITE_ELIGIBILITY_ENGINE_BASE_URL='https://4j492snpn5.execute-api.ap-southeast-1.amazonaws.com/prod'
 ```
 
 For production deployment, configure:
 - `VITE_ENHANCED_RAG_API_URL` - Enhanced RAG API endpoint
+- `VITE_ELIGIBILITY_ENGINE_BASE_URL` - Eligibility Engine API endpoint
 - Authentication providers
 - Feature flags  
 - Analytics tracking
@@ -255,6 +285,38 @@ The Guidelines Chat feature now includes full API integration:
 }
 ```
 
+### Eligibility Engine API Integration
+
+The Eligibility Engine provides real-time loan program analysis:
+
+**API Endpoint**: `/eligibility` (POST)
+**Base URL**: Configured via `VITE_ELIGIBILITY_ENGINE_BASE_URL` environment variable
+
+**Request Format**:
+```typescript
+{
+  loan_amount: number,
+  property_value: number,
+  borrower_fico: number,
+  debt_to_income: number,
+  loan_purpose: string,
+  property_type: string,
+  occupancy: string,
+  has_initial_1003: boolean,
+  has_credit_report: boolean
+}
+```
+
+**Response Format**:
+```typescript
+{
+  eligible_programs: LoanProgram[],
+  ineligible_programs: IneligibleProgram[],
+  eligibility_rules: EligibilityRule[],
+  documents: DocumentStatus[]
+}
+```
+
 ### Other Integration Areas
 - Loan calculation engines
 - Document processing services
@@ -265,7 +327,15 @@ The Guidelines Chat feature now includes full API integration:
 
 ## 🆕 Recent Updates
 
-### Guidelines Chat Enhancement (Latest)
+### Eligibility Engine Integration (Latest)
+- **Real-time Program Analysis**: Dynamic loan program eligibility checking with live API integration
+- **Enhanced Program Tables**: Updated EligibleTable and IneligibleTable with API-driven data display
+- **Document Status Tracking**: Real-time document requirements and status tracking per program
+- **Failed Constraint Analysis**: Detailed failure reasons and citations for ineligible programs
+- **Program Selection State**: Persistent selected program tracking across the application
+- **API Response Caching**: Efficient state management for eligibility data and program information
+
+### Guidelines Chat Enhancement
 - **Enhanced RAG API Integration**: Full backend API connectivity with structured response handling
 - **Citation System**: Expandable citations with Guidelines Tree and Neo4j database sources
 - **Improved Text Wrapping**: Fixed overflow issues with proper word wrapping and responsive design
@@ -278,12 +348,17 @@ The Guidelines Chat feature now includes full API integration:
 - **Citation Display**: Rich citation metadata including confidence scores, node IDs, and content previews
 - **Real-time Processing**: Loading indicators and status updates during API calls
 - **Conversation Persistence**: Maintains conversation context across multiple interactions
+- **Eligibility Data Transformation**: Converts API responses to frontend-friendly data structures
+- **Program Requirement Extraction**: Parses and displays loan program requirements and constraints
 
 ### UI/UX Improvements
 - **Responsive Chat Interface**: Adaptive layout that works on all screen sizes
 - **Text Overflow Protection**: Proper word wrapping prevents layout breaks
 - **Expandable Citations**: Toggle-based citation display with detailed source information
 - **Enhanced Error States**: Clear error messaging with retry options
+- **Dynamic Program Display**: Real-time updates to program tables based on API responses
+- **Loading State Management**: Comprehensive loading indicators for API operations
+- **Program Selection Feedback**: Clear visual feedback for selected programs and eligibility status
 
 ### Loan Record Management
 - **Horizontal Card Interface**: Clean, compact display of active loan records
