@@ -153,17 +153,14 @@ export function transformApiResponseToFrontend(apiResponse: EligibilityApiRespon
         // Determine eligibility based on failed array length
         // failed.length === 0 = eligible, failed.length > 0 = ineligible
         const failedCount = programData.failed ? programData.failed.length : 0;
-        
-        console.log(`🔍 Processing ${programName}: ${failedCount} failures`, {
-          failed: programData.failed,
-          overall_status: programData.overall_status
-        });
+
         
         if (failedCount === 0) {
           // Add passed requirements to the program object for display in the table
           const programWithDetails = {
             ...program,
-            passedRequirements: programData.passed || []
+            passedRequirements: programData.passed || [],
+            missing_fields: programData.missing_fields || []
           };
           eligiblePrograms.push(programWithDetails);
           console.log(`✅ ${programName} added to eligible (${failedCount} failures)`);
@@ -186,7 +183,8 @@ export function transformApiResponseToFrontend(apiResponse: EligibilityApiRespon
           // Add failure details to the program object for display in the table
           const programWithFailures = {
             ...program,
-            failures: programData.failed || []
+            failures: programData.failed || [],
+            missing_fields: programData.missing_fields || []
           };
           ineligiblePrograms.push(programWithFailures);
           console.log(`❌ ${programName} added to ineligible (${failedCount} failures)`);

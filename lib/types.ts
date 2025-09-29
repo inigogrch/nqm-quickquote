@@ -45,6 +45,13 @@ export interface LoanProgram {
     actual: string;
     expected: string;
   }>;
+  missing_fields?: Array<{
+    field: string;
+    requirement: string;
+    message: string;
+    actual?: string;
+    expected?: string;
+  }>;
 }
 
 export interface PricingData {
