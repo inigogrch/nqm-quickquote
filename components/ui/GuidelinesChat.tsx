@@ -6,67 +6,54 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import { Citations } from './citations';
 import { useAppStore } from '../../lib/store';
-import { PLACEHOLDER_TEXT } from '../../lib/fixtures';
-import { MessageCircle, Send, Bot, User, X, Minimize2, Maximize2 } from 'lucide-react';
-
-interface Message {
-  id: string;
-  type: 'user' | 'bot';
-  content: string;
-  timestamp: Date;
-}
+import { useEnhancedRAG } from '../../src/hooks/use-guidelines-chat';
+import { MessageCircle, Send, Bot, User, X, Minimize2, Maximize2, AlertCircle, RotateCcw } from 'lucide-react';
 
 export function GuidelinesChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      type: 'bot',
-      content: 'Hi! I can help you with loan guidelines, program requirements, and compliance questions. What would you like to know?',
-      timestamp: new Date()
-    }
-  ]);
   const [inputValue, setInputValue] = useState('');
   const { addTimelineEvent } = useAppStore();
+  
+  // Use Enhanced RAG hook
+  const { 
+    messages, 
+    isLoading, 
+    error, 
+    conversationId,
+    sendMessage, 
+    clearMessages,
+    retryLastMessage 
+  } = useEnhancedRAG();
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return;
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || isLoading) return;
 
-    const userMessage: Message = {
-      id: `user_${Date.now()}`,
-      type: 'user',
-      content: inputValue,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
+    const question = inputValue.trim();
     setInputValue('');
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botMessage: Message = {
-        id: `bot_${Date.now()}`,
-        type: 'bot',
-        content: `${PLACEHOLDER_TEXT} This is a simulated response about: "${inputValue}"`,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botMessage]);
+    try {
+      await sendMessage(question);
 
       // Add timeline event
       addTimelineEvent({
         id: `timeline_${Date.now()}`,
         timestamp: new Date().toISOString(),
         event: 'Guidelines Query',
-        description: `User asked: ${inputValue.substring(0, 50)}...`,
+        description: `User asked: ${question.substring(0, 50)}${question.length > 50 ? '...' : ''}`,
         status: 'completed'
       });
-    }, 1000);
+    } catch (err) {
+      console.error('Failed to send message:', err);
+      // Timeline event for error is handled by the hook
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
@@ -91,7 +78,7 @@ export function GuidelinesChat() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <Card className={`w-96 shadow-xl transition-all duration-300 ${
+      <Card className={`w-96 max-w-[90vw] shadow-xl transition-all duration-300 ${
         isMinimized ? 'h-16' : 'h-[500px]'
       } flex flex-col overflow-hidden`}>
         {/* Header */}
@@ -146,23 +133,45 @@ export function GuidelinesChat() {
                     }`}
                   >
                     {message.type === 'bot' && (
-                      <div className="w-8 h-8 bg-brand rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <div className={`w-8 h-8 bg-brand rounded-full flex items-center justify-center flex-shrink-0 shadow-sm ${
+                        message.isLoading ? 'animate-pulse' : ''
+                      }`}>
                         <Bot className="w-4 h-4 text-white" />
                       </div>
                     )}
-                    <div
-                      className={`max-w-[75%] p-3 rounded-2xl text-sm shadow-sm ${
-                        message.type === 'user'
-                          ? 'bg-brand text-white rounded-br-md'
-                          : 'bg-white text-slate-900 border border-slate-200 rounded-bl-md'
-                      }`}
-                      data-placeholder={message.type === 'bot' ? 'true' : undefined}
-                    >
-                      {message.content}
-                      {message.type === 'bot' && (
-                        <span className="sr-only">
-                          {/* TODO: replace with live guidelines service */}
-                        </span>
+                    <div className="max-w-[75%] flex flex-col min-w-0">
+                      <div
+                        className={`p-3 rounded-2xl text-sm shadow-sm break-words overflow-wrap-anywhere ${
+                          message.type === 'user'
+                            ? 'bg-brand text-white rounded-br-md'
+                            : `bg-white text-slate-900 border border-slate-200 rounded-bl-md ${
+                                message.isLoading ? 'animate-pulse' : ''
+                              } ${message.error ? 'border-red-200 bg-red-50' : ''}`
+                        }`}
+                      >
+                        {message.error && (
+                          <div className="flex items-center gap-2 mb-2 text-red-600">
+                            <AlertCircle className="w-4 h-4" />
+                            <span className="text-xs">Error occurred</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={retryLastMessage}
+                              className="h-5 px-2 text-xs hover:bg-red-100"
+                            >
+                              <RotateCcw className="w-3 h-3 mr-1" />
+                              Retry
+                            </Button>
+                          </div>
+                        )}
+                        <div className="whitespace-pre-wrap break-words">
+                          {message.content}
+                        </div>
+                      </div>
+                      
+                      {/* Citations */}
+                      {message.citations && message.type === 'bot' && !message.isLoading && (
+                        <Citations citations={message.citations} />
                       )}
                     </div>
                     {message.type === 'user' && (
@@ -173,6 +182,26 @@ export function GuidelinesChat() {
                   </div>
                 ))}
               </div>
+
+              {/* Error Banner */}
+              {error && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-red-700">
+                    <AlertCircle className="w-4 h-4" />
+                    <span className="text-sm font-medium">Connection Error</span>
+                  </div>
+                  <p className="text-sm text-red-600 mt-1">{error}</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={retryLastMessage}
+                    className="mt-2 h-7 px-3 text-xs text-red-700 hover:bg-red-100"
+                  >
+                    <RotateCcw className="w-3 h-3 mr-1" />
+                    Try Again
+                  </Button>
+                </div>
+              )}
             </ScrollArea>
 
             {/* Quick Questions */}
@@ -210,19 +239,24 @@ export function GuidelinesChat() {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Ask me anything..."
-                    className="resize-none border-slate-300 focus:border-brand focus:ring-brand/20 rounded-xl"
+                    placeholder={isLoading ? "Processing..." : "Ask me anything..."}
+                    disabled={isLoading}
+                    className="resize-none border-slate-300 focus:border-brand focus:ring-brand/20 rounded-xl disabled:opacity-50"
                     data-testid="chat-input"
                   />
                 </div>
                 <Button
                   onClick={handleSendMessage}
-                  disabled={!inputValue.trim()}
+                  disabled={!inputValue.trim() || isLoading}
                   size="sm"
-                  className="bg-brand hover:bg-brand-600 rounded-xl h-10 w-10 p-0 shadow-sm"
+                  className="bg-brand hover:bg-brand-600 rounded-xl h-10 w-10 p-0 shadow-sm disabled:opacity-50"
                   data-testid="send-message"
                 >
-                  <Send className="w-4 h-4" />
+                  {isLoading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
             </div>
