@@ -42,12 +42,22 @@ export interface ChatMessage {
     include_citations: boolean;
   }
   
-  export interface ChatResponse {
+  export interface ChatResponseData {
     response: string;
     citations: ChatCitations;
     conversation_id: string;
     message_id: string;
     timestamp: string;
+  }
+
+  export interface ChatResponse {
+    response: ChatResponseData;
+    stats: {
+      total_conversations: number;
+      total_messages: number;
+      rag_pipeline_ready: boolean;
+      timestamp: string;
+    };
   }
   
   export class EnhancedRAGAPI {
