@@ -1,6 +1,6 @@
 // API service for Neo4j eligibility engine integration
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://4j492snpn5.execute-api.ap-southeast-1.amazonaws.com/prod';
+const API_BASE_URL = import.meta.env.VITE_ELIGIBILITY_ENGINE_BASE_URL;
 
 export interface EligibilityApiResponse {
   status: string;
