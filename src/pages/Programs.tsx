@@ -13,17 +13,29 @@ import { useAppStore } from '../../lib/store';
 export default function Programs() {
   const navigate = useNavigate();
   const [isExplainOpen, setIsExplainOpen] = useState(false);
-  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
-  const { loanDetails, isMinimumLane, addLoanRecord } = useAppStore();
+  const [localSelectedProgramId, setLocalSelectedProgramId] = useState<string | null>(null);
+  const { 
+    loanDetails, 
+    isMinimumLane, 
+    addLoanRecord, 
+    loanPrograms, 
+    ineligiblePrograms,
+    eligibilityApiResponse,
+    setSelectedProgramId
+  } = useAppStore();
 
   const handleSelectProgram = (programId: string) => {
+    // Store the selected program ID in the global store
     setSelectedProgramId(programId);
+    
+    // Find the selected program from the API data
+    const selectedProgram = loanPrograms.find(program => program.id === programId);
     
     // Add loan record when program is selected
     addLoanRecord({
-      profileName: 'John Smith', // Placeholder name
-      programName: 'Lorem Program A', // Placeholder program name
-      requiredSteps: ['Upload Docs', 'Income Verification', 'Credit Check']
+      profileName: loanDetails?.borrowerName || 'Unknown Borrower',
+      programName: selectedProgram?.name || 'Selected Program',
+      requiredSteps: ['Upload Docs', 'Income Verification', 'Credit Check'] // TODO: Get from API later
     });
     
     navigate('/docs');
@@ -87,6 +99,7 @@ export default function Programs() {
             <EligibleTable 
               onSelectProgram={handleSelectProgram}
               isMinimumLane={isMinimumLane}
+              programs={loanPrograms}
             />
           </Card>
 
@@ -95,7 +108,7 @@ export default function Programs() {
             <h3 className="text-lg font-semibold text-slate-900 mb-6">
               Ineligible Programs
             </h3>
-            <IneligibleTable />
+            <IneligibleTable programs={ineligiblePrograms} />
           </Card>
         </div>
 
@@ -103,7 +116,7 @@ export default function Programs() {
         <ExplainDrawer 
           isOpen={isExplainOpen}
           onClose={() => setIsExplainOpen(false)}
-          selectedProgramId={selectedProgramId}
+          selectedProgramId={localSelectedProgramId}
         />
       </div>
     </div>

@@ -10,6 +10,8 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { PLACEHOLDER_CHECKLIST } from '../../lib/fixtures';
+import { useAppStore } from '../../lib/store';
+import { extractDocumentStatusesForProgram, DocumentStatus } from '../../src/lib/api';
 
 interface Document {
   id: string;
@@ -42,11 +44,14 @@ const getStatusIcon = (status: string) => {
 const getStatusBadge = (status: string) => {
   switch (status) {
     case 'completed':
+    case 'ai-verified':
       return <Badge className="bg-ok text-white">AI-Verified</Badge>;
     case 'in_progress':
+    case 'uploaded':
       return <Badge className="bg-warn text-white">Uploaded</Badge>;
     case 'failed':
       return <Badge className="bg-bad text-white">Needs Attention</Badge>;
+    case 'pending':
     default:
       return <Badge variant="outline">Pending</Badge>;
   }
@@ -249,6 +254,44 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  
+  // Get the selected program and API response from store
+  const { selectedProgramId, eligibilityApiResponse, loanPrograms } = useAppStore();
+  
+  // Generate documents from API response
+  const getDocumentsFromApi = (): Document[] => {
+    if (!selectedProgramId || !eligibilityApiResponse) {
+      // Fallback to placeholder data if no API data available
+      return generateDocuments(showAllCategories);
+    }
+    
+    // Find the selected program to get the original API key
+    const selectedProgram = loanPrograms.find(p => p.id === selectedProgramId);
+    const apiKeyToUse = selectedProgram?.originalApiKey || selectedProgramId;
+    
+    console.log('🔍 Document extraction debug:', {
+      selectedProgramId,
+      selectedProgram: selectedProgram?.name,
+      originalApiKey: selectedProgram?.originalApiKey,
+      apiKeyToUse,
+      hasApiResponse: !!eligibilityApiResponse
+    });
+    
+    const documentStatuses = extractDocumentStatusesForProgram(eligibilityApiResponse, apiKeyToUse);
+    
+    console.log('📄 Extracted document statuses:', documentStatuses);
+    
+    return documentStatuses.map((docStatus, index) => ({
+      id: docStatus.id,
+      name: docStatus.name,
+      type: 'required',
+      status: docStatus.status,
+      category: 'minimum', // For now, treat all API docs as minimum
+      whyRequired: `Required document for ${selectedProgramId} program`,
+      citation: `Program requirement for ${docStatus.field}`
+    }));
+  };
+  
   const [notNeededDocs] = useState<Document[]>([
     {
       id: 'not_1',
@@ -261,7 +304,7 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     }
   ]);
 
-  const documents = generateDocuments(showAllCategories);
+  const documents = getDocumentsFromApi();
   const minimumDocs = documents.filter(doc => doc.category === 'minimum');
   const likelyDocs = documents.filter(doc => doc.category === 'likely');
   const additionalDocs = documents.filter(doc => doc.category === 'additional');

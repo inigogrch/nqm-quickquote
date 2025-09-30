@@ -35,6 +35,9 @@ interface AppStore extends AppState {
   // New loan records state
   loanRecords: LoanRecord[];
   
+  // Selected program state
+  selectedProgramId: string | null;
+  
   // Actions
   setCurrentStep: (step: AppState['currentStep']) => void;
   setLoanDetails: (details: AppState['loanDetails']) => void;
@@ -43,6 +46,12 @@ interface AppStore extends AppState {
   addTimelineEvent: (event: AppState['timelineEvents'][0]) => void;
   addChatMessage: (message: AppState['chatMessages'][0]) => void;
   setIsMinimumLane: (isMinimum: boolean) => void;
+  
+  // New eligibility API actions
+  setEligibilityApiResponse: (response: any) => void;
+  setLoanPrograms: (programs: AppState['loanPrograms']) => void;
+  setIneligiblePrograms: (programs: AppState['ineligiblePrograms']) => void;
+  setEligibilityRules: (rules: AppState['eligibilityRules']) => void;
   
   // New package actions
   addToPackage: (doc: PackageDocument) => void;
@@ -54,20 +63,25 @@ interface AppStore extends AppState {
   addLoanRecord: (record: Omit<LoanRecord, 'id' | 'createdAt'>) => void;
   removeLoanRecord: (recordId: string) => void;
   
+  // Selected program actions
+  setSelectedProgramId: (programId: string | null) => void;
+  
   resetState: () => void;
 }
 
 const initialState: AppState = {
   currentStep: 'quick_quote',
   loanDetails: PLACEHOLDER_LOAN_DETAILS,
-  eligibilityRules: PLACEHOLDER_RULE_HITS,
+  eligibilityRules: PLACEHOLDER_RULE_HITS as any,
   loanPrograms: PLACEHOLDER_LOAN_PROGRAMS,
+  ineligiblePrograms: [],
+  eligibilityApiResponse: null,
   pricing: PLACEHOLDER_PRICING,
-  documents: PLACEHOLDER_DOCUMENTS,
-  agentSteps: PLACEHOLDER_AGENT_STEPS,
-  timelineEvents: PLACEHOLDER_TIMELINE_EVENTS,
-  loanPackage: PLACEHOLDER_PACKAGE,
-  chatMessages: PLACEHOLDER_CHAT_MESSAGES,
+  documents: PLACEHOLDER_DOCUMENTS as any,
+  agentSteps: PLACEHOLDER_AGENT_STEPS as any,
+  timelineEvents: PLACEHOLDER_TIMELINE_EVENTS as any,
+  loanPackage: PLACEHOLDER_PACKAGE as any,
+  chatMessages: PLACEHOLDER_CHAT_MESSAGES as any,
   isMinimumLane: true
 };
 
@@ -75,6 +89,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   ...initialState,
   packageDocuments: [],
   loanRecords: [],
+  selectedProgramId: null,
 
   setCurrentStep: (step) => set({ currentStep: step }),
   
@@ -101,6 +116,12 @@ export const useAppStore = create<AppStore>((set, get) => ({
   })),
   
   setIsMinimumLane: (isMinimum) => set({ isMinimumLane: isMinimum }),
+  
+  // Eligibility API actions
+  setEligibilityApiResponse: (response) => set({ eligibilityApiResponse: response }),
+  setLoanPrograms: (programs) => set({ loanPrograms: programs }),
+  setIneligiblePrograms: (programs) => set({ ineligiblePrograms: programs }),
+  setEligibilityRules: (rules) => set({ eligibilityRules: rules }),
   
   // Package management actions
   addToPackage: (doc) => set((state) => ({
@@ -137,7 +158,10 @@ export const useAppStore = create<AppStore>((set, get) => ({
     loanRecords: state.loanRecords.filter(record => record.id !== recordId)
   })),
   
-  resetState: () => set({ ...initialState, packageDocuments: [], loanRecords: [] })
+  // Selected program management
+  setSelectedProgramId: (programId) => set({ selectedProgramId: programId }),
+  
+  resetState: () => set({ ...initialState, packageDocuments: [], loanRecords: [], selectedProgramId: null })
 }));
 
 // Progress calculation helpers

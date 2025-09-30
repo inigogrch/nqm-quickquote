@@ -3,6 +3,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { X, AlertCircle } from 'lucide-react';
+import { LoanProgram } from '@/lib/types';
+
+interface IneligibleTableProps {
+  programs?: LoanProgram[];
+}
 
 const ineligiblePrograms = [
   {
@@ -28,7 +33,41 @@ const ineligiblePrograms = [
   }
 ];
 
-export function IneligibleTable() {
+export function IneligibleTable({ programs = [] }: IneligibleTableProps) {
+  // Use API data if available, otherwise fall back to placeholder data
+  const displayPrograms = programs.length > 0 ? programs.map(program => {
+    if (program.failures && program.failures.length > 0) {
+      // Extract ALL failed requirements (not just the first one)
+      const failedConstraints = program.failures.map(failure => failure.requirement);
+      
+      // Extract all failure messages
+      const failureMessages = program.failures.map(failure => failure.message);
+      
+      // Create a comprehensive citation from all failures
+      const citation = program.failures.map(failure => 
+        `${failure.requirement}: ${failure.expected}`
+      ).join(' | ');
+      
+      return {
+        id: program.id,
+        name: program.name,
+        failedConstraints: failedConstraints, // Array of all failed requirements
+        whyNot: failureMessages,
+        cite: citation
+      };
+    } else {
+      return {
+        id: program.id,
+        name: program.name,
+        failedConstraints: ['Eligibility Requirements'], // Keep as array for consistency
+        whyNot: ['Failed one or more eligibility requirements'],
+        cite: 'Program Guidelines'
+      };
+    }
+  }) : ineligiblePrograms.map(program => ({
+    ...program,
+    failedConstraints: [program.failedConstraint] // Convert single constraint to array
+  }));
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -37,11 +76,10 @@ export function IneligibleTable() {
             <TableHead>Program Name</TableHead>
             <TableHead>Failed Constraint</TableHead>
             <TableHead>Why Not</TableHead>
-            <TableHead>Guideline</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {ineligiblePrograms.map((program) => (
+          {displayPrograms.map((program) => (
             <TableRow 
               key={program.id}
               className="hover:bg-red-50/30 transition-colors"
@@ -57,10 +95,18 @@ export function IneligibleTable() {
                 </div>
               </TableCell>
               <TableCell>
-                <Badge variant="outline" className="bg-bad/10 text-bad border-bad/20" data-placeholder="true">
-                  {program.failedConstraint}
-                  {/* TODO: replace with live eligibility service */}
-                </Badge>
+                <div className="flex flex-wrap gap-1">
+                  {program.failedConstraints.map((constraint, index) => (
+                    <Badge 
+                      key={index}
+                      variant="outline" 
+                      className="bg-bad/10 text-bad border-bad/20" 
+                      data-placeholder="true"
+                    >
+                      {constraint}
+                    </Badge>
+                  ))}
+                </div>
               </TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-1">
@@ -77,12 +123,6 @@ export function IneligibleTable() {
                     </Badge>
                   ))}
                 </div>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className="text-xs" data-placeholder="true">
-                  {program.cite}
-                  {/* TODO: replace with live guidelines service */}
-                </Badge>
               </TableCell>
             </TableRow>
           ))}

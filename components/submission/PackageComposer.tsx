@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GripVertical, Download, Send } from 'lucide-react';
 import { PLACEHOLDER_PROGRAM } from '../../lib/fixtures';
+import { useAppStore } from '../../lib/store';
 
 interface PackageDocument {
   id: string;
@@ -24,6 +25,15 @@ interface PackageComposerProps {
 }
 
 export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: PackageComposerProps) {
+  const { selectedProgramId, loanPrograms } = useAppStore();
+  
+  // Get the selected program name
+  const selectedProgram = selectedProgramId 
+    ? loanPrograms.find(p => p.id === selectedProgramId)
+    : null;
+  
+  const programName = selectedProgram?.name || PLACEHOLDER_PROGRAM;
+  
   const [packageDocs, setPackageDocs] = useState<PackageDocument[]>([
     {
       id: 'min_0',
@@ -98,9 +108,8 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
     <Card className="p-6 h-fit">
       {/* Header */}
       <div className="space-y-4 mb-6">
-        <h3 className="text-lg font-semibold text-slate-900" data-placeholder="true">
-          {PLACEHOLDER_PROGRAM} Package
-          {/* TODO: replace with live program service */}
+        <h3 className="text-lg font-semibold text-slate-900">
+          {programName} Package
         </h3>
         
         {/* Progress Chips */}
