@@ -4,6 +4,8 @@
   "packageManager": "pnpm@8.10.0",
   "scripts": {
     "dev": "vite",
+    "json:dev": "json-server --watch db.json --port 3001",
+    "dev:all": "concurrently -k -n web,api -c blue,magenta \"pnpm dev\" \"pnpm json:dev\"",
     "build": "vite build",
     "lint": "eslint --quiet ./src",
     "preview": "vite preview"
@@ -82,6 +84,8 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
+    "json-server": "^1.0.0-beta.3",
+    "concurrently": "^9.1.2",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",

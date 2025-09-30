@@ -109,6 +109,20 @@ pnpm run lint
 ### Development Server
 The application will be available at `http://localhost:5173`
 
+### Local json-server
+Run a lightweight local API to persist loan details from Quick Quote:
+
+```bash
+pnpm install
+pnpm run dev AND pnpm run json:dev || pnpm dev:all
+# json-server runs at http://localhost:3001 with db.json
+```
+
+Endpoints used by the app:
+
+- POST `/loans` with body `{ createdAt, loanDetails }`
+- GET `/loans`
+
 ### Guidelines Chat Setup
 To enable the Guidelines Chat feature:
 

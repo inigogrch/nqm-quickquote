@@ -1,35 +1,78 @@
-'use client';
+"use client";
 
-import { useNavigate } from 'react-router-dom';
-import { Calculator, Search, Clock, FileText } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { LoanRecordCard } from '../../components/ui/LoanRecordCard';
-import { useAppStore } from '../../lib/store';
-import { PLACEHOLDER_TEXT } from '../../lib/fixtures';
+import { useNavigate } from "react-router-dom";
+import { Calculator, Search, Clock, FileText } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { LoanRecordCard } from "../../components/ui/LoanRecordCard";
+import { LoanDetailsDialog } from "../../components/modals/LoanDetailsDialog";
+import { useAppStore } from "../../lib/store";
+import { PLACEHOLDER_TEXT } from "../../lib/fixtures";
+import { deleteLoanByIdFromLocal, getLoansFromLocal } from "@/lib/local-db";
+import { useEffect, useState } from "react";
+
+interface LoanRecord {
+  id: string;
+  profileName: string;
+  programName: string;
+  requiredSteps: string[];
+  createdAt: string;
+}
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { timelineEvents, loanRecords, removeLoanRecord } = useAppStore();
+  const { timelineEvents, removeLoanRecord } = useAppStore();
+
+  const [localLoanRecords, setLocalLoanRecords] = useState<LoanRecord[]>([]);
+  const [detailsId, setDetailsId] = useState<string | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+
+  const getLocalLoanRecords = async () => {
+    const raw = await getLoansFromLocal();
+    const tempLoanRecords: LoanRecord[] = (raw as any[]).map((r: any) => ({
+      id: String(r.id),
+      profileName: r.profileName ?? "Unknown Borrower",
+      programName: r.programName ?? "Selected Program",
+      requiredSteps: Array.isArray(r.requiredSteps) ? r.requiredSteps : [],
+      createdAt: String(r.createdAt),
+    }));
+    setLocalLoanRecords(tempLoanRecords);
+  };
+
+  useEffect(() => {
+    getLocalLoanRecords();
+  }, []);
 
   const recentEvents = timelineEvents.slice(-3);
 
   const handleQuickQuoteClick = () => {
-    navigate('/quickquote');
+    navigate("/quickquote");
   };
 
   const handleRemoveLoanRecord = (recordId: string) => {
-    removeLoanRecord(recordId);
+    // removeLoanRecord(recordId);
+    setLocalLoanRecords(
+      localLoanRecords.filter((record) => record.id !== recordId)
+    );
+    deleteLoanByIdFromLocal(recordId);
   };
 
   return (
     <div className="space-y-8">
       {/* Loan Records Section */}
-      {loanRecords.length > 0 && (
+      {localLoanRecords.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">Active Loan Records</h2>
+          <h2 className="text-lg font-semibold text-slate-900">
+            Active Loan Records
+          </h2>
           <div className="space-y-3">
-            {loanRecords.map((record) => (
+            {localLoanRecords.map((record) => (
               <LoanRecordCard
                 key={record.id}
                 id={record.id}
@@ -38,6 +81,10 @@ export default function Dashboard() {
                 requiredSteps={record.requiredSteps}
                 createdAt={record.createdAt}
                 onRemove={handleRemoveLoanRecord}
+                onOpenDetails={(id) => {
+                  setDetailsId(id);
+                  setDetailsOpen(true);
+                }}
               />
             ))}
           </div>
@@ -46,7 +93,7 @@ export default function Dashboard() {
 
       {/* Hero Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card 
+        <Card
           className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-brand/5 to-brand/10 border-brand/20"
           onClick={handleQuickQuoteClick}
           data-testid="quick-quote-card"
@@ -58,7 +105,9 @@ export default function Dashboard() {
               </div>
               <div>
                 <CardTitle className="text-xl">Quick Quote</CardTitle>
-                <CardDescription>Get instant loan program eligibility</CardDescription>
+                <CardDescription>
+                  Get instant loan program eligibility
+                </CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -81,7 +130,9 @@ export default function Dashboard() {
               </div>
               <div>
                 <CardTitle className="text-xl">Smart Search</CardTitle>
-                <CardDescription>Advanced loan program discovery</CardDescription>
+                <CardDescription>
+                  Advanced loan program discovery
+                </CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -97,6 +148,12 @@ export default function Dashboard() {
         </Card>
       </div>
 
+      <LoanDetailsDialog
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+        loanId={detailsId}
+      />
+
       {/* Recent Timeline Widget */}
       <Card>
         <CardHeader>
@@ -108,7 +165,11 @@ export default function Dashboard() {
                 <CardDescription>Latest loan processing events</CardDescription>
               </div>
             </div>
-            <Button variant="outline" size="sm" data-testid="view-full-timeline">
+            <Button
+              variant="outline"
+              size="sm"
+              data-testid="view-full-timeline"
+            >
               View All
             </Button>
           </div>
@@ -117,11 +178,19 @@ export default function Dashboard() {
           {recentEvents.length > 0 ? (
             <div className="space-y-4">
               {recentEvents.map((event) => (
-                <div key={event.id} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50/50">
+                <div
+                  key={event.id}
+                  className="flex items-start gap-3 p-3 rounded-lg bg-slate-50/50"
+                >
                   <div className="w-2 h-2 bg-brand rounded-full mt-2 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-slate-900 text-sm">{event.event}</h4>
-                    <p className="text-sm text-slate-600 mt-1" data-placeholder="true">
+                    <h4 className="font-medium text-slate-900 text-sm">
+                      {event.event}
+                    </h4>
+                    <p
+                      className="text-sm text-slate-600 mt-1"
+                      data-placeholder="true"
+                    >
                       {event.description}
                       {/* TODO: replace with live timeline service */}
                     </p>

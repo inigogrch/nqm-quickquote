@@ -1,52 +1,65 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ScenarioChips } from '../../components/ui/ScenarioChips';
-import { EligibleTable } from '../../components/tables/EligibleTable';
-import { IneligibleTable } from '../../components/tables/IneligibleTable';
-import { ExplainDrawer } from '../../components/drawers/ExplainDrawer';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useAppStore } from '../../lib/store';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ScenarioChips } from "../../components/ui/ScenarioChips";
+import { EligibleTable } from "../../components/tables/EligibleTable";
+import { IneligibleTable } from "../../components/tables/IneligibleTable";
+import { ExplainDrawer } from "../../components/drawers/ExplainDrawer";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useAppStore } from "../../lib/store";
+import { saveLoanDetailsToLocal } from "../lib/local-db";
 
 export default function Programs() {
   const navigate = useNavigate();
   const [isExplainOpen, setIsExplainOpen] = useState(false);
-  const [localSelectedProgramId, setLocalSelectedProgramId] = useState<string | null>(null);
-  const { 
-    loanDetails, 
-    isMinimumLane, 
-    addLoanRecord, 
-    loanPrograms, 
+  const [localSelectedProgramId, setLocalSelectedProgramId] = useState<
+    string | null
+  >(null);
+  const {
+    loanDetails,
+    isMinimumLane,
+    addLoanRecord,
+    loanPrograms,
     ineligiblePrograms,
     eligibilityApiResponse,
-    setSelectedProgramId
+    setSelectedProgramId,
   } = useAppStore();
 
-  const handleSelectProgram = (programId: string) => {
+  const handleSelectProgram = async (programId: string) => {
     // Store the selected program ID in the global store
     setSelectedProgramId(programId);
-    
+
     // Find the selected program from the API data
-    const selectedProgram = loanPrograms.find(program => program.id === programId);
-    
+    const selectedProgram = loanPrograms.find(
+      (program) => program.id === programId
+    );
+
     // Add loan record when program is selected
     addLoanRecord({
-      profileName: loanDetails?.borrowerName || 'Unknown Borrower',
-      programName: selectedProgram?.name || 'Selected Program',
-      requiredSteps: ['Upload Docs', 'Income Verification', 'Credit Check'] // TODO: Get from API later
+      profileName: loanDetails?.borrowerName || "Unknown Borrower",
+      programName: selectedProgram?.name || "Selected Program",
+      requiredSteps: ["Upload Docs", "Income Verification", "Credit Check"], // TODO: Get from API later
     });
-    
-    navigate('/docs');
+
+    // Save loan details to local database
+    await saveLoanDetailsToLocal({
+      loanDetails,
+      profileName: loanDetails?.borrowerName || "Unknown Borrower",
+      programName: selectedProgram?.name || "Selected Program",
+      requiredSteps: ["Upload Docs", "Income Verification", "Credit Check"], // TODO: Get from API later});
+    });
+
+    navigate("/docs");
   };
 
   const handleEditScenario = () => {
-    navigate('/quickquote');
+    navigate("/quickquote");
   };
 
   if (!loanDetails) {
-    navigate('/quickquote');
+    navigate("/quickquote");
     return null;
   }
 
@@ -73,7 +86,7 @@ export default function Programs() {
               variant="outline"
               onClick={() => setIsExplainOpen(!isExplainOpen)}
               data-testid="explain-toggle"
-              className={isExplainOpen ? 'bg-brand/10 text-brand' : ''}
+              className={isExplainOpen ? "bg-brand/10 text-brand" : ""}
             >
               Explain
             </Button>
@@ -83,9 +96,11 @@ export default function Programs() {
 
       <div className="flex gap-6">
         {/* Tables */}
-        <div className={`flex-1 space-y-6 transition-all duration-300 ${
-          isExplainOpen ? 'mr-96' : ''
-        }`}>
+        <div
+          className={`flex-1 space-y-6 transition-all duration-300 ${
+            isExplainOpen ? "mr-96" : ""
+          }`}
+        >
           {/* Eligible Programs */}
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
@@ -93,10 +108,10 @@ export default function Programs() {
                 Eligible Programs
               </h3>
               <div className="text-sm text-slate-500">
-                {isMinimumLane ? 'Minimum Lane' : 'Full Lane'} • Ranked by rate
+                {isMinimumLane ? "Minimum Lane" : "Full Lane"} • Ranked by rate
               </div>
             </div>
-            <EligibleTable 
+            <EligibleTable
               onSelectProgram={handleSelectProgram}
               isMinimumLane={isMinimumLane}
               programs={loanPrograms}
@@ -113,7 +128,7 @@ export default function Programs() {
         </div>
 
         {/* Explain Drawer */}
-        <ExplainDrawer 
+        <ExplainDrawer
           isOpen={isExplainOpen}
           onClose={() => setIsExplainOpen(false)}
           selectedProgramId={localSelectedProgramId}

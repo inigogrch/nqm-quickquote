@@ -1,0 +1,28 @@
+{
+  "loans": [
+    {
+      "id": "ewzw7zyck2g",
+      "createdAt": "2025-09-30T13:48:43.632Z",
+      "loanDetails": {
+        "borrowerName": "Lorem Ipsum",
+        "loanAmount": 1234567,
+        "propertyValue": 1234567,
+        "creditScore": 750,
+        "loanToValue": 77.7,
+        "debtToIncome": 0,
+        "propertyType": "Single Family Residence",
+        "occupancyType": "Primary Residence",
+        "loanPurpose": "Purchase",
+        "has_initial_1003": true,
+        "has_credit_report": true
+      },
+      "profileName": "Lorem Ipsum",
+      "programName": "Foreign National",
+      "requiredSteps": [
+        "Upload Docs",
+        "Income Verification",
+        "Credit Check"
+      ]
+    }
+  ]
+}
