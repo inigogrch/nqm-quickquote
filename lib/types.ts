@@ -26,7 +26,32 @@ export interface LoanProgram {
   id: string;
   name: string;
   rate: number;
+  rateRange?: {
+    min: number;
+    max: number;
+    hasSubprograms: boolean;
+  };
   type: string;
+  originalApiKey?: string; // Store the original API key for document lookup
+  failures?: Array<{
+    requirement: string;
+    message: string;
+    actual: string;
+    expected: string;
+  }>;
+  passedRequirements?: Array<{
+    requirement: string;
+    message: string;
+    actual: string;
+    expected: string;
+  }>;
+  missing_fields?: Array<{
+    field: string;
+    requirement: string;
+    message: string;
+    actual?: string;
+    expected?: string;
+  }>;
 }
 
 export interface PricingData {
@@ -89,6 +114,8 @@ export interface AppState {
   loanDetails: LoanDetails | null;
   eligibilityRules: RuleHit[];
   loanPrograms: LoanProgram[];
+  ineligiblePrograms: LoanProgram[];
+  eligibilityApiResponse: any; // Raw API response from eligibility engine
   pricing: PricingData | null;
   documents: Document[];
   agentSteps: AgentStep[];

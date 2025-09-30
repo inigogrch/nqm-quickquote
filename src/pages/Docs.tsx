@@ -19,7 +19,12 @@ export default function Docs() {
   const [uploaderOpen, setUploaderOpen] = useState(false);
   const [explainOpen, setExplainOpen] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
-  const { addTimelineEvent } = useAppStore();
+  const { addTimelineEvent, selectedProgramId, loanPrograms } = useAppStore();
+  
+  // Get the selected program name
+  const selectedProgram = selectedProgramId 
+    ? loanPrograms.find(p => p.id === selectedProgramId)
+    : null;
 
   const handleDocumentClick = (docId: string) => {
     setSelectedDocId(docId);
@@ -88,9 +93,8 @@ export default function Docs() {
           
           {/* Program Chip */}
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="px-3 py-1" data-placeholder="true">
-              Program: {PLACEHOLDER_PROGRAM}
-              {/* TODO: replace with live program service */}
+            <Badge variant="outline" className="px-3 py-1">
+              Program: {selectedProgram?.name || PLACEHOLDER_PROGRAM}
             </Badge>
             <Button
               variant="ghost"
@@ -150,11 +154,11 @@ export default function Docs() {
         documentId={selectedDocId}
       />
       
-      <ExplainDrawer
-        isOpen={explainOpen}
-        onClose={() => setExplainOpen(false)}
-        selectedProgramId="program_1"
-      />
+        <ExplainDrawer
+          isOpen={explainOpen}
+          onClose={() => setExplainOpen(false)}
+          selectedProgramId={selectedProgramId}
+        />
     </div>
   );
 }
