@@ -241,3 +241,151 @@ export const PLACEHOLDER_CHAT_MESSAGES = [
     timestamp: "2024-01-15T10:01:00Z"
   }
 ];
+
+// BSA Data Analysis Details
+export const PLACEHOLDER_BSA_ANALYSIS_DETAILS = [
+  {
+    id: "bsa_001",
+    year: "2023",
+    month: "April",
+    openingBalance: 100000,
+    endingBalance: 100000,
+    grossDeposits: 100000,
+    monthlyNetDeposits: 3.03,
+    totalExclusions: 138160.72,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_002",
+    year: "2023",
+    month: "March",
+    openingBalance: 2755.21,
+    endingBalance: 23488.11,
+    grossDeposits: 255702.21,
+    monthlyNetDeposits: 65043.98,
+    totalExclusions: 190658.23,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  }, 
+  {
+    id: "bsa_003",
+    year: "2023",
+    month: "February",
+    openingBalance: 1029.99,
+    endingBalance: 2755.21,
+    grossDeposits: 135783.12,
+    monthlyNetDeposits: 17415.01,
+    totalExclusions: 118368.11,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_004",
+    year: "2023",
+    month: "January",
+    openingBalance: 46,
+    endingBalance: 1029.99,
+    grossDeposits: 143134.63,
+    monthlyNetDeposits: -20095.63,
+    totalExclusions: 163230.26,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_005",
+    year: "2022",
+    month: "December",
+    openingBalance: 78848.03,
+    endingBalance: 55,
+    grossDeposits: 145413.95,
+    monthlyNetDeposits: 4315.58,
+    totalExclusions: 141098.37,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_006",
+    year: "2022",
+    month: "November",
+    openingBalance: 131886.25,
+    endingBalance: 78848.03,
+    grossDeposits: 459200.11,
+    monthlyNetDeposits: -344838.42,
+    totalExclusions: 804038.53,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_007",
+    year: "2022",
+    month: "October",
+    openingBalance: 21848.83,
+    endingBalance: 131886.25,
+    grossDeposits: 459109.66,
+    monthlyNetDeposits: -233038.60,
+    totalExclusions: 717148.26,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_008",
+    year: "2022",
+    month: "September",
+    openingBalance: 29802.93,
+    endingBalance: 21848.83,
+    grossDeposits: 238361.80,
+    monthlyNetDeposits: -81364.34,
+    totalExclusions: 319726.14,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_009",
+    year: "2022",
+    month: "August",
+    openingBalance: 12677.10,
+    endingBalance: 29802.93,
+    grossDeposits: 148760.52,
+    monthlyNetDeposits: 56760.84,
+    totalExclusions: 91999.68,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_010",
+    year: "2022",
+    month: "July",
+    openingBalance: 50354.38,
+    endingBalance: 12677.10,
+    grossDeposits: 131502.42,
+    monthlyNetDeposits: -2597.44,
+    totalExclusions: 134099.86,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_011",
+    year: "2022",
+    month: "June",
+    openingBalance: 64178.12,
+    endingBalance: 50354.38,
+    grossDeposits: 149165.68,
+    monthlyNetDeposits: 12039.34,
+    totalExclusions: 137126.34,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  },
+  {
+    id: "bsa_012",
+    year: "2022",
+    month: "May",
+    openingBalance: 55921.05,
+    endingBalance: 64178.12,
+    grossDeposits: 154383.65,
+    monthlyNetDeposits: 86795.51,
+    totalExclusions: 67588.14,
+    totalLargeDepositsToBeSourced: 0,
+    nsfs: 0
+  }
+];
