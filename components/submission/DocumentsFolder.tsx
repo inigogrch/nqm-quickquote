@@ -95,8 +95,8 @@ const generateDocuments = (showAll: boolean): Document[] => {
 };
 
 // Document Upload Dialog Component
-const DocumentUploadDialog = ({ document, isOpen, onClose }: { 
-  document: Document; 
+const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: { 
+  selectedDocument: Document; 
   isOpen: boolean; 
   onClose: () => void; 
 }) => {
@@ -146,18 +146,18 @@ const DocumentUploadDialog = ({ document, isOpen, onClose }: {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Upload {document.name}</DialogTitle>
+          <DialogTitle>Upload {selectedDocument.name}</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4">
           {/* Document Info */}
           <div className="p-3 bg-slate-50 rounded-lg">
             <p className="text-sm text-slate-600 mb-1">Document Type:</p>
-            <p className="font-medium">{document.name}</p>
-            {document.whyRequired && (
+            <p className="font-medium">{selectedDocument.name}</p>
+            {selectedDocument.whyRequired && (
               <>
                 <p className="text-sm text-slate-600 mt-2 mb-1">Why Required:</p>
-                <p className="text-sm">{document.whyRequired}</p>
+                <p className="text-sm">{selectedDocument.whyRequired}</p>
               </>
             )}
           </div>
@@ -434,7 +434,7 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
       {/* Upload Dialog */}
       {selectedDocument && (
         <DocumentUploadDialog
-          document={selectedDocument}
+          selectedDocument={selectedDocument}
           isOpen={uploadDialogOpen}
           onClose={() => {
             setUploadDialogOpen(false);
