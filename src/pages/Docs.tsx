@@ -130,17 +130,6 @@ export default function Docs() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Column - Documents Folder */}
         <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-slate-900">Documents Folder</h2>
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => toast.info('AI Verification running...')}
-              className="bg-brand hover:bg-brand-600"
-            >
-              Run AI Verification
-            </Button>
-          </div>
           <DocumentsFolder
             onAddToPackage={handleAddToPackage}
             onDocumentClick={handleDocumentClick}
