@@ -21,7 +21,8 @@ export default function QuickQuote() {
     setEligibilityApiResponse,
     setLoanPrograms,
     setIneligiblePrograms,
-    setEligibilityRules
+    setEligibilityRules,
+    addTimelineEvent
   } = useAppStore();
   const [formData, setFormData] = useState<LoanDetails>(PLACEHOLDER_LOAN_DETAILS);
   const [showImproveAccuracy, setShowImproveAccuracy] = useState(false);
@@ -89,6 +90,15 @@ export default function QuickQuote() {
       // Dismiss loading toast and show success
       toast.dismiss(loadingToast);
       toast.success(`Analysis complete! Found ${transformedData.eligible.length} eligible programs`);
+      
+      // Add timeline event for Loan Scenario Details completion
+      addTimelineEvent({
+        id: `timeline_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        event: 'Loan Scenario Details',
+        description: 'Loan scenario details completed and programs analyzed',
+        status: 'completed'
+      });
       
       // Navigate to programs page - it will now use the API data from store
       navigate('/programs');
