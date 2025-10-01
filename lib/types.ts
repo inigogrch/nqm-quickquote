@@ -66,11 +66,23 @@ export interface Document {
   id: string;
   name: string;
   type: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'uploaded' | 'ai-verified';
   required: boolean;
   category: 'minimum' | 'likely_conditions';
-  uploadedFile?: File;
+  uploadedFiles?: Array<{
+    id: string;
+    originalName: string;
+    fileName: string;
+    fileSize: number;
+    fileType: string;
+    uploadedAt: string;
+    s3Key: string;
+    s3Bucket: string;
+    url?: string;
+  }>;
   aiFindings?: string[];
+  rackStackJobId?: string; // Track the Rack Stack job ID
+  rackStackStatus?: 'queued' | 'running' | 'success' | 'failed';
 }
 
 export interface AgentStep {

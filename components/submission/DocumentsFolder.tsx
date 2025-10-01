@@ -1,17 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X } from 'lucide-react';
+import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { toast } from 'sonner';
 import { PLACEHOLDER_CHECKLIST } from '../../lib/fixtures';
 import { useAppStore } from '../../lib/store';
 import { extractDocumentStatusesForProgram, DocumentStatus } from '../../src/lib/api';
+import { uploadFilesToS3, isS3Configured } from '../../src/lib/api/s3-upload';
+import { triggerRackStackProcessing, isRackStackConfigured } from '../../src/lib/api/rack-stack';
 
 interface Document {
   id: string;
@@ -21,6 +24,18 @@ interface Document {
   category: string;
   whyRequired?: string;
   citation?: string;
+  uploadedFiles?: Array<{
+    id: string;
+    originalName: string;
+    fileName: string;
+    fileSize: number;
+    fileType: string;
+    uploadedAt: string;
+    s3Key: string;
+    s3Bucket: string;
+    url?: string;
+  }>;
+  rackStackJobId?: string;
 }
 
 interface DocumentsFolderProps {
@@ -28,32 +43,39 @@ interface DocumentsFolderProps {
   onDocumentClick: (docId: string) => void;
 }
 
+// Accurate status icons based on actual document state
 const getStatusIcon = (status: string) => {
   switch (status) {
     case 'completed':
-      return <CheckCircle className="w-4 h-4 text-ok" />;
+    case 'ai-verified':
+      return <CheckCircle className="w-5 h-5 text-ok" />;
     case 'in_progress':
-      return <Clock className="w-4 h-4 text-warn animate-spin" />;
+      return <Clock className="w-5 h-5 text-blue-500 animate-spin" />;
+    case 'uploaded':
+      return <AlertCircle className="w-5 h-5 text-warn" />;
     case 'failed':
-      return <AlertCircle className="w-4 h-4 text-bad" />;
+      return <AlertCircle className="w-5 h-5 text-bad" />;
+    case 'pending':
     default:
-      return <FileText className="w-4 h-4 text-slate-400" />;
+      return <FileText className="w-5 h-5 text-slate-400" />;
   }
 };
 
+// Accurate status badges
 const getStatusBadge = (status: string) => {
   switch (status) {
     case 'completed':
     case 'ai-verified':
-      return <Badge className="bg-ok text-white">AI-Verified</Badge>;
+      return <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
     case 'in_progress':
+      return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Processing</Badge>;
     case 'uploaded':
-      return <Badge className="bg-warn text-white">Uploaded</Badge>;
+      return <Badge className="bg-warn text-white hover:bg-warn/90">Uploaded</Badge>;
     case 'failed':
-      return <Badge className="bg-bad text-white">Needs Attention</Badge>;
+      return <Badge className="bg-bad text-white hover:bg-bad/90">Needs Attention</Badge>;
     case 'pending':
     default:
-      return <Badge variant="outline">Pending</Badge>;
+      return <Badge variant="outline" className="text-slate-600">Pending</Badge>;
   }
 };
 
@@ -63,7 +85,7 @@ const generateDocuments = (showAll: boolean): Document[] => {
     id: `min_${index}`,
     name,
     type: 'required',
-    status: index < 2 ? 'completed' : index < 4 ? 'in_progress' : 'pending',
+    status: index < 2 ? 'ai-verified' : index < 4 ? 'uploaded' : 'pending',
     category: 'minimum',
     whyRequired: `Required for loan submission - Guideline ${index + 1}.1`,
     citation: `Section ${index + 1}.1 - Minimum Documentation Requirements`
@@ -73,7 +95,7 @@ const generateDocuments = (showAll: boolean): Document[] => {
     id: `likely_${index}`,
     name,
     type: 'conditional',
-    status: index === 0 ? 'completed' : 'pending',
+    status: index === 0 ? 'ai-verified' : 'pending',
     category: 'likely',
     whyRequired: `May be requested during underwriting - Guideline ${index + 5}.2`,
     citation: `Section ${index + 5}.2 - Conditional Documentation`
@@ -102,6 +124,8 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
 }) => {
   const [dragActive, setDragActive] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const { selectedProgramId, updateDocument, addTimelineEvent } = useAppStore();
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -135,11 +159,73 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleUpload = () => {
-    // Simulate upload process
-    console.log('Uploading files:', uploadedFiles);
-    // Here you would typically send files to your backend
-    onClose();
+  const handleUpload = async () => {
+    if (uploadedFiles.length === 0) {
+      toast.error('Please select files to upload');
+      return;
+    }
+
+    if (!selectedProgramId) {
+      toast.error('No program selected');
+      return;
+    }
+
+    if (!isS3Configured()) {
+      toast.error('S3 not configured. Please set credentials in src/lib/config/credentials.ts');
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      // Update status to in_progress
+      updateDocument(selectedDocument.id, {
+        status: 'in_progress' as any
+      });
+
+      // Upload files to S3
+      const uploadedFileMetadata = await uploadFilesToS3(
+        uploadedFiles,
+        selectedDocument.id,
+        selectedProgramId
+      );
+
+      // Update document with uploaded file metadata and new status
+      updateDocument(selectedDocument.id, {
+        status: 'uploaded' as any,
+        uploadedFiles: [
+          ...(selectedDocument.uploadedFiles || []),
+          ...uploadedFileMetadata
+        ] as any
+      });
+
+      // Add timeline event
+      addTimelineEvent({
+        id: `timeline_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        event: 'Document Uploaded',
+        description: `${uploadedFiles.length} file(s) uploaded for ${selectedDocument.name}`,
+        status: 'completed'
+      });
+
+      toast.success(`Successfully uploaded ${uploadedFiles.length} file(s) to S3`);
+      
+      // Clear the selected files
+      setUploadedFiles([]);
+      
+      // Close the dialog
+      onClose();
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to upload files');
+      
+      // Revert status
+      updateDocument(selectedDocument.id, {
+        status: (selectedDocument.uploadedFiles && selectedDocument.uploadedFiles.length > 0) ? 'uploaded' as any : 'pending' as any
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -161,6 +247,16 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
               </>
             )}
           </div>
+
+          {/* Configuration Warning */}
+          {!isS3Configured() && (
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-sm text-amber-800 font-medium">⚠️ S3 Not Configured</p>
+              <p className="text-xs text-amber-700 mt-1">
+                Please set your S3 credentials in <code className="bg-amber-100 px-1 py-0.5 rounded">src/lib/config/credentials.ts</code>
+              </p>
+            </div>
+          )}
 
           {/* Upload Area */}
           <div
@@ -194,6 +290,7 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
               variant="outline"
               size="sm"
               onClick={() => document.getElementById('file-upload')?.click()}
+              disabled={!isS3Configured()}
             >
               Browse Files
             </Button>
@@ -205,10 +302,10 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
               <h4 className="text-sm font-medium">Selected Files:</h4>
               {uploadedFiles.map((file, index) => (
                 <div key={index} className="flex items-center justify-between p-2 bg-slate-50 rounded">
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-slate-500" />
-                    <span className="text-sm">{file.name}</span>
-                    <span className="text-xs text-slate-500">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <FileText className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                    <span className="text-sm truncate">{file.name}</span>
+                    <span className="text-xs text-slate-500 flex-shrink-0">
                       ({(file.size / 1024 / 1024).toFixed(1)} MB)
                     </span>
                   </div>
@@ -232,16 +329,24 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
               variant="outline"
               onClick={onClose}
               className="flex-1"
+              disabled={isUploading}
             >
               Cancel
             </Button>
             <Button
               type="button"
               onClick={handleUpload}
-              disabled={uploadedFiles.length === 0}
+              disabled={uploadedFiles.length === 0 || isUploading || !isS3Configured()}
               className="flex-1"
             >
-              Upload {uploadedFiles.length > 0 && `(${uploadedFiles.length})`}
+              {isUploading ? (
+                <>
+                  <Clock className="w-3 h-3 mr-2 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>Upload {uploadedFiles.length > 0 && `(${uploadedFiles.length})`}</>
+              )}
             </Button>
           </div>
         </div>
@@ -254,11 +359,12 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [isRunningVerification, setIsRunningVerification] = useState(false);
   
   // Get the selected program and API response from store
-  const { selectedProgramId, eligibilityApiResponse, loanPrograms } = useAppStore();
+  const { selectedProgramId, eligibilityApiResponse, loanPrograms, documents: storeDocuments, updateDocument, addTimelineEvent } = useAppStore();
   
-  // Generate documents from API response
+  // Generate documents from API response, merging with existing store documents
   const getDocumentsFromApi = (): Document[] => {
     if (!selectedProgramId || !eligibilityApiResponse) {
       // Fallback to placeholder data if no API data available
@@ -269,27 +375,30 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     const selectedProgram = loanPrograms.find(p => p.id === selectedProgramId);
     const apiKeyToUse = selectedProgram?.originalApiKey || selectedProgramId;
     
-    console.log('🔍 Document extraction debug:', {
-      selectedProgramId,
-      selectedProgram: selectedProgram?.name,
-      originalApiKey: selectedProgram?.originalApiKey,
-      apiKeyToUse,
-      hasApiResponse: !!eligibilityApiResponse
-    });
-    
     const documentStatuses = extractDocumentStatusesForProgram(eligibilityApiResponse, apiKeyToUse);
     
-    console.log('📄 Extracted document statuses:', documentStatuses);
-    
-    return documentStatuses.map((docStatus, index) => ({
-      id: docStatus.id,
-      name: docStatus.name,
-      type: 'required',
-      status: docStatus.status,
-      category: 'minimum', // For now, treat all API docs as minimum
-      whyRequired: `Required document for ${selectedProgramId} program`,
-      citation: `Program requirement for ${docStatus.field}`
-    }));
+    // Map API document statuses to Document objects, merging with store data
+    return documentStatuses.map((docStatus) => {
+      // Check if this document already exists in the store (with uploaded files)
+      const existingDoc = storeDocuments.find(d => d.id === docStatus.id);
+      
+      // If document has uploaded files, prioritize the uploaded/ai-verified status
+      const finalStatus = existingDoc?.uploadedFiles && existingDoc.uploadedFiles.length > 0
+        ? (existingDoc.status || 'uploaded') // Keep the store status if files are uploaded
+        : docStatus.status; // Otherwise use API status
+      
+      return {
+        id: docStatus.id,
+        name: docStatus.name,
+        type: 'required',
+        status: finalStatus,
+        category: 'minimum',
+        whyRequired: `Required document for ${selectedProgramId} program`,
+        citation: `Program requirement for ${docStatus.field}`,
+        uploadedFiles: existingDoc?.uploadedFiles || [],
+        rackStackJobId: existingDoc?.rackStackJobId
+      };
+    });
   };
   
   const [notNeededDocs] = useState<Document[]>([
@@ -315,35 +424,148 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     onDocumentClick(doc.id);
   };
 
+  // Handle "Run AI Verification" button click
+  const handleRunAIVerification = async () => {
+    // Find all documents with "uploaded" status (not yet AI-verified)
+    const docsToVerify = documents.filter(
+      doc => doc.status === 'uploaded' && doc.uploadedFiles && doc.uploadedFiles.length > 0
+    );
+
+    if (docsToVerify.length === 0) {
+      toast.info('No uploaded documents to verify');
+      return;
+    }
+
+    if (!isRackStackConfigured()) {
+      toast.error('Rack Stack API not configured. Please set credentials in src/lib/config/credentials.ts');
+      return;
+    }
+
+    setIsRunningVerification(true);
+    toast.info(`Starting AI verification for ${docsToVerify.length} document(s)...`);
+
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const doc of docsToVerify) {
+      // Get the first uploaded file for this document
+      const firstFile = doc.uploadedFiles![0];
+
+      try {
+        // Update document status to in_progress
+        updateDocument(doc.id, {
+          status: 'in_progress' as any
+        });
+
+        // Trigger Rack Stack processing
+        const result = await triggerRackStackProcessing(
+          firstFile.s3Bucket,
+          firstFile.s3Key,
+          doc.id
+        );
+
+        if (result.success) {
+          // Update document with Rack Stack job ID
+          updateDocument(doc.id, {
+            status: 'ai-verified' as any,
+            rackStackJobId: result.dag_run_id as any
+          });
+
+          // Add timeline event
+          addTimelineEvent({
+            id: `timeline_${Date.now()}`,
+            timestamp: new Date().toISOString(),
+            event: 'AI Verification Started',
+            description: `Rack Stack processing started for ${doc.name} (Job ID: ${result.dag_run_id})`,
+            status: 'completed'
+          });
+
+          successCount++;
+        } else {
+          throw new Error(result.message || 'Verification failed');
+        }
+      } catch (error) {
+        console.error(`Failed to verify ${doc.name}:`, error);
+        
+        // Revert to uploaded status
+        updateDocument(doc.id, {
+          status: 'uploaded' as any
+        });
+
+        failCount++;
+      }
+    }
+
+    setIsRunningVerification(false);
+
+    if (successCount > 0) {
+      toast.success(`AI verification started for ${successCount} document(s)! Check console for details.`);
+    }
+    if (failCount > 0) {
+      toast.error(`Failed to verify ${failCount} document(s). Check console for errors.`);
+    }
+  };
+
   const DocumentRow = ({ doc }: { doc: Document }) => (
     <div
       key={doc.id}
-      className="flex items-center gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50/50 transition-colors"
+      className="flex items-start gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50/50 transition-colors"
       data-testid={`document-${doc.id}`}
     >
-      <div className="flex-shrink-0">
+      <div className="flex-shrink-0 mt-0.5">
         {getStatusIcon(doc.status)}
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <h4 className="font-medium text-slate-900" data-placeholder="true">
+          <h4 className="font-medium text-slate-900">
             {doc.name}
-            {/* TODO: replace with live document service */}
           </h4>
           <Tooltip>
             <TooltipTrigger>
               <Info className="w-3 h-3 text-slate-400" />
             </TooltipTrigger>
             <TooltipContent>
-              <div className="text-xs max-w-xs space-y-1" data-placeholder="true">
+              <div className="text-xs max-w-xs space-y-1">
                 <p><strong>Why required:</strong> {doc.whyRequired}</p>
                 <p><strong>Citation:</strong> {doc.citation}</p>
-                {/* TODO: replace with live guidelines service */}
               </div>
             </TooltipContent>
           </Tooltip>
         </div>
+        
+        {/* Display uploaded file names */}
+        {doc.uploadedFiles && doc.uploadedFiles.length > 0 && (
+          <div className="mt-2 space-y-1">
+            {doc.uploadedFiles.map((file) => (
+              <div key={file.id} className="flex items-center gap-2 text-xs text-slate-600">
+                <FileText className="w-3 h-3 text-slate-400" />
+                <span className="truncate max-w-xs">{file.originalName}</span>
+                <span className="text-slate-400">
+                  ({(file.fileSize / 1024 / 1024).toFixed(1)} MB)
+                </span>
+                {file.url && (
+                  <a 
+                    href={file.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-700"
+                    title="View document"
+                  >
+                    <Download className="w-3 h-3" />
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Show Rack Stack Job ID if available */}
+        {doc.rackStackJobId && (
+          <div className="mt-1 text-xs text-slate-500">
+            Job ID: {doc.rackStackJobId}
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-3">
@@ -352,7 +574,7 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
           size="sm"
           variant="outline"
           onClick={() => onAddToPackage(doc.id)}
-          disabled={doc.status === 'pending' || doc.status === 'failed'}
+          disabled={doc.status === 'pending' || doc.status === 'failed' || doc.status === 'in_progress'}
           data-testid={`add-${doc.id}`}
           className="flex items-center gap-2"
         >
@@ -373,75 +595,104 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
   );
 
   return (
-    <div className="space-y-6">
-      {/* Show All Categories Toggle */}
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="show-all"
-          checked={showAllCategories}
-          onCheckedChange={setShowAllCategories}
-          data-testid="show-all-toggle"
-        />
-        <Label htmlFor="show-all" className="text-sm text-slate-600">
-          Show all categories
-        </Label>
-      </div>
-
-      <Tabs defaultValue="available" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="available">Available Documents</TabsTrigger>
-          <TabsTrigger value="not-needed">Not Needed</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="available" className="space-y-6">
-          {/* Minimum Documents */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900">Minimum for Submit</h3>
-            <div className="space-y-3">
-              {minimumDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
-            </div>
+    <TooltipProvider>
+      <div className="space-y-6">
+        {/* Header with Run AI Verification button */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="show-all"
+              checked={showAllCategories}
+              onCheckedChange={setShowAllCategories}
+              data-testid="show-all-toggle"
+            />
+            <Label htmlFor="show-all" className="text-sm text-slate-600">
+              Show all categories
+            </Label>
           </div>
 
-          {/* Likely Conditions */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900">Likely Conditions</h3>
-            <div className="space-y-3">
-              {likelyDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
-            </div>
-          </div>
+          <Button 
+            onClick={handleRunAIVerification}
+            disabled={isRunningVerification || !isRackStackConfigured()}
+            className="bg-teal-500 hover:bg-teal-600 text-white"
+          >
+            {isRunningVerification ? (
+              <>
+                <Clock className="w-4 h-4 mr-2 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              'Run AI Verification'
+            )}
+          </Button>
+        </div>
 
-          {/* Additional Categories (if showing all) */}
-          {showAllCategories && additionalDocs.length > 0 && (
+        {/* Configuration Status Warnings */}
+        {(!isS3Configured() || !isRackStackConfigured()) && (
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-sm font-medium text-amber-800 mb-2">⚠️ Configuration Required</p>
+            <ul className="text-xs text-amber-700 space-y-1 list-disc list-inside">
+              {!isS3Configured() && (
+                <li>S3 credentials not configured - uploads will fail</li>
+              )}
+              {!isRackStackConfigured() && (
+                <li>Rack Stack API not configured - AI verification will fail</li>
+              )}
+            </ul>
+            <p className="text-xs text-amber-700 mt-2">
+              Please configure credentials in <code className="bg-amber-100 px-1 py-0.5 rounded">src/lib/config/credentials.ts</code>
+            </p>
+          </div>
+        )}
+
+        <Tabs defaultValue="available" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="available">Available Documents</TabsTrigger>
+            <TabsTrigger value="not-needed">Not Needed</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="available" className="space-y-6">
+            {/* Minimum Documents */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-slate-900">Additional Documents</h3>
+              <h3 className="font-semibold text-slate-900">Minimum for Submit</h3>
               <div className="space-y-3">
-                {additionalDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
+                {minimumDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
               </div>
             </div>
-          )}
-        </TabsContent>
 
-        <TabsContent value="not-needed" className="space-y-4">
-          <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900">Not Needed (Parking Lot)</h3>
-            <div className="space-y-3">
-              {notNeededDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
+            {/* Additional Categories (if showing all) */}
+            {showAllCategories && additionalDocs.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="font-semibold text-slate-900">Additional Documents</h3>
+                <div className="space-y-3">
+                  {additionalDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="not-needed" className="space-y-4">
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-900">Not Needed (Parking Lot)</h3>
+              <div className="space-y-3">
+                {notNeededDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
+              </div>
             </div>
-          </div>
-        </TabsContent>
-      </Tabs>
+          </TabsContent>
+        </Tabs>
 
-      {/* Upload Dialog */}
-      {selectedDocument && (
-        <DocumentUploadDialog
-          selectedDocument={selectedDocument}
-          isOpen={uploadDialogOpen}
-          onClose={() => {
-            setUploadDialogOpen(false);
-            setSelectedDocument(null);
-          }}
-        />
-      )}
-    </div>
+        {/* Upload Dialog */}
+        {selectedDocument && (
+          <DocumentUploadDialog
+            selectedDocument={selectedDocument}
+            isOpen={uploadDialogOpen}
+            onClose={() => {
+              setUploadDialogOpen(false);
+              setSelectedDocument(null);
+            }}
+          />
+        )}
+      </div>
+    </TooltipProvider>
   );
 }
