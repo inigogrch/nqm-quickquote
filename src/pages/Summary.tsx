@@ -1,16 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { PackageCards } from '../../components/summary/PackageCards';
-import { ShareModal } from '../../components/modals/ShareModal';
-import { EmailBanner } from '../../components/banners/EmailBanner';
-import { TimelineDrawer } from '../../components/drawers/TimelineDrawer';
-import { Share2, Clock, Download } from 'lucide-react';
-import { useAppStore } from '../../lib/store';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { PackageCards } from "../../components/summary/PackageCards";
+import { BSACard } from "../../components/summary/BSACard";
+import { ShareModal } from "../../components/modals/ShareModal";
+import { EmailBanner } from "../../components/banners/EmailBanner";
+import { TimelineDrawer } from "../../components/drawers/TimelineDrawer";
+import { Share2, Clock, Download } from "lucide-react";
+import { useAppStore } from "../../lib/store";
+import { toast } from "sonner";
 
 export default function Summary() {
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -22,11 +23,11 @@ export default function Summary() {
     addTimelineEvent({
       id: `timeline_${Date.now()}`,
       timestamp: new Date().toISOString(),
-      event: 'Package Downloaded',
-      description: 'Pre-submission package downloaded by user',
-      status: 'completed'
+      event: "Package Downloaded",
+      description: "Pre-submission package downloaded by user",
+      status: "completed",
     });
-    toast.success('Package download started');
+    toast.success("Package download started");
   };
 
   const handleShare = () => {
@@ -41,7 +42,8 @@ export default function Summary() {
             No Package Generated
           </h2>
           <p className="text-slate-600">
-            Please complete the agent processing steps to generate a summary package.
+            Please complete the agent processing steps to generate a summary
+            package.
           </p>
         </Card>
       </div>
@@ -64,11 +66,12 @@ export default function Summary() {
               <Badge className="bg-ok text-white">Ready</Badge>
             </div>
             <p className="text-slate-600" data-placeholder="true">
-              Package ID: {loanPackage.id} • Generated {new Date(loanPackage.createdAt).toLocaleDateString()}
+              Package ID: {loanPackage.id} • Generated{" "}
+              {new Date(loanPackage.createdAt).toLocaleDateString()}
               {/* TODO: replace with live package service */}
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
@@ -100,6 +103,9 @@ export default function Summary() {
 
       {/* Package Details */}
       <PackageCards />
+
+      {/* BSA */}
+      <BSACard />
 
       {/* Modals */}
       <ShareModal
