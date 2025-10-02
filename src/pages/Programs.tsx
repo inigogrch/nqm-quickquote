@@ -22,7 +22,8 @@ export default function Programs() {
     ineligiblePrograms,
     eligibilityApiResponse,
     setSelectedProgramId,
-    addTimelineEvent
+    addTimelineEvent,
+    unlockSubmission
   } = useAppStore();
 
   const handleSelectProgram = (programId: string) => {
@@ -47,6 +48,9 @@ export default function Programs() {
       description: `Selected program: ${selectedProgram?.name || 'Selected Program'}`,
       status: 'completed'
     });
+    
+    // Unlock Submission section in the workflow
+    unlockSubmission();
     
     navigate('/docs');
   };
