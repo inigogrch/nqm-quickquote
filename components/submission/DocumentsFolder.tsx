@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -366,6 +367,7 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
 };
 
 export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFolderProps) {
+  const navigate = useNavigate();
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
@@ -373,7 +375,7 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
   const [initializedProgramId, setInitializedProgramId] = useState<string | null>(null);
   
   // Get the selected program and API response from store
-  const { selectedProgramId, eligibilityApiResponse, loanPrograms, documents: storeDocuments, updateDocument, setDocuments, addTimelineEvent } = useAppStore();
+  const { selectedProgramId, eligibilityApiResponse, loanPrograms, documents: storeDocuments, updateDocument, setDocuments, addTimelineEvent, unlockSummary } = useAppStore();
   
   // Generate documents from API response, merging with existing store documents
   const getDocumentsFromApi = (): Document[] => {
@@ -602,6 +604,14 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
 
     if (successCount > 0) {
       toast.success(`AI verification started for ${successCount} document(s)! Check console for details.`);
+      
+      // Unlock Summary section and navigate to it
+      unlockSummary();
+      
+      // Add a small delay for user to see the success message before navigating
+      setTimeout(() => {
+        navigate('/summary');
+      }, 1000);
     }
     if (failCount > 0) {
       toast.error(`Failed to verify ${failCount} document(s). Check console for errors.`);

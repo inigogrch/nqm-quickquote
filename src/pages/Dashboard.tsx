@@ -10,11 +10,13 @@ import { PLACEHOLDER_TEXT } from '../../lib/fixtures';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { timelineEvents, loanRecords, removeLoanRecord } = useAppStore();
+  const { timelineEvents, loanRecords, removeLoanRecord, unlockQuickQuote } = useAppStore();
 
   const recentEvents = timelineEvents.slice(-3);
 
   const handleQuickQuoteClick = () => {
+    // Unlock QuickQuote section in the workflow
+    unlockQuickQuote();
     navigate('/quickquote');
   };
 
