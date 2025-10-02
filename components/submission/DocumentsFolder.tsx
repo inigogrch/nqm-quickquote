@@ -21,6 +21,10 @@ interface Document {
   category: string;
   whyRequired?: string;
   citation?: string;
+  apiRequirement?: string | null;
+  apiMessage?: string | null;
+  apiFieldName?: string | null;
+  apiFieldValue?: boolean | null | string;
 }
 
 interface DocumentsFolderProps {
@@ -265,9 +269,10 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
       return generateDocuments(showAllCategories);
     }
     
-    // Find the selected program to get the original API key
+    // Find the selected program to get the original API key and program name
     const selectedProgram = loanPrograms.find(p => p.id === selectedProgramId);
     const apiKeyToUse = selectedProgram?.originalApiKey || selectedProgramId;
+    const programName = selectedProgram?.name || selectedProgramId;
     
     console.log('🔍 Document extraction debug:', {
       selectedProgramId,
@@ -281,15 +286,84 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     
     console.log('📄 Extracted document statuses:', documentStatuses);
     
-    return documentStatuses.map((docStatus, index) => ({
-      id: docStatus.id,
-      name: docStatus.name,
-      type: 'required',
-      status: docStatus.status,
-      category: 'minimum', // For now, treat all API docs as minimum
-      whyRequired: `Required document for ${selectedProgramId} program`,
-      citation: `Program requirement for ${docStatus.field}`
-    }));
+    // Get the program data to access missing_fields, passed, and failed information
+    const programData = eligibilityApiResponse.detailed_results?.program_results?.[apiKeyToUse];
+    
+    console.log('📋 Program data for documents:', {
+      programName,
+      apiKeyToUse,
+      hasProgramData: !!programData,
+      missingFieldsCount: programData?.missing_fields?.length || 0,
+      passedCount: programData?.passed?.length || 0,
+      failedCount: programData?.failed?.length || 0
+    });
+    
+    return documentStatuses.map((docStatus, index) => {
+      // Find corresponding information from API - check missing_fields, passed, and failed arrays
+      const missingFieldInfo = programData?.missing_fields?.find(
+        (field: any) => field.field === docStatus.field
+      );
+      
+      // Also check passed and failed arrays for document-related requirements
+      const passedInfo = programData?.passed?.find(
+        (req: any) => {
+          // Check if the requirement mentions this document field
+          const actualValue = req.actual;
+          if (typeof actualValue === 'object' && actualValue !== null) {
+            return docStatus.field in actualValue;
+          }
+          return false;
+        }
+      );
+      
+      const failedInfo = programData?.failed?.find(
+        (req: any) => {
+          // Check if the requirement mentions this document field
+          const actualValue = req.actual;
+          if (typeof actualValue === 'object' && actualValue !== null) {
+            return docStatus.field in actualValue;
+          }
+          return false;
+        }
+      );
+      
+      // Priority: use failedInfo, then missingFieldInfo, then passedInfo
+      const apiInfo = failedInfo || missingFieldInfo || passedInfo;
+      
+      // Extract the actual field value from the API response
+      let fieldValue: boolean | null | string = null;
+      if (passedInfo?.actual && typeof passedInfo.actual === 'object') {
+        fieldValue = passedInfo.actual[docStatus.field];
+      } else if (failedInfo?.actual && typeof failedInfo.actual === 'object') {
+        fieldValue = failedInfo.actual[docStatus.field];
+      } else if (missingFieldInfo) {
+        fieldValue = null; // Missing field means it's not provided
+      }
+      
+      console.log(`📄 Document "${docStatus.name}" (${docStatus.field}):`, {
+        hasMissingFieldInfo: !!missingFieldInfo,
+        hasPassedInfo: !!passedInfo,
+        hasFailedInfo: !!failedInfo,
+        selectedInfo: apiInfo ? 'found' : 'not found',
+        requirement: apiInfo?.requirement,
+        message: apiInfo?.message,
+        fieldValue: fieldValue
+      });
+      
+      return {
+        id: docStatus.id,
+        name: docStatus.name,
+        type: 'required',
+        status: docStatus.status,
+        category: 'minimum', // For now, treat all API docs as minimum
+        whyRequired: `Required for ${programName} loan program`,
+        citation: 'Minimum Documentation Requirements',
+        apiRequirement: apiInfo?.requirement || null,
+        apiMessage: apiInfo?.message || null,
+        apiFieldName: docStatus.field,
+        apiFieldValue: fieldValue
+      };
+    });
   };
   
   const [notNeededDocs] = useState<Document[]>([
@@ -336,10 +410,13 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
               <Info className="w-3 h-3 text-slate-400" />
             </TooltipTrigger>
             <TooltipContent>
-              <div className="text-xs max-w-xs space-y-1" data-placeholder="true">
-                <p><strong>Why required:</strong> {doc.whyRequired}</p>
-                <p><strong>Citation:</strong> {doc.citation}</p>
-                {/* TODO: replace with live guidelines service */}
+              <div className="text-xs max-w-xs space-y-2">
+                <div>
+                  <p><strong>Why required:</strong> {doc.whyRequired}</p>
+                </div>
+                <div>
+                  <p><strong>Citation:</strong> {doc.citation}</p>
+                </div>
               </div>
             </TooltipContent>
           </Tooltip>
