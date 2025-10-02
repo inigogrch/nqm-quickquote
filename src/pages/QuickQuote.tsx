@@ -210,6 +210,7 @@ export default function QuickQuote() {
       setLoading(true)
 
       try {
+        console.log('🚀 Uploading FNMA file:', uploadedFile)
         // Hit converter API (send file as base64 in JSON body)
         /**
          * curl -X POST "{{BASE_URL}}/api/v1/encompass/converter/loans?token={{ACCESS_TOKEN}}" \
