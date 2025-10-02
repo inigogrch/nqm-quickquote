@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { ExternalLink, Settings } from 'lucide-react';
 import { DocumentsFolder } from '../../components/submission/DocumentsFolder';
 import { PackageComposer } from '../../components/submission/PackageComposer';
-import { UploaderDialog } from '../../components/dialogs/UploaderDialog';
+// Removed UploaderDialog - now handled inside DocumentsFolder component
 import { ExplainDrawer } from '../../components/drawers/ExplainDrawer';
 import { useAppStore } from '../../lib/store';
 import { PLACEHOLDER_PROGRAM } from '../../lib/fixtures';
@@ -16,9 +16,7 @@ import { toast } from 'sonner';
 
 export default function Docs() {
   const navigate = useNavigate();
-  const [uploaderOpen, setUploaderOpen] = useState(false);
   const [explainOpen, setExplainOpen] = useState(false);
-  const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const { addTimelineEvent, selectedProgramId, loanPrograms } = useAppStore();
   
   // Get the selected program name
@@ -27,8 +25,8 @@ export default function Docs() {
     : null;
 
   const handleDocumentClick = (docId: string) => {
-    setSelectedDocId(docId);
-    setUploaderOpen(true);
+    // Removed - now handled inside DocumentsFolder component
+    console.log('Document clicked:', docId);
   };
 
   const handleAddToPackage = (docId: string) => {
@@ -147,13 +145,7 @@ export default function Docs() {
       </div>
 
       {/* Dialogs */}
-      <UploaderDialog
-        isOpen={uploaderOpen}
-        onClose={() => setUploaderOpen(false)}
-        documentId={selectedDocId}
-      />
-      
-        <ExplainDrawer
+      <ExplainDrawer
           isOpen={explainOpen}
           onClose={() => setExplainOpen(false)}
           selectedProgramId={selectedProgramId}

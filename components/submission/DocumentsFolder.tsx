@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -178,6 +178,8 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
     setIsUploading(true);
 
     try {
+      // Upload working correctly - debug removed
+
       // Update status to in_progress
       updateDocument(selectedDocument.id, {
         status: 'in_progress' as any
@@ -191,12 +193,16 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
       );
 
       // Update document with uploaded file metadata and new status
+      const updatedFiles = [
+        ...(selectedDocument.uploadedFiles || []),
+        ...uploadedFileMetadata
+      ];
+
+      // Document update working correctly - debug removed
+
       updateDocument(selectedDocument.id, {
         status: 'uploaded' as any,
-        uploadedFiles: [
-          ...(selectedDocument.uploadedFiles || []),
-          ...uploadedFileMetadata
-        ] as any
+        uploadedFiles: updatedFiles as any
       });
 
       // Add timeline event
@@ -360,9 +366,10 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [isRunningVerification, setIsRunningVerification] = useState(false);
+  const [initializedProgramId, setInitializedProgramId] = useState<string | null>(null);
   
   // Get the selected program and API response from store
-  const { selectedProgramId, eligibilityApiResponse, loanPrograms, documents: storeDocuments, updateDocument, addTimelineEvent } = useAppStore();
+  const { selectedProgramId, eligibilityApiResponse, loanPrograms, documents: storeDocuments, updateDocument, setDocuments, addTimelineEvent } = useAppStore();
   
   // Generate documents from API response, merging with existing store documents
   const getDocumentsFromApi = (): Document[] => {
@@ -381,6 +388,8 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     return documentStatuses.map((docStatus) => {
       // Check if this document already exists in the store (with uploaded files)
       const existingDoc = storeDocuments.find(d => d.id === docStatus.id);
+      
+      // Document merging working correctly now - debug logs removed
       
       // If document has uploaded files, prioritize the uploaded/ai-verified status
       const finalStatus = existingDoc?.uploadedFiles && existingDoc.uploadedFiles.length > 0
@@ -414,6 +423,27 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
   ]);
 
   const documents = getDocumentsFromApi();
+  
+  // Initialize documents in store when program changes (only once per program)
+  useEffect(() => {
+    if (selectedProgramId && selectedProgramId !== initializedProgramId && documents.length > 0) {
+      console.log('🔄 Initializing documents for program:', selectedProgramId);
+      // Convert to proper Document type for store
+      const docsForStore = documents.map(doc => ({
+        id: doc.id,
+        name: doc.name,
+        type: doc.type,
+        status: doc.status as any,
+        required: true,
+        category: doc.category as any,
+        uploadedFiles: doc.uploadedFiles,
+        rackStackJobId: doc.rackStackJobId
+      }));
+      setDocuments(docsForStore as any);
+      setInitializedProgramId(selectedProgramId);
+    }
+  }, [selectedProgramId]); // Only run when program changes
+  
   const minimumDocs = documents.filter(doc => doc.category === 'minimum');
   const likelyDocs = documents.filter(doc => doc.category === 'likely');
   const additionalDocs = documents.filter(doc => doc.category === 'additional');

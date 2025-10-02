@@ -10,6 +10,8 @@ export interface LoanDetails {
   propertyType: string;
   occupancyType: string;
   loanPurpose: string;
+  state: string;
+  county: string;
 }
 
 export interface RuleHit {
