@@ -11,9 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LoanRecordCard } from "../../components/ui/LoanRecordCard";
-import LoanDetailsDialog, {
-  type LoanRecordData,
-} from "../../components/dialogs/LoanDetailsDialog";
 import { useAppStore } from "../../lib/store";
 import { PLACEHOLDER_TEXT } from "../../lib/fixtures";
 import { useEffect, useState } from "react";
@@ -21,10 +18,8 @@ import supabase from "../../lib/supabase";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { timelineEvents, loanRecords, removeLoanRecord } = useAppStore();
+  const { timelineEvents, setCurrentLoanId } = useAppStore();
   const [loans, setLoans] = useState([]);
-  const [selectedLoan, setSelectedLoan] = useState<LoanRecordData | null>(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const fetchLoans = async () => {
     const { data, error } = await supabase
@@ -85,8 +80,8 @@ export default function Dashboard() {
                   createdAt={loan.created_at}
                   onRemove={handleRemoveLoanRecord}
                   openLoanDetails={() => {
-                    setSelectedLoan(loan);
-                    setIsDetailsOpen(true);
+                    setCurrentLoanId(loan.id);
+                    navigate("/summary");
                   }}
                 />
               ))}
@@ -210,16 +205,6 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Loan Details Dialog */}
-      <LoanDetailsDialog
-        isOpen={isDetailsOpen}
-        onClose={() => {
-          setIsDetailsOpen(false);
-          setSelectedLoan(null);
-        }}
-        loan={selectedLoan}
-      />
     </>
   );
 }

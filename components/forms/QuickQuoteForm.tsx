@@ -3,8 +3,9 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LoanDetails } from '@/lib/types';
-import { PLACEHOLDER_NUMBER } from '@/lib/fixtures';
+import { LoanDetails } from '../../lib/types';
+import { PLACEHOLDER_NUMBER } from '../../lib/fixtures';
+import { US_STATES, getCountiesByState } from '../../lib/location-data';
 
 interface QuickQuoteFormProps {
   data: LoanDetails;
@@ -14,6 +15,11 @@ interface QuickQuoteFormProps {
 export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
   const handleInputChange = (field: keyof LoanDetails, value: string | number) => {
     onChange({ [field]: value });
+  };
+  
+  const handleStateChange = (stateCode: string) => {
+    // Reset county when state changes
+    onChange({ state: stateCode, county: '' });
   };
 
   const formatCurrency = (value: number) => {
@@ -76,23 +82,22 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
           State *
         </Label>
         <Select 
-          value={data.propertyType.includes('CA') ? 'CA' : ''}
-          onValueChange={(value) => handleInputChange('propertyType', `${value} Property`)}
+          value={data.state || ''}
+          onValueChange={handleStateChange}
         >
-          <SelectTrigger data-testid="state-select" data-placeholder="true">
+          <SelectTrigger data-testid="state-select">
             <SelectValue placeholder="Select state" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="CA">California</SelectItem>
-            <SelectItem value="TX">Texas</SelectItem>
-            <SelectItem value="FL">Florida</SelectItem>
-            <SelectItem value="NY">New York</SelectItem>
-            <SelectItem value="WA">Washington</SelectItem>
+          <SelectContent className="max-h-[300px]">
+            {US_STATES.map((state) => (
+              <SelectItem key={state.code} value={state.code}>
+                {state.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <p className="text-xs text-slate-500">
           Property location state
-          {/* TODO: replace with live location service */}
         </p>
       </div>
 
@@ -101,19 +106,24 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
         <Label htmlFor="county" className="text-sm font-medium">
           County *
         </Label>
-        <Select defaultValue="lorem">
-          <SelectTrigger data-testid="county-select" data-placeholder="true">
-            <SelectValue placeholder="Select county" />
+        <Select 
+          value={data.county || ''}
+          onValueChange={(value) => handleInputChange('county', value)}
+          disabled={!data.state}
+        >
+          <SelectTrigger data-testid="county-select">
+            <SelectValue placeholder={data.state ? "Select county" : "Select state first"} />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="lorem">Lorem County</SelectItem>
-            <SelectItem value="ipsum">Ipsum County</SelectItem>
-            <SelectItem value="dolor">Dolor County</SelectItem>
+          <SelectContent className="max-h-[300px]">
+            {data.state && getCountiesByState(data.state).map((county) => (
+              <SelectItem key={county} value={county}>
+                {county}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <p className="text-xs text-slate-500">
           Property location county
-          {/* TODO: replace with live location service */}
         </p>
       </div>
 

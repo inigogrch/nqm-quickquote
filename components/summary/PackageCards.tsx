@@ -1,17 +1,30 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { useAppStore } from '../../lib/store';
-import { PLACEHOLDER_TEXT } from '../../lib/fixtures';
-import { FileText, Download, Eye, CheckCircle, AlertTriangle } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useAppStore } from "../../lib/store";
+import { PLACEHOLDER_TEXT } from "../../lib/fixtures";
+import {
+  FileText,
+  Download,
+  Eye,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
 
-export function PackageCards() {
-  const { loanPackage, loanDetails, documents } = useAppStore();
+export function PackageCards({ loan }: { loan: any }) {
+  const { loanPackage, loanDetails, documents, currentLoanId, loanPrograms } =
+    useAppStore();
 
-  if (!loanPackage || !loanDetails) {
+  if (!loanPackage || !loanDetails || !loan) {
     return (
       <Card className="p-8 text-center">
         <p className="text-slate-600">No package data available</p>
@@ -19,13 +32,17 @@ export function PackageCards() {
     );
   }
 
-  const completedDocs = documents.filter(doc => doc.status === 'completed');
-  const pendingDocs = documents.filter(doc => doc.status === 'pending');
+  const selectedProgram = loanPrograms.find(
+    (program) => program.id === loan.program_name
+  );
+
+  const completedDocs = documents.filter((doc) => doc.status === "completed");
+  const pendingDocs = documents.filter((doc) => doc.status === "pending");
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
@@ -40,25 +57,79 @@ export function PackageCards() {
             <FileText className="w-5 h-5 text-brand" />
             Loan Summary
           </CardTitle>
-          <CardDescription>Key loan details and program selection</CardDescription>
+          <CardDescription>
+            Key loan details and program selection
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
+              <p className="text-sm text-slate-600">Borrower Name</p>
+              <p className="font-semibold">{loan.loan_details.borrowerName}</p>
+            </div>
+            <div></div>
+            <div>
+              <p className="text-sm text-slate-600">State</p>
+              <p className="font-semibold">{loan.loan_details.state}</p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-600">County</p>
+              <p className="font-semibold">
+                {loan.loan_details.county || "N/A"}
+              </p>
+            </div>
+            <div>
               <p className="text-sm text-slate-600">Loan Amount</p>
-              <p className="font-semibold">{formatCurrency(loanDetails.loanAmount)}</p>
+              <p className="font-semibold">
+                {formatCurrency(loan.loan_details.loanAmount)}
+              </p>
             </div>
             <div>
-              <p className="text-sm text-slate-600">Property Value</p>
-              <p className="font-semibold">{formatCurrency(loanDetails.propertyValue)}</p>
-            </div>
-            <div>
-              <p className="text-sm text-slate-600">LTV Ratio</p>
-              <p className="font-semibold">{loanDetails.loanToValue.toFixed(1)}%</p>
+              <p className="text-sm text-slate-600">Loan Purpose</p>
+              <p className="font-semibold">{loan.loan_details.loanPurpose}</p>
             </div>
             <div>
               <p className="text-sm text-slate-600">Credit Score</p>
-              <p className="font-semibold">{loanDetails.creditScore}</p>
+              <p className="font-semibold">{loan.loan_details.creditScore}</p>
+            </div>
+
+            <div>
+              <p className="text-sm text-slate-600">LTV Ratio</p>
+              <p className="font-semibold">
+                {loan.loan_details.loanToValue.toFixed(1)}%
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-600">Debt to Income</p>
+              <p className="font-semibold">
+                {(loan.loan_details.debtToIncome * 100).toFixed(1)}%
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-600">Property Type</p>
+              <p className="font-semibold">{loan.loan_details.propertyType}</p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-600">Occupancy Type</p>
+              <p className="font-semibold">{loan.loan_details.occupancyType}</p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-600">Property Value</p>
+              <p className="font-semibold">
+                {formatCurrency(loan.loan_details.propertyValue)}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-600">Initial 1003</p>
+              <p className="font-semibold">
+                {loan.loan_details.has_initial_1003 ? "Yes" : "No"}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-600">Credit Report</p>
+              <p className="font-semibold">
+                {loan.loan_details.has_credit_report ? "Yes" : "No"}
+              </p>
             </div>
           </div>
 
@@ -68,11 +139,11 @@ export function PackageCards() {
             <p className="text-sm text-slate-600 mb-2">Selected Program</p>
             <div className="flex items-center justify-between">
               <p className="font-semibold" data-placeholder="true">
-                {loanPackage.selectedProgram}
+                {loan.program_name}
                 {/* TODO: replace with live program service */}
               </p>
               <Badge className="bg-brand text-white">
-                {loanPackage.rate}% Rate
+                {selectedProgram?.rate || 8.25}% Rate
               </Badge>
             </div>
           </div>
@@ -102,11 +173,15 @@ export function PackageCards() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-3 bg-ok/5 rounded-lg border border-ok/20">
-              <div className="text-2xl font-bold text-ok">{completedDocs.length}</div>
+              <div className="text-2xl font-bold text-ok">
+                {completedDocs.length}
+              </div>
               <div className="text-sm text-slate-600">Verified</div>
             </div>
             <div className="text-center p-3 bg-warn/5 rounded-lg border border-warn/20">
-              <div className="text-2xl font-bold text-warn">{pendingDocs.length}</div>
+              <div className="text-2xl font-bold text-warn">
+                {pendingDocs.length}
+              </div>
               <div className="text-sm text-slate-600">Pending</div>
             </div>
           </div>
@@ -114,10 +189,18 @@ export function PackageCards() {
           <Separator />
 
           <div className="space-y-2">
-            <p className="text-sm font-medium text-slate-900">Recent Verifications</p>
+            <p className="text-sm font-medium text-slate-900">
+              Recent Verifications
+            </p>
             {completedDocs.slice(0, 3).map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between py-1">
-                <span className="text-sm text-slate-600" data-placeholder="true">
+              <div
+                key={doc.id}
+                className="flex items-center justify-between py-1"
+              >
+                <span
+                  className="text-sm text-slate-600"
+                  data-placeholder="true"
+                >
                   {doc.name}
                   {/* TODO: replace with live document service */}
                 </span>
@@ -135,12 +218,21 @@ export function PackageCards() {
                   Outstanding Items
                 </p>
                 {pendingDocs.slice(0, 2).map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between py-1">
-                    <span className="text-sm text-slate-600" data-placeholder="true">
+                  <div
+                    key={doc.id}
+                    className="flex items-center justify-between py-1"
+                  >
+                    <span
+                      className="text-sm text-slate-600"
+                      data-placeholder="true"
+                    >
                       {doc.name}
                       {/* TODO: replace with live document service */}
                     </span>
-                    <Badge variant="outline" className="text-xs border-warn text-warn">
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-warn text-warn"
+                    >
                       Pending
                     </Badge>
                   </div>
@@ -148,10 +240,37 @@ export function PackageCards() {
               </div>
             </>
           )}
+
+          <Separator />
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-slate-900 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-ok" />
+              Uploaded Documents
+            </p>
+            {loan.documents.map((doc) => (
+              <div
+                key={doc.id}
+                className="flex items-center justify-between py-1"
+              >
+                <span
+                  className="text-sm text-slate-600 font-medium cursor-pointer hover:underline"
+                  data-placeholder="true"
+                >
+                  {doc.originalName}
+                </span>
+                <Badge variant="outline" className="text-xs border-ok text-ok">
+                  Uploaded
+                </Badge>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
-      {/* Compliance Card */}
+      {/* TODO: COMPLIANCE CHECK - TEMPORARILY HIDDEN - WILL BE RE-ENABLED LATER */}
+      {/* Uncomment this section when ready to show Compliance Check again */}
+      {/*
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -195,13 +314,15 @@ export function PackageCards() {
             </div>
             <p className="text-xs text-slate-500 mt-1" data-placeholder="true">
               High confidence in loan approval
-              {/* TODO: replace with live confidence service */}
             </p>
           </div>
         </CardContent>
       </Card>
+      */}
 
-      {/* Next Steps Card */}
+      {/* TODO: NEXT STEPS - TEMPORARILY HIDDEN - WILL BE RE-ENABLED LATER */}
+      {/* Uncomment this section when ready to show Next Steps again */}
+      {/*
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -220,7 +341,6 @@ export function PackageCards() {
                 <p className="text-sm font-medium text-slate-900">Upload Documents</p>
                 <p className="text-xs text-slate-600" data-placeholder="true">
                   Upload and organize all required loan documentation
-                  {/* TODO: replace with live workflow service */}
                 </p>
               </div>
             </div>
@@ -233,7 +353,6 @@ export function PackageCards() {
                 <p className="text-sm font-medium text-slate-900">Review Package</p>
                 <p className="text-xs text-slate-600" data-placeholder="true">
                   Final review of all documents and loan details
-                  {/* TODO: replace with live workflow service */}
                 </p>
               </div>
             </div>
@@ -246,7 +365,6 @@ export function PackageCards() {
                 <p className="text-sm font-medium text-slate-600">Handover to LGX</p>
                 <p className="text-xs text-slate-500" data-placeholder="true">
                   LGX system will handle automated LOS submission and processing
-                  {/* TODO: replace with live workflow service */}
                 </p>
               </div>
             </div>
@@ -257,6 +375,7 @@ export function PackageCards() {
           </Button>
         </CardContent>
       </Card>
+      */}
     </div>
   );
 }
