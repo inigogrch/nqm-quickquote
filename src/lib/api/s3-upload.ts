@@ -16,13 +16,13 @@ function getS3Client(): S3Client {
       },
     });
   }
-  
+
   if (!s3Client) {
     throw new Error(
-      'S3 credentials not configured. Please set credentials in src/lib/config/credentials.ts'
+      "S3 credentials not configured. Please set credentials in src/lib/config/credentials.ts"
     );
   }
-  
+
   return s3Client;
 }
 
@@ -53,24 +53,24 @@ export async function uploadFileToS3(
 ): Promise<UploadedFileMetadata> {
   try {
     const timestamp = Date.now();
-    const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    
+    const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+
     // Create S3 key with organized structure
-    const basePath = loanId ? `loans/${loanId}` : 'documents';
+    const basePath = loanId ? `loans/${loanId}` : "documents";
     const s3Key = `${basePath}/${programId}/${documentId}/${timestamp}_${sanitizedFileName}`;
-    
-    console.log('📤 Uploading to S3:', {
+
+    console.log("📤 Uploading to S3:", {
       bucket: AWS_CONFIG.BUCKET,
       key: s3Key,
       size: file.size,
-      type: file.type
+      type: file.type,
     });
 
     const client = getS3Client();
-    
+
     // Convert File to ArrayBuffer for upload
     const fileBuffer = await file.arrayBuffer();
-    
+
     const command = new PutObjectCommand({
       Bucket: AWS_CONFIG.BUCKET,
       Key: s3Key,
@@ -85,7 +85,7 @@ export async function uploadFileToS3(
     });
 
     await client.send(command);
-    
+
     const fileMetadata: UploadedFileMetadata = {
       id: `file_${timestamp}`,
       originalName: file.name,
@@ -101,10 +101,13 @@ export async function uploadFileToS3(
     console.log('✅ Upload successful:', fileMetadata);
     
     return fileMetadata;
-    
   } catch (error) {
-    console.error('❌ S3 upload failed:', error);
-    throw new Error(`Failed to upload ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error("❌ S3 upload failed:", error);
+    throw new Error(
+      `Failed to upload ${file.name}: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
   }
 }
 
@@ -117,10 +120,10 @@ export async function uploadFilesToS3(
   programId: string,
   loanId?: string
 ): Promise<UploadedFileMetadata[]> {
-  const uploadPromises = files.map(file => 
+  const uploadPromises = files.map((file) =>
     uploadFileToS3(file, documentId, programId, loanId)
   );
-  
+
   return Promise.all(uploadPromises);
 }
 
@@ -196,4 +199,3 @@ export async function checkS3FileExists(s3Uri: string): Promise<boolean> {
 
 // Re-export for convenience
 export { isS3Configured };
-

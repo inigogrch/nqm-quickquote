@@ -20,7 +20,7 @@ import { PLACEHOLDER_BSA_ANALYSIS_DETAILS as bsaDetails } from "../../lib/fixtur
 import DataChart from "./DataChart";
 import { useState } from "react";
 
-export function BSACard() {
+export function BSACard({ hideDetailsButton }: { hideDetailsButton: boolean }) {
   const [showContent, setShowContent] = useState(true);
 
   return (
@@ -33,6 +33,7 @@ export function BSACard() {
           </div>
           <button
             className="p-1.5 rounded-md text-base text-white bg-brand"
+            hidden={hideDetailsButton}
             onClick={() => setShowContent(!showContent)}
           >
             {showContent ? "Hide details" : "Show details"}
