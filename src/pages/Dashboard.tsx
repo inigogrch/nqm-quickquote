@@ -49,8 +49,20 @@ export default function Dashboard() {
     navigate("/quickquote");
   };
 
-  const handleRemoveLoanRecord = (recordId: string) => {
-    removeLoanRecord(recordId);
+  const handleRemoveLoanRecord = async (loanId: string) => {
+    // delete loan record with matching id from supabase
+    const { error } = await supabase
+      .from("loans")
+      .delete()
+      .eq("id", loanId);
+    if (error) {
+      console.error("Error deleting loan record:", error);
+    } else {
+      console.log("Loan record deleted successfully");
+      fetchLoans();
+    }
+
+    setLoans(loans.filter((loan) => loan.id !== loanId));
   };
 
   return (
@@ -73,7 +85,7 @@ export default function Dashboard() {
                   createdAt={loan.created_at}
                   onRemove={handleRemoveLoanRecord}
                   openLoanDetails={() => {
-                    setSelectedLoan(loan as unknown as LoanRecordData);
+                    setSelectedLoan(loan);
                     setIsDetailsOpen(true);
                   }}
                 />
