@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/dialog'
 import { FileText, Upload, X } from 'lucide-react'
 import * as convert from 'xml-js'
+import { US_STATES } from '../../lib/location-data';
 
 export default function QuickQuote() {
   const navigate = useNavigate();
@@ -295,20 +296,25 @@ export default function QuickQuote() {
                 ?.PropertyEstimatedValueAmount?._text
           ) || 0
 
+        const stateCode =
+          selectedCollateral.SUBJECT_PROPERTY?.ADDRESS?.StateCode?._text || ''
+        const state = US_STATES.find((s) => s.code === stateCode)?.code || ''
+
         const mappedData: Partial<LoanDetails> = {
           borrowerName:
             selectedBorrower?.NAME?.FullName._text ||
             selectedBorrower?.INDIVIDUAL?.NAME?.FullName._text ||
             '',
           loanAmount,
-          occupancyType,
-          propertyType,
           propertyValue: propertyEstimatedValueAmount,
           loanToValue: propertyEstimatedValueAmount
             ? Math.round((loanAmount / propertyEstimatedValueAmount) * 10000) /
               100
             : 0,
+          propertyType,
+          occupancyType,
           loanPurpose: selectedLoan.TERMS_OF_LOAN.LoanPurposeType?._text || '',
+          state,
         }
 
         console.log('🗂 Mapped FNMA to LoanDetails:', mappedData)
