@@ -24,7 +24,9 @@ export default function Programs() {
     eligibilityApiResponse,
     setSelectedProgramId,
     setCurrentLoanId,
-    addTimelineEvent
+    addTimelineEvent,
+    unlockSubmission,
+    unlockSummary
   } = useAppStore();
 
   const handleSelectProgram = async (programId: string) => {
@@ -67,6 +69,10 @@ export default function Programs() {
       description: `Selected program: ${selectedProgram?.name || 'Selected Program'}`,
       status: 'completed'
     });
+    
+    // Unlock Submission and Summary sections in the workflow
+    unlockSubmission();
+    unlockSummary();
     
     navigate('/docs');
   };

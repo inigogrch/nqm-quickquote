@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
@@ -19,6 +20,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { FileText, Upload, X } from 'lucide-react'
+import * as convert from 'xml-js'
+import { US_STATES } from '../../lib/location-data';
 
 export default function QuickQuote() {
   const navigate = useNavigate();
@@ -29,7 +32,8 @@ export default function QuickQuote() {
     setLoanPrograms,
     setIneligiblePrograms,
     setEligibilityRules,
-    addTimelineEvent
+    addTimelineEvent,
+    unlockPrograms
   } = useAppStore();
   const [formData, setFormData] = useState<LoanDetails>(PLACEHOLDER_LOAN_DETAILS);
   const [showImproveAccuracy, setShowImproveAccuracy] = useState(false);
@@ -106,6 +110,9 @@ export default function QuickQuote() {
         description: `Analyzed loan eligibility - Found ${transformedData.eligible.length} eligible programs`,
         status: "completed",
       });
+      
+      // Unlock Programs section in the workflow
+      unlockPrograms();
       
       // Navigate to programs page - it will now use the API data from store
       navigate('/programs');
@@ -212,73 +219,112 @@ export default function QuickQuote() {
       setLoading(true)
 
       try {
-        // Hit converter API (send file as base64 in JSON body)
-        /**
-         * curl -X POST "{{BASE_URL}}/api/v1/encompass/converter/loans?token={{ACCESS_TOKEN}}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "filename": "example.xml",
-            "file_base64": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cm9vdD48aGVsbG8+V29ybGQ8L2hlbGxvPjwvcm9vdD4="
-          }'
-         */
-        const reader = new FileReader()
-        reader.readAsDataURL(uploadedFile)
-        reader.onload = async () => {
-          const base64String = (reader.result as string).split(',')[1] // Remove data:*/*;base64, part
-
-          const response = await fetch(
-            `${
-              import.meta.env.VITE_ESFUSE_BASE_URL
-            }/api/v1/encompass/converter/loans?token=${
-              import.meta.env.VITE_ESFUSE_ACCESS_TOKEN
-            }`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                filename: uploadedFile.name,
-                file_base64: base64String,
-              }),
+        console.log('🚀 Parsing FNMA file:', uploadedFile)
+        const text = await uploadedFile.text()
+        const parsed = convert.xml2js(text, { compact: true }) as {
+          MESSAGE: {
+            DEAL_SETS: {
+              DEAL_SET: {
+                DEALS: {
+                  DEAL: any
+                }
+              }
             }
+          }
+        }
+
+        const extractedData = parsed.MESSAGE.DEAL_SETS.DEAL_SET.DEALS.DEAL
+
+        const parties = Array.isArray(extractedData.PARTIES.PARTY)
+          ? extractedData.PARTIES.PARTY
+          : [extractedData.PARTIES.PARTY]
+        const selectedBorrower = parties.find((p: any) => {
+          const roles = Array.isArray(p.ROLES.ROLE)
+            ? p.ROLES.ROLE
+            : [p.ROLES.ROLE]
+
+          const parsedRoles = roles.map(
+            (r: any) =>
+              r.PartyRoleType?._text || r.ROLE_DETAIL?.PartyRoleType?._text
           )
 
-          if (!response.ok) {
-            throw new Error(
-              `API Error: ${response.status} ${response.statusText}`
-            )
-          }
+          return parsedRoles.includes('Borrower')
+        })
 
-          const data = await response.json()
-          console.log('✅ FNMA Converter API Response:', data)
-          if (data.status !== 'success' || !data.loan_data) {
-            throw new Error('Invalid response from converter API')
-          }
+        const selectedLoan = Array.isArray(extractedData.LOANS.LOAN)
+          ? extractedData.LOANS.LOAN[0]
+          : extractedData.LOANS.LOAN
+        const loanAmount =
+          Number(
+            selectedLoan.TERMS_OF_LOAN.LoanAmount?._text ||
+              selectedLoan.TERMS_OF_LOAN.BaseLoanAmount?._text
+          ) || 0
 
-          // Process and map the returned loan_data to form fields
-          const loanData = data.loan_data
-          const mappedData: Partial<LoanDetails> = {
-            borrowerName: loanData.borrower_name || '',
-            loanAmount: loanData.loan_amount || 0,
-            propertyValue: loanData.property_value || 0,
-            creditScore: loanData.credit_score || 0,
-            loanToValue: loanData.loan_to_value || 0,
-            debtToIncome: loanData.debt_to_income || 0,
-            propertyType: loanData.property_type || '',
-            occupancyType: loanData.occupancy_type || '',
-            loanPurpose: loanData.loan_purpose || '',
-          }
+        const selectedCollateral = Array.isArray(
+          extractedData.COLLATERALS.COLLATERAL
+        )
+          ? extractedData.COLLATERALS.COLLATERAL[0]
+          : extractedData.COLLATERALS.COLLATERAL
 
-          setFormData((prev) => ({ ...prev, ...mappedData }))
-          setIsMinimalComplete(true)
-          toast.success('FNMA file processed successfully! Form updated.')
-          onClose()
-          setUploadedFile(null)
+        const propertyUsageType =
+          selectedCollateral.SUBJECT_PROPERTY?.PropertyUsageType?._text ||
+          selectedCollateral.SUBJECT_PROPERTY?.PROPERTY_DETAIL
+            ?.PropertyUsageType?._text ||
+          ''
+        let occupancyType = ''
+        if (propertyUsageType === 'PrimaryResidence')
+          occupancyType = 'Primary Residence'
+        else if (propertyUsageType === 'SecondHome')
+          occupancyType = 'Second Home'
+        else if (propertyUsageType === 'Investment')
+          occupancyType = 'Investment Property'
+        else occupancyType = propertyUsageType
+
+        const subjectPropertyType =
+          selectedCollateral.SUBJECT_PROPERTY?.PropertyType?._text ||
+          selectedCollateral.SUBJECT_PROPERTY?.PROPERTY_DETAIL?.PropertyType
+            ?._text ||
+          ''
+        let propertyType = ''
+        if (subjectPropertyType === 'SingleFamily')
+          propertyType = 'Single Family Residence'
+        else if (subjectPropertyType === 'MultiFamily')
+          propertyType = 'Multi-Family'
+        else propertyType = subjectPropertyType
+
+        const propertyEstimatedValueAmount =
+          Number(
+            selectedCollateral.SUBJECT_PROPERTY?.PropertyEstimatedValueAmount
+              ?._text ||
+              selectedCollateral.SUBJECT_PROPERTY?.PROPERTY_DETAIL
+                ?.PropertyEstimatedValueAmount?._text
+          ) || 0
+
+        const stateCode =
+          selectedCollateral.SUBJECT_PROPERTY?.ADDRESS?.StateCode?._text || ''
+        const state = US_STATES.find((s) => s.code === stateCode)?.code || ''
+
+        const mappedData: Partial<LoanDetails> = {
+          borrowerName:
+            selectedBorrower?.NAME?.FullName._text ||
+            selectedBorrower?.INDIVIDUAL?.NAME?.FullName._text ||
+            '',
+          loanAmount,
+          propertyValue: propertyEstimatedValueAmount,
+          loanToValue: propertyEstimatedValueAmount
+            ? Math.round((loanAmount / propertyEstimatedValueAmount) * 10000) /
+              100
+            : 0,
+          propertyType,
+          occupancyType,
+          loanPurpose: selectedLoan.TERMS_OF_LOAN.LoanPurposeType?._text || '',
+          state,
         }
-        reader.onerror = (error) => {
-          throw error
-        }
+
+        console.log('🗂 Mapped FNMA to LoanDetails:', mappedData)
+        setFormData((prev) => ({ ...prev, ...mappedData }))
+        setUploadFNMAOpen(false)
+        toast.success('FNMA file processed successfully!')
       } catch (error) {
         console.error('Error processing FNMA file:', error)
         toast.error('Failed to process FNMA file. Please try again.')

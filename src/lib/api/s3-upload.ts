@@ -1,7 +1,7 @@
 // S3 Upload Service for Document Management
 
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { AWS_CONFIG, isS3Configured } from "../config/credentials";
+import { PutObjectCommand, GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { AWS_CONFIG, isS3Configured } from '../config/credentials';
 
 // Initialize S3 Client
 let s3Client: S3Client | null = null;
@@ -125,6 +125,76 @@ export async function uploadFilesToS3(
   );
 
   return Promise.all(uploadPromises);
+}
+
+/**
+ * Read a JSON file from S3
+ * @param s3Uri - Full S3 URI (e.g., s3://bucket/path/to/file.json)
+ */
+export async function readJsonFromS3(s3Uri: string): Promise<any> {
+  try {
+    // Parse S3 URI to extract bucket and key
+    const match = s3Uri.match(/^s3:\/\/([^/]+)\/(.+)$/);
+    if (!match) {
+      throw new Error(`Invalid S3 URI format: ${s3Uri}`);
+    }
+    
+    const [, bucket, key] = match;
+    
+    console.log('📥 Reading from S3:', {
+      bucket,
+      key
+    });
+
+    const client = getS3Client();
+    
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    });
+
+    const response = await client.send(command);
+    
+    // Convert stream to string
+    const bodyString = await response.Body?.transformToString();
+    
+    if (!bodyString) {
+      throw new Error('Empty response body from S3');
+    }
+    
+    const jsonData = JSON.parse(bodyString);
+    
+    console.log('✅ Successfully read JSON from S3:', {
+      bucket,
+      key,
+      dataSize: bodyString.length
+    });
+    
+    return jsonData;
+    
+  } catch (error: any) {
+    // Check if it's a NoSuchKey error (file doesn't exist yet)
+    if (error.name === 'NoSuchKey' || error.$metadata?.httpStatusCode === 404) {
+      console.log('⏳ File not found in S3 (processing may still be in progress):', s3Uri);
+      return null;
+    }
+    
+    console.error('❌ S3 read failed:', error);
+    throw new Error(`Failed to read from S3: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Check if a file exists in S3
+ * @param s3Uri - Full S3 URI (e.g., s3://bucket/path/to/file.json)
+ */
+export async function checkS3FileExists(s3Uri: string): Promise<boolean> {
+  try {
+    const result = await readJsonFromS3(s3Uri);
+    return result !== null;
+  } catch (error) {
+    return false;
+  }
 }
 
 // Re-export for convenience

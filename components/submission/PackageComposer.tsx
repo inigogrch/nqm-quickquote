@@ -25,7 +25,14 @@ interface PackageComposerProps {
 }
 
 export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: PackageComposerProps) {
-  const { selectedProgramId, loanPrograms } = useAppStore();
+  const { 
+    selectedProgramId, 
+    loanPrograms, 
+    packageDocuments, 
+    updatePackageDocument, 
+    removeFromPackage,
+    reorderPackageDocuments 
+  } = useAppStore();
   
   // Get the selected program name
   const selectedProgram = selectedProgramId 
@@ -34,50 +41,8 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
   
   const programName = selectedProgram?.name || PLACEHOLDER_PROGRAM;
   
-  const [packageDocs, setPackageDocs] = useState<PackageDocument[]>([
-    {
-      id: 'min_0',
-      name: '1003',
-      category: 'minimum',
-      verified: true,
-      timestamp: '2024-01-15 10:30 AM'
-    },
-    {
-      id: 'min_1',
-      name: 'Bank Statements (12 mo)',
-      category: 'minimum',
-      verified: true,
-      timestamp: '2024-01-15 10:45 AM'
-    },
-    {
-      id: 'min_2',
-      name: 'Title Fee Sheet',
-      category: 'minimum',
-      verified: false,
-      timestamp: '2024-01-15 11:00 AM'
-    },
-    {
-      id: 'min_3',
-      name: 'Credit Report',
-      category: 'minimum',
-      verified: true,
-      timestamp: '2024-01-15 11:15 AM'
-    },
-    {
-      id: 'min_4',
-      name: 'Borrower Certification',
-      category: 'minimum',
-      verified: false,
-      timestamp: '2024-01-15 11:30 AM'
-    },
-    {
-      id: 'likely_0',
-      name: 'LOX for Large Deposit',
-      category: 'likely',
-      verified: true,
-      timestamp: '2024-01-15 11:45 AM'
-    }
-  ]);
+  // Use package documents from global store (starts empty)
+  const packageDocs = packageDocuments;
 
   const minimumDocs = packageDocs.filter(doc => doc.category === 'minimum');
   const likelyDocs = packageDocs.filter(doc => doc.category === 'likely');
@@ -85,23 +50,21 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
   const minimumCompleted = minimumDocs.filter(doc => doc.verified).length;
   const likelyCompleted = likelyDocs.filter(doc => doc.verified).length;
   
-  const minimumProgress = (minimumCompleted / minimumDocs.length) * 100;
+  const minimumProgress = minimumDocs.length > 0 ? (minimumCompleted / minimumDocs.length) * 100 : 0;
   const likelyProgress = likelyDocs.length > 0 ? (likelyCompleted / likelyDocs.length) * 100 : 0;
   
-  const canSubmit = minimumDocs.every(doc => doc.verified);
+  const canSubmit = minimumDocs.length > 0 && minimumDocs.every(doc => doc.verified);
 
   const handleDocumentToggle = (docId: string, checked: boolean) => {
-    setPackageDocs(docs => docs.map(doc => 
-      doc.id === docId ? { ...doc, verified: checked } : doc
-    ));
+    updatePackageDocument(docId, { verified: checked });
+  };
+
+  const handleRemoveDocument = (docId: string) => {
+    removeFromPackage(docId);
   };
 
   const handleReorder = (dragIndex: number, hoverIndex: number) => {
-    const draggedDoc = packageDocs[dragIndex];
-    const newDocs = [...packageDocs];
-    newDocs.splice(dragIndex, 1);
-    newDocs.splice(hoverIndex, 0, draggedDoc);
-    setPackageDocs(newDocs);
+    reorderPackageDocuments(dragIndex, hoverIndex);
   };
 
   return (
@@ -131,38 +94,44 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
 
       {/* Document List */}
       <div className="space-y-3 mb-6 max-h-96 overflow-y-auto">
-        {packageDocs.map((doc, index) => (
-          <div
-            key={doc.id}
-            className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50/50"
-            data-testid={`package-doc-${doc.id}`}
-          >
-            <GripVertical 
-              className="w-4 h-4 text-slate-400 cursor-grab" 
-              data-testid={`drag-handle-${doc.id}`}
-            />
-            
-            <Checkbox
-              checked={doc.verified}
-              onCheckedChange={(checked) => handleDocumentToggle(doc.id, !!checked)}
-              data-testid={`checkbox-${doc.id}`}
-            />
-            
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-slate-900 truncate" data-placeholder="true">
-                {doc.name}
-                {/* TODO: replace with live document service */}
-              </p>
-            </div>
-            
-            <Badge 
-              className={doc.category === 'minimum' ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800'}
-              variant="outline"
-            >
-              {doc.category === 'minimum' ? 'Min' : 'Likely'}
-            </Badge>
+        {packageDocs.length === 0 ? (
+          <div className="text-center py-8 text-slate-500">
+            <p className="text-sm">No documents added to package yet</p>
+            <p className="text-xs mt-1">Use &quot;+ Add →&quot; to add documents from the left</p>
           </div>
-        ))}
+        ) : (
+          packageDocs.map((doc, index) => (
+            <div
+              key={doc.id}
+              className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50/50"
+              data-testid={`package-doc-${doc.id}`}
+            >
+              <GripVertical 
+                className="w-4 h-4 text-slate-400 cursor-grab" 
+                data-testid={`drag-handle-${doc.id}`}
+              />
+              
+              <Checkbox
+                checked={doc.verified}
+                onCheckedChange={(checked) => handleDocumentToggle(doc.id, !!checked)}
+                data-testid={`checkbox-${doc.id}`}
+              />
+              
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-slate-900 truncate">
+                  {doc.name}
+                </p>
+              </div>
+              
+              <Badge 
+                className={doc.category === 'minimum' ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800'}
+                variant="outline"
+              >
+                {doc.category === 'minimum' ? 'Min' : 'Likely'}
+              </Badge>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Footer Actions */}

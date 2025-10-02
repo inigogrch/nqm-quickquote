@@ -18,7 +18,7 @@ import supabase from "../../lib/supabase";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { timelineEvents, setCurrentLoanId } = useAppStore();
+  const { timelineEvents, setCurrentLoanId, unlockQuickQuote } = useAppStore();
   const [loans, setLoans] = useState([]);
 
   const fetchLoans = async () => {
@@ -41,7 +41,9 @@ export default function Dashboard() {
   const recentEvents = timelineEvents.slice(-3);
 
   const handleQuickQuoteClick = () => {
-    navigate("/quickquote");
+    // Unlock QuickQuote section in the workflow
+    unlockQuickQuote();
+    navigate('/quickquote');
   };
 
   const handleRemoveLoanRecord = async (loanId: string) => {
