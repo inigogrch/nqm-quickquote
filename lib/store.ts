@@ -37,6 +37,9 @@ interface AppStore extends AppState {
   
   // Selected program state
   selectedProgramId: string | null;
+
+  // Current loan id
+  currentLoanId: string | null;
   
   // Actions
   setCurrentStep: (step: AppState['currentStep']) => void;
@@ -62,6 +65,7 @@ interface AppStore extends AppState {
   // New loan record actions
   addLoanRecord: (record: Omit<LoanRecord, 'id' | 'createdAt'>) => void;
   removeLoanRecord: (recordId: string) => void;
+  setCurrentLoanId: (loanId: string | null) => void;
   
   // Selected program actions
   setSelectedProgramId: (programId: string | null) => void;
@@ -90,6 +94,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   packageDocuments: [],
   loanRecords: [],
   selectedProgramId: null,
+  currentLoanId: null,
 
   setCurrentStep: (step) => set({ currentStep: step }),
   
@@ -157,6 +162,8 @@ export const useAppStore = create<AppStore>((set, get) => ({
   removeLoanRecord: (recordId) => set((state) => ({
     loanRecords: state.loanRecords.filter(record => record.id !== recordId)
   })),
+  
+  setCurrentLoanId: (loanId) => set({ currentLoanId: loanId }),
   
   // Selected program management
   setSelectedProgramId: (programId) => set({ selectedProgramId: programId }),

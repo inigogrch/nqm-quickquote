@@ -9,6 +9,7 @@ import { ExplainDrawer } from '../../components/drawers/ExplainDrawer';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useAppStore } from '../../lib/store';
+import supabase from '../../lib/supabase';
 
 export default function Programs() {
   const navigate = useNavigate();
@@ -21,10 +22,11 @@ export default function Programs() {
     loanPrograms, 
     ineligiblePrograms,
     eligibilityApiResponse,
-    setSelectedProgramId
+    setSelectedProgramId,
+    setCurrentLoanId
   } = useAppStore();
 
-  const handleSelectProgram = (programId: string) => {
+  const handleSelectProgram = async (programId: string) => {
     // Store the selected program ID in the global store
     setSelectedProgramId(programId);
     
@@ -37,6 +39,24 @@ export default function Programs() {
       programName: selectedProgram?.name || 'Selected Program',
       requiredSteps: ['Upload Docs', 'Income Verification', 'Credit Check'] // TODO: Get from API later
     });
+
+    // upload loan record to supabase
+    try {
+      // i need it to return the id of the loan record
+      const { data, error } = await supabase.from('loans').insert({
+        loan_details: loanDetails,
+        program_name: selectedProgram?.name || 'Selected Program',
+        required_steps: ['Upload Docs', 'Income Verification', 'Credit Check'] // TODO: Get from API later
+      }).select().single();
+
+      if (!error) {
+        console.log('Loan record inserted', data);
+        setCurrentLoanId(data.id);
+      }
+
+    } catch (error) {
+      console.error('Error inserting loan record:', error);
+    }
     
     navigate('/docs');
   };

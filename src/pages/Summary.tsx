@@ -105,7 +105,7 @@ export default function Summary() {
       <PackageCards />
 
       {/* BSA */}
-      <BSACard />
+      <BSACard hideDetailsButton={false} />
 
       {/* Modals */}
       <ShareModal
