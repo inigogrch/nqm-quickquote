@@ -23,7 +23,8 @@ export default function Programs() {
     eligibilityApiResponse,
     setSelectedProgramId,
     addTimelineEvent,
-    unlockSubmission
+    unlockSubmission,
+    unlockSummary
   } = useAppStore();
 
   const handleSelectProgram = (programId: string) => {
@@ -49,8 +50,9 @@ export default function Programs() {
       status: 'completed'
     });
     
-    // Unlock Submission section in the workflow
+    // Unlock Submission and Summary sections in the workflow
     unlockSubmission();
+    unlockSummary();
     
     navigate('/docs');
   };
