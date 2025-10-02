@@ -42,6 +42,7 @@ interface AppStore extends AppState {
   setCurrentStep: (step: AppState['currentStep']) => void;
   setLoanDetails: (details: AppState['loanDetails']) => void;
   updateDocument: (docId: string, updates: Partial<AppState['documents'][0]>) => void;
+  setDocuments: (documents: AppState['documents']) => void;
   updateAgentStep: (stepId: string, updates: Partial<AppState['agentSteps'][0]>) => void;
   addTimelineEvent: (event: AppState['timelineEvents'][0]) => void;
   addChatMessage: (message: AppState['chatMessages'][0]) => void;
@@ -100,6 +101,8 @@ export const useAppStore = create<AppStore>((set, get) => ({
       doc.id === docId ? { ...doc, ...updates } : doc
     )
   })),
+  
+  setDocuments: (documents) => set({ documents }),
   
   updateAgentStep: (stepId, updates) => set((state) => ({
     agentSteps: state.agentSteps.map(step => 
