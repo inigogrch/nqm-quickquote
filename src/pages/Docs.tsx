@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,11 +17,13 @@ import { toast } from 'sonner';
 export default function Docs() {
   const navigate = useNavigate();
   const [explainOpen, setExplainOpen] = useState(false);
-  const { addTimelineEvent, selectedProgramId, loanPrograms } = useAppStore();
-  
+  const { addTimelineEvent, selectedProgramId, loanPrograms, currentLoanId } = useAppStore();
+
+  console.log('currentLoanId', currentLoanId);
+
   // Get the selected program name
-  const selectedProgram = selectedProgramId 
-    ? loanPrograms.find(p => p.id === selectedProgramId)
+  const selectedProgram = selectedProgramId
+    ? loanPrograms.find((p) => p.id === selectedProgramId)
     : null;
 
   const handleDocumentClick = (docId: string) => {
@@ -43,45 +45,45 @@ export default function Docs() {
   const handleSubmit = () => {
     // Add timeline events
     const now = new Date().toISOString();
-    
+
     addTimelineEvent({
       id: `timeline_${Date.now()}_1`,
       timestamp: now,
       event: "Package generated",
       description: "Loan package assembled and validated",
-      status: "completed"
+      status: "completed",
     });
-    
+
     addTimelineEvent({
       id: `timeline_${Date.now()}_2`,
       timestamp: now,
       event: "Queued to Encompass",
       description: "Package queued for LOS submission",
-      status: "completed"
+      status: "completed",
     });
-    
+
     addTimelineEvent({
       id: `timeline_${Date.now()}_3`,
       timestamp: now,
       event: "Email sent",
       description: "Confirmation email sent to borrower",
-      status: "completed"
+      status: "completed",
     });
 
-    toast.success('Package submitted successfully!');
-    navigate('/summary');
+    toast.success("Package submitted successfully!");
+    navigate("/summary");
   };
 
   const handleDownloadPDF = () => {
-    toast.info('PDF download feature coming soon');
+    toast.info("PDF download feature coming soon");
   };
 
   const handleDownloadZIP = () => {
-    toast.info('ZIP download feature coming soon');
+    toast.info("ZIP download feature coming soon");
   };
 
   const handleChangeProgram = () => {
-    navigate('/programs');
+    navigate("/programs");
   };
 
   const handleOpenGuideline = () => {
@@ -95,7 +97,7 @@ export default function Docs() {
         <div className="space-y-4 mx-[15px] my-[5px] bg-[#00000000] mt-[15px] mr-[15px] mb-[0px] ml-[15px] pt-[0px] pr-[0px] pb-[0px] pl-[0px] font-normal opacity-100 text-[#020817]">
           {/* Page Title */}
           <h1 className="text-2xl font-semibold text-slate-900">Submission</h1>
-          
+
           {/* Program Chip */}
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="px-3 py-1">
@@ -122,10 +124,11 @@ export default function Docs() {
               Change
             </Button>
           </div>
-          
+
           {/* Subtext */}
           <p className="text-sm text-slate-600" data-placeholder="true">
-            Checklist auto-tailored to your program. Minimum docs are required to submit; Likely Conditions are optional.
+            Checklist auto-tailored to your program. Minimum docs are required
+            to submit; Likely Conditions are optional.
             {/* TODO: replace with live program service */}
           </p>
         </div>

@@ -12,6 +12,8 @@
  * - VITE_AWS_S3_BUCKET: Your S3 bucket name
  * - VITE_AWS_REGION: Your S3 region (default: us-east-1)
  * - VITE_RACK_STACK_OUTPUT_BUCKET: Output bucket for Rack Stack results
+ * - VITE_SUPABASE_URL: Your Supabase URL
+ * - VITE_SUPABASE_ANON_KEY: Your Supabase anon key
  */
 
 // ==========================================
@@ -33,6 +35,14 @@ export const RACK_STACK_CONFIG = {
   PASSWORD: import.meta.env.VITE_RACK_STACK_PASSWORD || 'jXe4wZgMUsJrWSUwaLHJuFTWnfsMp5DQDC+',
   OUTPUT_BUCKET: import.meta.env.VITE_RACK_STACK_OUTPUT_BUCKET || '',
   OUTPUT_PREFIX: import.meta.env.VITE_RACK_STACK_OUTPUT_PREFIX || 'results/',
+};
+
+// ==========================================
+// 🔑 SUPABASE CONFIGURATION
+// ==========================================
+export const SUPABASE_CONFIG = {
+  URL: import.meta.env.VITE_SUPABASE_URL || '',
+  ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
 };
 
 // ==========================================

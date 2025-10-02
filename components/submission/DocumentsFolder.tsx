@@ -16,6 +16,7 @@ import { useAppStore } from '../../lib/store';
 import { extractDocumentStatusesForProgram, DocumentStatus } from '../../src/lib/api';
 import { uploadFilesToS3, isS3Configured } from '../../src/lib/api/s3-upload';
 import { triggerRackStackProcessing, isRackStackConfigured, pollForResults } from '../../src/lib/api/rack-stack';
+import supabase from '../../lib/supabase';
 
 interface Document {
   id: string;
@@ -133,7 +134,7 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
   const [dragActive, setDragActive] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const { selectedProgramId, updateDocument, addTimelineEvent } = useAppStore();
+  const { selectedProgramId, updateDocument, addTimelineEvent, currentLoanId } = useAppStore();
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -212,6 +213,28 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
         status: 'uploaded' as any,
         uploadedFiles: updatedFiles as any
       });
+
+      // update loan in supabase with updated documents
+      let {data: loanData, error: loanError} = await supabase
+        .from('loans')
+        .select('*')
+        .eq('id', currentLoanId)
+        .single();
+
+      if (loanError) {
+        console.error('Error getting loan:', loanError);
+      }
+
+      let newDocument = { status: 'uploaded', ...uploadedFileMetadata[0] };
+      console.log('New document:', newDocument);
+
+      let {data: updatedLoanData, error: updatedLoanError} = await supabase
+        .from('loans')
+        .update({ documents: [...loanData.documents, newDocument] })
+        .eq('id', currentLoanId)
+        .single();
+
+      console.log('Loan updated with new document');
 
       // Add timeline event
       addTimelineEvent({

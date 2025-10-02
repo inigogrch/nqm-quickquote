@@ -12,6 +12,7 @@ interface LoanRecordCardProps {
   requiredSteps: string[];
   createdAt: string;
   onRemove: (id: string) => void;
+  openLoanDetails: () => void;
 }
 
 export function LoanRecordCard({ 
@@ -20,19 +21,21 @@ export function LoanRecordCard({
   programName, 
   requiredSteps, 
   createdAt, 
-  onRemove 
+  onRemove,
+  openLoanDetails
 }: LoanRecordCardProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
+      year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
     });
   };
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 relative">
+    <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 relative cursor-pointer" onClick={openLoanDetails}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 flex-1">
           {/* Profile Section */}
@@ -72,7 +75,7 @@ export function LoanRecordCard({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onRemove(id)}
+          onClick={(e) => { e.stopPropagation(); onRemove(id); }}
           className="w-6 h-6 p-0 hover:bg-red-100 hover:text-red-600 ml-2"
           data-testid={`remove-loan-record-${id}`}
         >

@@ -44,6 +44,9 @@ interface AppStore extends AppState {
   
   // Selected program state
   selectedProgramId: string | null;
+
+  // Current loan id
+  currentLoanId: string | null;
   
   // Workflow state
   workflow: WorkflowState;
@@ -73,6 +76,7 @@ interface AppStore extends AppState {
   // New loan record actions
   addLoanRecord: (record: Omit<LoanRecord, 'id' | 'createdAt'>) => void;
   removeLoanRecord: (recordId: string) => void;
+  setCurrentLoanId: (loanId: string | null) => void;
   
   // Selected program actions
   setSelectedProgramId: (programId: string | null) => void;
@@ -107,6 +111,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   packageDocuments: [],
   loanRecords: [],
   selectedProgramId: null,
+  currentLoanId: null,
   workflow: {
     quickQuoteUnlocked: false,
     programsUnlocked: false,
@@ -182,6 +187,8 @@ export const useAppStore = create<AppStore>((set, get) => ({
   removeLoanRecord: (recordId) => set((state) => ({
     loanRecords: state.loanRecords.filter(record => record.id !== recordId)
   })),
+  
+  setCurrentLoanId: (loanId) => set({ currentLoanId: loanId }),
   
   // Selected program management
   setSelectedProgramId: (programId) => set({ selectedProgramId: programId }),

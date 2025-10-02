@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,11 +12,41 @@ import { TimelineDrawer } from "../../components/drawers/TimelineDrawer";
 import { Share2, Clock, Download } from "lucide-react";
 import { useAppStore } from "../../lib/store";
 import { toast } from "sonner";
+import supabase from "../../lib/supabase";
+
+interface Loan {
+  id: string;
+  created_at: string;
+  documents: any[];
+  loanDetails: any;
+  programName: string;
+  requiredSteps: string[];
+}
 
 export default function Summary() {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [timelineOpen, setTimelineOpen] = useState(false);
-  const { loanPackage, addTimelineEvent } = useAppStore();
+  const [loan, setLoan] = useState<Loan | null>(null);
+  const { loanPackage, addTimelineEvent, currentLoanId } = useAppStore();
+
+  // fetch loan from supabase using currentLoanId
+  useEffect(() => {
+    const fetchLoanFromSupabase = async () => {
+      const { data, error } = await supabase
+        .from("loans")
+        .select("*")
+        .eq("id", currentLoanId)
+        .single();
+      if (error) {
+        console.error("Error fetching loan from supabase:", error);
+      } else {
+        console.log("Loan fetched from supabase:", data);
+        setLoan(data);
+      }
+    };
+
+    fetchLoanFromSupabase();
+  }, []);
 
   const handleDownload = () => {
     // Simulate package download
@@ -34,7 +64,7 @@ export default function Summary() {
     setShareModalOpen(true);
   };
 
-  if (!loanPackage) {
+  if (!loan) {
     return (
       <div className="max-w-4xl mx-auto">
         <Card className="p-8 text-center">
@@ -67,7 +97,7 @@ export default function Summary() {
             </div>
             <p className="text-slate-600" data-placeholder="true">
               Package ID: {loanPackage.id} • Generated{" "}
-              {new Date(loanPackage.createdAt).toLocaleDateString()}
+              {new Date(loan.created_at).toLocaleDateString()}
               {/* TODO: replace with live package service */}
             </p>
           </div>
@@ -102,10 +132,10 @@ export default function Summary() {
       </Card>
 
       {/* Package Details */}
-      <PackageCards />
+      <PackageCards loan={loan} />
 
       {/* BSA */}
-      <BSACard />
+      <BSACard hideDetailsButton={false} />
 
       {/* Modals */}
       <ShareModal
