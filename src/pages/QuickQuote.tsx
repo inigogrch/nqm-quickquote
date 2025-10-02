@@ -32,7 +32,8 @@ export default function QuickQuote() {
     setLoanPrograms,
     setIneligiblePrograms,
     setEligibilityRules,
-    addTimelineEvent
+    addTimelineEvent,
+    unlockPrograms
   } = useAppStore();
   const [formData, setFormData] = useState<LoanDetails>(PLACEHOLDER_LOAN_DETAILS);
   const [showImproveAccuracy, setShowImproveAccuracy] = useState(false);
@@ -109,6 +110,9 @@ export default function QuickQuote() {
         description: `Analyzed loan eligibility - Found ${transformedData.eligible.length} eligible programs`,
         status: "completed",
       });
+      
+      // Unlock Programs section in the workflow
+      unlockPrograms();
       
       // Navigate to programs page - it will now use the API data from store
       navigate('/programs');

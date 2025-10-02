@@ -72,9 +72,25 @@ interface LeftRailProps {
 export function LeftRail({ isCollapsed = false, onToggleCollapse }: LeftRailProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentStep, setCurrentStep } = useAppStore();
+  const { currentStep, setCurrentStep, workflow } = useAppStore();
+
+  const isNavigationEnabled = (itemId: string) => {
+    // Dashboard is always enabled
+    if (itemId === 'dashboard') return true;
+    
+    // Check workflow state for other sections
+    if (itemId === 'quickquote') return workflow.quickQuoteUnlocked;
+    if (itemId === 'programs') return workflow.programsUnlocked;
+    if (itemId === 'docs') return workflow.submissionUnlocked;
+    if (itemId === 'summary') return workflow.summaryUnlocked;
+    
+    return false;
+  };
 
   const handleNavigation = (item: typeof navigationItems[0]) => {
+    // Only navigate if the section is enabled
+    if (!isNavigationEnabled(item.id)) return;
+    
     navigate(item.href);
     if (item.step) {
       setCurrentStep(item.step);
@@ -113,6 +129,7 @@ export function LeftRail({ isCollapsed = false, onToggleCollapse }: LeftRailProp
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.href;
+            const isEnabled = isNavigationEnabled(item.id);
             const isCompleted = item.step && currentStep !== item.step && 
               navigationItems.findIndex(nav => nav.step === currentStep) > 
               navigationItems.findIndex(nav => nav.step === item.step);
@@ -122,11 +139,15 @@ export function LeftRail({ isCollapsed = false, onToggleCollapse }: LeftRailProp
                 key={item.id}
                 onClick={() => handleNavigation(item)}
                 data-testid={`nav-${item.id}`}
+                disabled={!isEnabled}
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors relative group",
+                  !isEnabled && "opacity-40 cursor-not-allowed",
                   isActive
                     ? "bg-brand/10 text-brand-600 font-medium"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    : isEnabled 
+                      ? "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                      : "text-slate-400"
                 )}
                 title={isCollapsed ? item.label : undefined}
               >
@@ -148,6 +169,7 @@ export function LeftRail({ isCollapsed = false, onToggleCollapse }: LeftRailProp
                   <div className="absolute left-full ml-2 px-2 py-1 bg-slate-900 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
                     {item.label}
                     {isCompleted && " ✓"}
+                    {!isEnabled && " (Locked)"}
                   </div>
                 )}
               </button>
