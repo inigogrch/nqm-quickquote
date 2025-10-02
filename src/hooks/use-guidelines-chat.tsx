@@ -99,13 +99,24 @@ export function useEnhancedRAG(): UseEnhancedRAGReturn {
         timestamp: userMessage.timestamp
       });
 
-      const response: ChatResponse = await enhancedRAGAPI.sendMessage({
+      const requestPayload = {
         conversation_id: conversationIdRef.current,
         messages: apiMessages,
-        include_citations: true
-      });
+        include_citations: true,
+        message: content // Add the current message for Lambda compatibility
+      };
+      
+      console.log('🔍 DEBUG: Sending request to API:', requestPayload);
+      console.log('🔍 DEBUG: Latest message content:', content);
+      console.log('🔍 DEBUG: Full API messages:', apiMessages);
+      
+      const response: ChatResponse = await enhancedRAGAPI.sendMessage(requestPayload);
 
       // Handle nested response structure - the API returns { response: ChatResponseData, stats: ... }
+      console.log('🔍 DEBUG: API Response received:', response);
+      console.log('🔍 DEBUG: Response data:', response.response);
+      console.log('🔍 DEBUG: Actual response text:', response.response?.response);
+      
       const responseData = response.response;
       
       // Create bot response message

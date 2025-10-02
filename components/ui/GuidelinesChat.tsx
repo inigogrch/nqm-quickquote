@@ -224,10 +224,18 @@ export function GuidelinesChat() {
                 <Badge 
                   variant="outline" 
                   className="text-xs cursor-pointer hover:bg-brand/10 hover:border-brand/30 transition-colors"
-                  onClick={() => handleQuickQuestion('Income documentation needed?')}
+                  onClick={() => handleQuickQuestion('What is Flex Supreme?')}
                 >
-                  Income docs
+                  Flex Supreme
                 </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearMessages}
+                  className="text-xs text-slate-500 hover:text-slate-700"
+                >
+                  Clear Chat
+                </Button>
               </div>
             </div>
 

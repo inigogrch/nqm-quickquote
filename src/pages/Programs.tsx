@@ -21,7 +21,8 @@ export default function Programs() {
     loanPrograms, 
     ineligiblePrograms,
     eligibilityApiResponse,
-    setSelectedProgramId
+    setSelectedProgramId,
+    addTimelineEvent
   } = useAppStore();
 
   const handleSelectProgram = (programId: string) => {
@@ -36,6 +37,15 @@ export default function Programs() {
       profileName: loanDetails?.borrowerName || 'Unknown Borrower',
       programName: selectedProgram?.name || 'Selected Program',
       requiredSteps: ['Upload Docs', 'Income Verification', 'Credit Check'] // TODO: Get from API later
+    });
+    
+    // Add timeline event for Eligible Programs Selection completion
+    addTimelineEvent({
+      id: `timeline_${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      event: 'Eligible Programs Selection',
+      description: `Selected program: ${selectedProgram?.name || 'Selected Program'}`,
+      status: 'completed'
     });
     
     navigate('/docs');
