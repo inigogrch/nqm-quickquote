@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +15,7 @@ import { PLACEHOLDER_CHECKLIST } from '../../lib/fixtures';
 import { useAppStore } from '../../lib/store';
 import { extractDocumentStatusesForProgram, DocumentStatus } from '../../src/lib/api';
 import { uploadFilesToS3, isS3Configured } from '../../src/lib/api/s3-upload';
-import { triggerRackStackProcessing, isRackStackConfigured } from '../../src/lib/api/rack-stack';
+import { triggerRackStackProcessing, isRackStackConfigured, pollForResults } from '../../src/lib/api/rack-stack';
 import supabase from '../../lib/supabase';
 
 interface Document {
@@ -41,10 +42,13 @@ interface Document {
     url?: string;
   }>;
   rackStackJobId?: string;
+  outputDestination?: string;
+  classificationCategory?: string;
+  classificationConfidence?: number;
 }
 
 interface DocumentsFolderProps {
-  onAddToPackage: (docId: string) => void;
+  onAddToPackage: (docId: string, docName: string, category: 'minimum' | 'likely') => void;
   onDocumentClick: (docId: string) => void;
 }
 
@@ -73,7 +77,7 @@ const getStatusBadge = (status: string) => {
     case 'ai-verified':
       return <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
     case 'in_progress':
-      return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Processing</Badge>;
+      return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
     case 'uploaded':
       return <Badge className="bg-warn text-white hover:bg-warn/90">Uploaded</Badge>;
     case 'failed':
@@ -389,6 +393,7 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
 };
 
 export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFolderProps) {
+  const navigate = useNavigate();
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
@@ -396,7 +401,17 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
   const [initializedProgramId, setInitializedProgramId] = useState<string | null>(null);
   
   // Get the selected program and API response from store
-  const { selectedProgramId, eligibilityApiResponse, loanPrograms, documents: storeDocuments, updateDocument, setDocuments, addTimelineEvent } = useAppStore();
+  const { 
+    selectedProgramId, 
+    eligibilityApiResponse, 
+    loanPrograms, 
+    documents: storeDocuments, 
+    updateDocument, 
+    setDocuments, 
+    addTimelineEvent,
+    addToPackage,
+    packageDocuments 
+  } = useAppStore();
   
   // Generate documents from API response, merging with existing store documents
   const getDocumentsFromApi = (): Document[] => {
@@ -567,47 +582,120 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     }
 
     setIsRunningVerification(true);
-    toast.info(`Starting AI verification for ${docsToVerify.length} document(s)...`);
+    
+    // Show single consolidated toast message
+    toast.info(`Processing uploaded documents... This may take up to 90 seconds.`);
 
-    let successCount = 0;
-    let failCount = 0;
+    // Step 1: Set all documents to in_progress immediately
+    docsToVerify.forEach(doc => {
+      updateDocument(doc.id, {
+        status: 'in_progress' as any
+      });
+    });
 
-    for (const doc of docsToVerify) {
-      // Get the first uploaded file for this document
+    // Step 2: Trigger all Rack Stack jobs in parallel
+    const triggerPromises = docsToVerify.map(async (doc) => {
       const firstFile = doc.uploadedFiles![0];
-
+      
       try {
-        // Update document status to in_progress
-        updateDocument(doc.id, {
-          status: 'in_progress' as any
-        });
-
-        // Trigger Rack Stack processing
-        const result = await triggerRackStackProcessing(
+        const triggerResult = await triggerRackStackProcessing(
           firstFile.s3Bucket,
           firstFile.s3Key,
           doc.id
         );
 
-        if (result.success) {
-          // Update document with Rack Stack job ID
+        if (!triggerResult.success) {
+          throw new Error(triggerResult.message || 'Failed to trigger processing');
+        }
+
+        // Store job ID and output destination
+        updateDocument(doc.id, {
+          rackStackJobId: triggerResult.dag_run_id as any,
+          outputDestination: triggerResult.output_destination as any
+        });
+
+        // Add timeline event for job start
+        addTimelineEvent({
+          id: `timeline_${Date.now()}_${doc.id}`,
+          timestamp: new Date().toISOString(),
+          event: 'AI Verification Started',
+          description: `Processing started for ${doc.name} (Job ID: ${triggerResult.dag_run_id})`,
+          status: 'completed'
+        });
+
+        return {
+          doc,
+          triggerResult,
+          success: true
+        };
+      } catch (error) {
+        console.error(`Failed to trigger ${doc.name}:`, error);
+        
+        // Revert to uploaded status
+        updateDocument(doc.id, {
+          status: 'uploaded' as any
+        });
+
+        return {
+          doc,
+          error,
+          success: false
+        };
+      }
+    });
+
+    const triggerResults = await Promise.all(triggerPromises);
+    
+    // Filter out failed triggers
+    const successfulTriggers = triggerResults.filter(r => r.success);
+    
+    if (successfulTriggers.length === 0) {
+      setIsRunningVerification(false);
+      toast.error('Failed to start verification for any documents');
+      return;
+    }
+
+    // Step 3: Poll for all results in parallel
+    const pollPromises = successfulTriggers.map(async ({ doc, triggerResult }) => {
+      try {
+        const pollResult = await pollForResults(triggerResult!.output_destination!);
+
+        if (pollResult.status === 'ai-verified') {
+          // Success! Update document with verification details
           updateDocument(doc.id, {
             status: 'ai-verified' as any,
-            rackStackJobId: result.dag_run_id as any
+            classificationCategory: pollResult.category as any,
+            classificationConfidence: pollResult.confidence as any
           });
 
-          // Add timeline event
+          // Add success timeline event
           addTimelineEvent({
-            id: `timeline_${Date.now()}`,
+            id: `timeline_${Date.now()}_${doc.id}`,
             timestamp: new Date().toISOString(),
-            event: 'AI Verification Started',
-            description: `Rack Stack processing started for ${doc.name} (Job ID: ${result.dag_run_id})`,
+            event: 'AI Verification Completed',
+            description: `${doc.name} verified as ${pollResult.category} (${(pollResult.confidence! * 100).toFixed(1)}% confidence)`,
             status: 'completed'
           });
 
-          successCount++;
+          return { doc, success: true };
         } else {
-          throw new Error(result.message || 'Verification failed');
+          // Failed verification
+          updateDocument(doc.id, {
+            status: 'failed' as any,
+            classificationCategory: pollResult.category as any,
+            classificationConfidence: pollResult.confidence as any
+          });
+
+          // Add failure timeline event
+          addTimelineEvent({
+            id: `timeline_${Date.now()}_${doc.id}`,
+            timestamp: new Date().toISOString(),
+            event: 'AI Verification Failed',
+            description: `${doc.name}: ${pollResult.message}`,
+            status: 'failed'
+          });
+
+          return { doc, success: false };
         }
       } catch (error) {
         console.error(`Failed to verify ${doc.name}:`, error);
@@ -617,17 +705,23 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
           status: 'uploaded' as any
         });
 
-        failCount++;
+        return { doc, success: false };
       }
-    }
+    });
 
+    const pollResults = await Promise.all(pollPromises);
+    
     setIsRunningVerification(false);
 
+    // Count successes and failures
+    const successCount = pollResults.filter(r => r.success).length;
+    const failCount = pollResults.filter(r => !r.success).length;
+
     if (successCount > 0) {
-      toast.success(`AI verification started for ${successCount} document(s)! Check console for details.`);
+      toast.success(`Successfully verified ${successCount} document(s)!`);
     }
     if (failCount > 0) {
-      toast.error(`Failed to verify ${failCount} document(s). Check console for errors.`);
+      toast.error(`${failCount} document(s) failed verification`);
     }
   };
 
@@ -695,6 +789,16 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
             Job ID: {doc.rackStackJobId}
           </div>
         )}
+
+        {/* Show classification results if available */}
+        {doc.classificationCategory && doc.classificationConfidence && (
+          <div className="mt-2 text-xs text-slate-600">
+            <span className="font-medium">Classification:</span> {doc.classificationCategory} 
+            <span className="text-slate-500 ml-1">
+              ({(doc.classificationConfidence * 100).toFixed(1)}% confidence)
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-3">
@@ -702,7 +806,30 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
         <Button
           size="sm"
           variant="outline"
-          onClick={() => onAddToPackage(doc.id)}
+          onClick={() => {
+            // Check if document is already in package
+            const alreadyInPackage = packageDocuments.some(pkgDoc => pkgDoc.id === doc.id);
+            
+            if (alreadyInPackage) {
+              toast.info(`${doc.name} is already in the package`);
+              return;
+            }
+            
+            // Determine category based on document's category
+            const category = doc.category === 'likely' ? 'likely' : 'minimum';
+            
+            // Add to package in global store
+            addToPackage({
+              id: doc.id,
+              name: doc.name,
+              category: category as 'minimum' | 'likely',
+              verified: doc.status === 'ai-verified' || doc.status === 'uploaded',
+              timestamp: new Date().toISOString()
+            });
+            
+            // Call parent handler for timeline event
+            onAddToPackage(doc.id, doc.name, category as 'minimum' | 'likely');
+          }}
           disabled={doc.status === 'pending' || doc.status === 'failed' || doc.status === 'in_progress'}
           data-testid={`add-${doc.id}`}
           className="flex items-center gap-2"
@@ -788,6 +915,16 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
                 {minimumDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
               </div>
             </div>
+
+            {/* Likely Conditions Documents */}
+            {likelyDocs.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="font-semibold text-slate-900">Likely Conditions</h3>
+                <div className="space-y-3">
+                  {likelyDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
+                </div>
+              </div>
+            )}
 
             {/* Additional Categories (if showing all) */}
             {showAllCategories && additionalDocs.length > 0 && (

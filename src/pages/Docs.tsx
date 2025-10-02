@@ -31,8 +31,15 @@ export default function Docs() {
     console.log('Document clicked:', docId);
   };
 
-  const handleAddToPackage = (docId: string) => {
-    toast.success("Document added to package");
+  const handleAddToPackage = (docId: string, docName: string, category: 'minimum' | 'likely') => {
+    addTimelineEvent({
+      id: `timeline_${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      event: 'Document added to package',
+      description: `Added ${docName} to submission package`,
+      status: 'completed'
+    });
+    toast.success(`${docName} added to package`);
   };
 
   const handleSubmit = () => {

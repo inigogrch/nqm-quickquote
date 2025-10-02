@@ -1,6 +1,7 @@
 // Rack Stack API Service - PDF Processing, OCR, and Document Classification
 
 import { RACK_STACK_CONFIG, isRackStackConfigured } from '../config/credentials';
+import { readJsonFromS3 } from './s3-upload';
 
 export interface RackStackRequest {
   bucket_name: string;
@@ -49,6 +50,114 @@ export interface RackStackJobStatus {
   conf: Record<string, any>;
 }
 
+export interface ProcessingResult {
+  success: boolean;
+  status: 'ai-verified' | 'failed' | 'in_progress';
+  confidence?: number;
+  category?: string;
+  processing_status?: string;
+  message?: string;
+  fullResult?: RackStackResponse;
+}
+
+/**
+ * Poll S3 for processing results with timeout
+ * @param outputDestination - S3 URI where results will be saved
+ * @param maxAttempts - Maximum number of polling attempts (default: 9 for ~90 seconds)
+ * @param intervalMs - Interval between attempts in milliseconds (default: 10000 = 10 seconds)
+ */
+export async function pollForResults(
+  outputDestination: string,
+  maxAttempts: number = 9,
+  intervalMs: number = 10000
+): Promise<ProcessingResult> {
+  console.log('🔄 Starting polling for results:', {
+    outputDestination,
+    maxAttempts,
+    intervalMs,
+    totalWaitTime: `${(maxAttempts * intervalMs) / 1000} seconds`
+  });
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      console.log(`🔍 Polling attempt ${attempt}/${maxAttempts}...`);
+      
+      const result = await readJsonFromS3(outputDestination);
+      
+      if (result !== null) {
+        // Result found! Validate it
+        console.log('✅ Processing result found:', result);
+        
+        const { classification, processing_status } = result;
+        
+        // Check if processing completed successfully
+        if (processing_status === 'completed') {
+          const confidence = classification?.confidence || 0;
+          const category = classification?.category || 'Unknown';
+          
+          // Check confidence threshold (95% = 0.95)
+          if (confidence >= 0.95) {
+            return {
+              success: true,
+              status: 'ai-verified',
+              confidence,
+              category,
+              processing_status,
+              message: `Document classified as ${category} with ${(confidence * 100).toFixed(1)}% confidence`,
+              fullResult: result
+            };
+          } else {
+            return {
+              success: false,
+              status: 'failed',
+              confidence,
+              category,
+              processing_status,
+              message: `Low confidence: ${(confidence * 100).toFixed(1)}% (required: 95%)`
+            };
+          }
+        } else {
+          // Processing completed but not successfully
+          return {
+            success: false,
+            status: 'failed',
+            processing_status,
+            message: `Processing status: ${processing_status}`
+          };
+        }
+      }
+      
+      // Result not found yet, wait before next attempt
+      if (attempt < maxAttempts) {
+        console.log(`⏳ Result not ready, waiting ${intervalMs / 1000} seconds before retry...`);
+        await new Promise(resolve => setTimeout(resolve, intervalMs));
+      }
+      
+    } catch (error) {
+      console.error(`❌ Error during polling attempt ${attempt}:`, error);
+      
+      // If it's the last attempt, return failure
+      if (attempt === maxAttempts) {
+        return {
+          success: false,
+          status: 'failed',
+          message: `Polling failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        };
+      }
+      
+      // Otherwise, wait and retry
+      await new Promise(resolve => setTimeout(resolve, intervalMs));
+    }
+  }
+  
+  // Timeout - processing took too long
+  return {
+    success: false,
+    status: 'failed',
+    message: `Processing timeout: Result not available after ${(maxAttempts * intervalMs) / 1000} seconds`
+  };
+}
+
 /**
  * Trigger Rack Stack processing for a document
  * @param s3Bucket - S3 bucket containing the document
@@ -59,7 +168,7 @@ export async function triggerRackStackProcessing(
   s3Bucket: string,
   s3Key: string,
   documentId: string
-): Promise<{ success: boolean; dag_run_id?: string; message?: string; response?: any }> {
+): Promise<{ success: boolean; dag_run_id?: string; message?: string; response?: any; output_destination?: string }> {
   try {
     if (!isRackStackConfigured()) {
       throw new Error('Rack Stack API credentials not configured in src/lib/config/credentials.ts');
@@ -119,6 +228,7 @@ export async function triggerRackStackProcessing(
     return {
       success: true,
       dag_run_id: result.dag_run_id,
+      output_destination: outputDestination,
       message: 'Document processing job started successfully',
       response: result, // Return full response for observation
     };
