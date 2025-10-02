@@ -41,7 +41,6 @@ export function BreadcrumbHeader({ title, description }: BreadcrumbHeaderProps) 
         { label: 'Quick Quote', path: '/quick-quote' },
         { label: 'Programs', path: '/programs' },
         { label: 'Submission', path: '/docs' },
-        { label: 'Agents', path: '/agents' },
         { label: 'Summary', path: '/summary' }
       );
     }
