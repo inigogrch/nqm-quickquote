@@ -151,7 +151,9 @@ export function PackageCards() {
         </CardContent>
       </Card>
 
-      {/* Compliance Card */}
+      {/* TODO: COMPLIANCE CHECK - TEMPORARILY HIDDEN - WILL BE RE-ENABLED LATER */}
+      {/* Uncomment this section when ready to show Compliance Check again */}
+      {/*
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -195,13 +197,15 @@ export function PackageCards() {
             </div>
             <p className="text-xs text-slate-500 mt-1" data-placeholder="true">
               High confidence in loan approval
-              {/* TODO: replace with live confidence service */}
             </p>
           </div>
         </CardContent>
       </Card>
+      */}
 
-      {/* Next Steps Card */}
+      {/* TODO: NEXT STEPS - TEMPORARILY HIDDEN - WILL BE RE-ENABLED LATER */}
+      {/* Uncomment this section when ready to show Next Steps again */}
+      {/*
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -220,7 +224,6 @@ export function PackageCards() {
                 <p className="text-sm font-medium text-slate-900">Upload Documents</p>
                 <p className="text-xs text-slate-600" data-placeholder="true">
                   Upload and organize all required loan documentation
-                  {/* TODO: replace with live workflow service */}
                 </p>
               </div>
             </div>
@@ -233,7 +236,6 @@ export function PackageCards() {
                 <p className="text-sm font-medium text-slate-900">Review Package</p>
                 <p className="text-xs text-slate-600" data-placeholder="true">
                   Final review of all documents and loan details
-                  {/* TODO: replace with live workflow service */}
                 </p>
               </div>
             </div>
@@ -246,7 +248,6 @@ export function PackageCards() {
                 <p className="text-sm font-medium text-slate-600">Handover to LGX</p>
                 <p className="text-xs text-slate-500" data-placeholder="true">
                   LGX system will handle automated LOS submission and processing
-                  {/* TODO: replace with live workflow service */}
                 </p>
               </div>
             </div>
@@ -257,6 +258,7 @@ export function PackageCards() {
           </Button>
         </CardContent>
       </Card>
+      */}
     </div>
   );
 }
