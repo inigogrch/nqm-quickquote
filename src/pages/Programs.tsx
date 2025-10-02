@@ -23,7 +23,8 @@ export default function Programs() {
     ineligiblePrograms,
     eligibilityApiResponse,
     setSelectedProgramId,
-    setCurrentLoanId
+    setCurrentLoanId,
+    addTimelineEvent
   } = useAppStore();
 
   const handleSelectProgram = async (programId: string) => {
@@ -57,6 +58,15 @@ export default function Programs() {
     } catch (error) {
       console.error('Error inserting loan record:', error);
     }
+    
+    // Add timeline event for Eligible Programs Selection completion
+    addTimelineEvent({
+      id: `timeline_${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      event: 'Eligible Programs Selection',
+      description: `Selected program: ${selectedProgram?.name || 'Selected Program'}`,
+      status: 'completed'
+    });
     
     navigate('/docs');
   };
