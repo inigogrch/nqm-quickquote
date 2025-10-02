@@ -1,15 +1,6 @@
 /**
- * ====================================
- * CREDENTIALS CONFIGURATION
- * ====================================
- * 
  * 🔑 ENVIRONMENT VARIABLES SETUP:
- * 
- * For local development:
- * 1. Copy .env.example to .env
- * 2. Add your actual credentials to .env
- * 3. Never commit .env to git (already in .gitignore)
- * 
+
  * For Vercel deployment:
  * 1. Go to your Vercel project settings
  * 2. Navigate to "Environment Variables"
