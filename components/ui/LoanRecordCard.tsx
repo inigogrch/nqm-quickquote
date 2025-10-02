@@ -75,7 +75,7 @@ export function LoanRecordCard({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onRemove(id)}
+          onClick={(e) => { e.stopPropagation(); onRemove(id); }}
           className="w-6 h-6 p-0 hover:bg-red-100 hover:text-red-600 ml-2"
           data-testid={`remove-loan-record-${id}`}
         >
