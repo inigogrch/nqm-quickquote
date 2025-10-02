@@ -98,13 +98,13 @@ export default function QuickQuote() {
       toast.dismiss(loadingToast);
       toast.success(`Analysis complete! Found ${transformedData.eligible.length} eligible programs`);
       
-      // Add timeline event for Loan Scenario Details completion
+      // Add timeline event for eligibility analysis
       addTimelineEvent({
         id: `timeline_${Date.now()}`,
         timestamp: new Date().toISOString(),
-        event: 'Loan Scenario Details',
-        description: 'Loan scenario details completed and programs analyzed',
-        status: 'completed'
+        event: "Eligibility Analysis Complete",
+        description: `Analyzed loan eligibility - Found ${transformedData.eligible.length} eligible programs`,
+        status: "completed",
       });
       
       // Navigate to programs page - it will now use the API data from store
@@ -128,7 +128,9 @@ export default function QuickQuote() {
       debtToIncome: 0,
       propertyType: '',
       occupancyType: '',
-      loanPurpose: ''
+      loanPurpose: '',
+      state: '',
+      county: ''
     });
     setShowImproveAccuracy(false);
     setIsMinimalComplete(false);
