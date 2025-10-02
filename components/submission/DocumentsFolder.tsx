@@ -40,10 +40,6 @@ interface Document {
     url?: string;
   }>;
   rackStackJobId?: string;
-  apiRequirement?: string | null;
-  apiMessage?: string | null;
-  apiFieldName?: string | null;
-  apiFieldValue?: boolean | null | string;
 }
 
 interface DocumentsFolderProps {
@@ -386,10 +382,9 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
       return generateDocuments(showAllCategories);
     }
     
-    // Find the selected program to get the original API key and program name and program name
+    // Find the selected program to get the original API key and program name
     const selectedProgram = loanPrograms.find(p => p.id === selectedProgramId);
     const apiKeyToUse = selectedProgram?.originalApiKey || selectedProgramId;
-    const programName = selectedProgram?.name || selectedProgramId;
     const programName = selectedProgram?.name || selectedProgramId;
     
     const documentStatuses = extractDocumentStatusesForProgram(eligibilityApiResponse, apiKeyToUse);
@@ -633,13 +628,6 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
               <Info className="w-3 h-3 text-slate-400" />
             </TooltipTrigger>
             <TooltipContent>
-              <div className="text-xs max-w-xs space-y-2">
-                <div>
-                  <p><strong>Why required:</strong> {doc.whyRequired}</p>
-                </div>
-                <div>
-                  <p><strong>Citation:</strong> {doc.citation}</p>
-                </div>
               <div className="text-xs max-w-xs space-y-2">
                 <div>
                   <p><strong>Why required:</strong> {doc.whyRequired}</p>
