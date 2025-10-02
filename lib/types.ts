@@ -85,6 +85,9 @@ export interface Document {
   aiFindings?: string[];
   rackStackJobId?: string; // Track the Rack Stack job ID
   rackStackStatus?: 'queued' | 'running' | 'success' | 'failed';
+  outputDestination?: string; // S3 URI where processing results are saved
+  classificationCategory?: string; // Document classification category from AI
+  classificationConfidence?: number; // Confidence score (0-1) from AI classification
 }
 
 export interface AgentStep {
