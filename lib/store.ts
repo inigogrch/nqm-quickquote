@@ -28,6 +28,13 @@ interface LoanRecord {
   createdAt: string;
 }
 
+interface WorkflowState {
+  quickQuoteUnlocked: boolean;
+  programsUnlocked: boolean;
+  submissionUnlocked: boolean;
+  summaryUnlocked: boolean;
+}
+
 interface AppStore extends AppState {
   // New package state
   packageDocuments: PackageDocument[];
@@ -40,6 +47,9 @@ interface AppStore extends AppState {
 
   // Current loan id
   currentLoanId: string | null;
+  
+  // Workflow state
+  workflow: WorkflowState;
   
   // Actions
   setCurrentStep: (step: AppState['currentStep']) => void;
@@ -71,6 +81,12 @@ interface AppStore extends AppState {
   // Selected program actions
   setSelectedProgramId: (programId: string | null) => void;
   
+  // Workflow actions
+  unlockQuickQuote: () => void;
+  unlockPrograms: () => void;
+  unlockSubmission: () => void;
+  unlockSummary: () => void;
+  
   resetState: () => void;
 }
 
@@ -96,6 +112,12 @@ export const useAppStore = create<AppStore>((set, get) => ({
   loanRecords: [],
   selectedProgramId: null,
   currentLoanId: null,
+  workflow: {
+    quickQuoteUnlocked: false,
+    programsUnlocked: false,
+    submissionUnlocked: false,
+    summaryUnlocked: false
+  },
 
   setCurrentStep: (step) => set({ currentStep: step }),
   
@@ -171,7 +193,35 @@ export const useAppStore = create<AppStore>((set, get) => ({
   // Selected program management
   setSelectedProgramId: (programId) => set({ selectedProgramId: programId }),
   
-  resetState: () => set({ ...initialState, packageDocuments: [], loanRecords: [], selectedProgramId: null })
+  // Workflow management
+  unlockQuickQuote: () => set((state) => ({ 
+    workflow: { ...state.workflow, quickQuoteUnlocked: true } 
+  })),
+  
+  unlockPrograms: () => set((state) => ({ 
+    workflow: { ...state.workflow, programsUnlocked: true } 
+  })),
+  
+  unlockSubmission: () => set((state) => ({ 
+    workflow: { ...state.workflow, submissionUnlocked: true } 
+  })),
+  
+  unlockSummary: () => set((state) => ({ 
+    workflow: { ...state.workflow, summaryUnlocked: true } 
+  })),
+  
+  resetState: () => set({ 
+    ...initialState, 
+    packageDocuments: [], 
+    loanRecords: [], 
+    selectedProgramId: null,
+    workflow: {
+      quickQuoteUnlocked: false,
+      programsUnlocked: false,
+      submissionUnlocked: false,
+      summaryUnlocked: false
+    }
+  })
 }));
 
 // Progress calculation helpers
