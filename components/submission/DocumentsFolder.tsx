@@ -559,23 +559,22 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     }
 
     setIsRunningVerification(true);
-    toast.info(`Starting AI verification for ${docsToVerify.length} document(s)...`);
+    
+    // Show single consolidated toast message
+    toast.info(`Processing uploaded documents... This may take up to 90 seconds.`);
 
-    let successCount = 0;
-    let failCount = 0;
+    // Step 1: Set all documents to in_progress immediately
+    docsToVerify.forEach(doc => {
+      updateDocument(doc.id, {
+        status: 'in_progress' as any
+      });
+    });
 
-    // Process documents sequentially to avoid overwhelming the system
-    for (const doc of docsToVerify) {
-      // Get the first uploaded file for this document
+    // Step 2: Trigger all Rack Stack jobs in parallel
+    const triggerPromises = docsToVerify.map(async (doc) => {
       const firstFile = doc.uploadedFiles![0];
-
+      
       try {
-        // Step 1: Update document status to in_progress
-        updateDocument(doc.id, {
-          status: 'in_progress' as any
-        });
-
-        // Step 2: Trigger Rack Stack processing
         const triggerResult = await triggerRackStackProcessing(
           firstFile.s3Bucket,
           firstFile.s3Key,
@@ -594,17 +593,49 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
 
         // Add timeline event for job start
         addTimelineEvent({
-          id: `timeline_${Date.now()}`,
+          id: `timeline_${Date.now()}_${doc.id}`,
           timestamp: new Date().toISOString(),
           event: 'AI Verification Started',
           description: `Processing started for ${doc.name} (Job ID: ${triggerResult.dag_run_id})`,
           status: 'completed'
         });
 
-        toast.info(`Processing ${doc.name}... This may take up to 90 seconds.`);
+        return {
+          doc,
+          triggerResult,
+          success: true
+        };
+      } catch (error) {
+        console.error(`Failed to trigger ${doc.name}:`, error);
+        
+        // Revert to uploaded status
+        updateDocument(doc.id, {
+          status: 'uploaded' as any
+        });
 
-        // Step 3: Poll for results (will take ~1 minute)
-        const pollResult = await pollForResults(triggerResult.output_destination!);
+        return {
+          doc,
+          error,
+          success: false
+        };
+      }
+    });
+
+    const triggerResults = await Promise.all(triggerPromises);
+    
+    // Filter out failed triggers
+    const successfulTriggers = triggerResults.filter(r => r.success);
+    
+    if (successfulTriggers.length === 0) {
+      setIsRunningVerification(false);
+      toast.error('Failed to start verification for any documents');
+      return;
+    }
+
+    // Step 3: Poll for all results in parallel
+    const pollPromises = successfulTriggers.map(async ({ doc, triggerResult }) => {
+      try {
+        const pollResult = await pollForResults(triggerResult!.output_destination!);
 
         if (pollResult.status === 'ai-verified') {
           // Success! Update document with verification details
@@ -616,15 +647,14 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
 
           // Add success timeline event
           addTimelineEvent({
-            id: `timeline_${Date.now()}`,
+            id: `timeline_${Date.now()}_${doc.id}`,
             timestamp: new Date().toISOString(),
             event: 'AI Verification Completed',
             description: `${doc.name} verified as ${pollResult.category} (${(pollResult.confidence! * 100).toFixed(1)}% confidence)`,
             status: 'completed'
           });
 
-          toast.success(pollResult.message || `${doc.name} verified successfully!`);
-          successCount++;
+          return { doc, success: true };
         } else {
           // Failed verification
           updateDocument(doc.id, {
@@ -635,15 +665,14 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
 
           // Add failure timeline event
           addTimelineEvent({
-            id: `timeline_${Date.now()}`,
+            id: `timeline_${Date.now()}_${doc.id}`,
             timestamp: new Date().toISOString(),
             event: 'AI Verification Failed',
             description: `${doc.name}: ${pollResult.message}`,
             status: 'failed'
           });
 
-          toast.error(`${doc.name}: ${pollResult.message}`);
-          failCount++;
+          return { doc, success: false };
         }
       } catch (error) {
         console.error(`Failed to verify ${doc.name}:`, error);
@@ -653,12 +682,17 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
           status: 'uploaded' as any
         });
 
-        toast.error(`Failed to process ${doc.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        failCount++;
+        return { doc, success: false };
       }
-    }
+    });
 
+    const pollResults = await Promise.all(pollPromises);
+    
     setIsRunningVerification(false);
+
+    // Count successes and failures
+    const successCount = pollResults.filter(r => r.success).length;
+    const failCount = pollResults.filter(r => !r.success).length;
 
     if (successCount > 0) {
       toast.success(`Successfully verified ${successCount} document(s)!`);
