@@ -40,6 +40,7 @@ export interface ChatMessage {
     conversation_id: string;
     messages: ChatMessage[];
     include_citations: boolean;
+    message?: string; // Add for Lambda compatibility
   }
   
   export interface ChatResponseData {
@@ -69,6 +70,8 @@ export interface ChatMessage {
   
     async sendMessage(request: ChatRequest): Promise<ChatResponse> {
       try {
+        console.log('🔍 DEBUG: Sending request payload:', JSON.stringify(request, null, 2));
+        
         const response = await fetch(`${this.baseUrl}/api/chat`, {
           method: 'POST',
           headers: {
@@ -78,7 +81,10 @@ export interface ChatMessage {
         });
   
         if (!response.ok) {
-          throw new Error(`API Error: ${response.status} ${response.statusText}`);
+          const errorMessage = response.status === 502 
+            ? 'Server temporarily unavailable. Please try again in a few moments.'
+            : `API Error: ${response.status} ${response.statusText}`;
+          throw new Error(errorMessage);
         }
   
         return await response.json();

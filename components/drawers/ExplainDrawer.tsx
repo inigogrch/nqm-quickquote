@@ -3,11 +3,9 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAppStore } from '../../lib/store';
-import { PLACEHOLDER_TEXT } from '../../lib/fixtures';
-import { Info, ExternalLink } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 interface ExplainDrawerProps {
   isOpen: boolean;
@@ -16,13 +14,18 @@ interface ExplainDrawerProps {
 }
 
 export function ExplainDrawer({ isOpen, onClose, selectedProgramId }: ExplainDrawerProps) {
-  const { eligibilityRules, loanPrograms } = useAppStore();
+  const { eligibilityRules, loanPrograms, loanDetails } = useAppStore();
   
   const selectedProgram = selectedProgramId 
     ? loanPrograms.find(p => p.id === selectedProgramId)
     : null;
 
-  const relevantRules = eligibilityRules.slice(0, 5);
+  // Show all rules from the API response, sorted by result (pass first, then fail)
+  const relevantRules = [...eligibilityRules].sort((a, b) => {
+    if (a.result === 'pass' && b.result !== 'pass') return -1;
+    if (a.result !== 'pass' && b.result === 'pass') return 1;
+    return 0;
+  });
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -86,16 +89,6 @@ export function ExplainDrawer({ isOpen, onClose, selectedProgramId }: ExplainDra
                       {/* TODO: replace with live guidelines service */}
                     </p>
                   </div>
-
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
-                    data-testid={`view-guideline-${rule.id}`}
-                  >
-                    <ExternalLink className="w-3 h-3 mr-2" />
-                    View Full Guideline
-                  </Button>
                 </div>
               </Card>
             ))}
@@ -107,9 +100,26 @@ export function ExplainDrawer({ isOpen, onClose, selectedProgramId }: ExplainDra
           <div className="space-y-3">
             <h3 className="font-medium text-slate-900">Summary</h3>
             <Card className="p-4">
-              <p className="text-sm text-slate-600" data-placeholder="true">
-                {PLACEHOLDER_TEXT}
-                {/* TODO: replace with live explainability service */}
+              <p className="text-sm text-slate-600">
+                {(() => {
+                  const passedRules = relevantRules.filter(r => r.result === 'pass').length;
+                  const failedRules = relevantRules.filter(r => r.result === 'fail').length;
+                  const totalRules = relevantRules.length;
+                  
+                  if (totalRules === 0) {
+                    return 'No rules have been evaluated yet. Please complete the loan scenario and see programs first.';
+                  }
+                  
+                  const passRate = ((passedRules / totalRules) * 100).toFixed(0);
+                  
+                  return `Your loan scenario has been evaluated against ${totalRules} eligibility requirements. ${passedRules} requirements passed and ${failedRules} requirements failed. Overall pass rate: ${passRate}%. ${
+                    failedRules === 0 
+                      ? 'This is an excellent scenario with high approval likelihood.'
+                      : failedRules <= 3
+                      ? 'Some requirements were not met, but eligible programs are still available.'
+                      : 'Multiple requirements were not met. Consider adjusting loan parameters for more options.'
+                  }`;
+                })()}
               </p>
             </Card>
           </div>
@@ -118,18 +128,38 @@ export function ExplainDrawer({ isOpen, onClose, selectedProgramId }: ExplainDra
           <div className="space-y-3">
             <h3 className="font-medium text-slate-900">Key Factors</h3>
             <div className="space-y-2">
-              <Badge variant="outline" className="text-xs" data-placeholder="true">
-                FICO Score: 777 (Excellent)
-                {/* TODO: replace with live analysis service */}
-              </Badge>
-              <Badge variant="outline" className="text-xs" data-placeholder="true">
-                LTV: 77.7% (Acceptable)
-                {/* TODO: replace with live analysis service */}
-              </Badge>
-              <Badge variant="outline" className="text-xs" data-placeholder="true">
-                Property Type: SFR (Preferred)
-                {/* TODO: replace with live analysis service */}
-              </Badge>
+              {loanDetails?.creditScore && (
+                <Badge variant="outline" className="text-xs">
+                  FICO Score: {loanDetails.creditScore} {
+                    loanDetails.creditScore >= 740 ? '(Excellent)' :
+                    loanDetails.creditScore >= 670 ? '(Good)' :
+                    loanDetails.creditScore >= 580 ? '(Fair)' : '(Poor)'
+                  }
+                </Badge>
+              )}
+              {loanDetails?.loanToValue && (
+                <Badge variant="outline" className="text-xs">
+                  LTV: {loanDetails.loanToValue}% {
+                    loanDetails.loanToValue <= 80 ? '(Acceptable)' :
+                    loanDetails.loanToValue <= 90 ? '(High)' : '(Very High)'
+                  }
+                </Badge>
+              )}
+              {loanDetails?.propertyType && (
+                <Badge variant="outline" className="text-xs">
+                  Property Type: {loanDetails.propertyType}
+                </Badge>
+              )}
+              {loanDetails?.debtToIncome && (
+                <Badge variant="outline" className="text-xs">
+                  DTI: {loanDetails.debtToIncome}%
+                </Badge>
+              )}
+              {loanDetails?.occupancyType && (
+                <Badge variant="outline" className="text-xs">
+                  Occupancy: {loanDetails.occupancyType}
+                </Badge>
+              )}
             </div>
           </div>
         </div>
