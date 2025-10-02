@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { LoanDetails } from '../../lib/types';
 import { PLACEHOLDER_TEXT } from '../../lib/fixtures';
-import { Calculator, TrendingUp, Home, User } from 'lucide-react';
+import { Calculator, TrendingUp, Home, User, MapPin } from 'lucide-react';
+import { getStateName } from '../../lib/location-data';
 
 interface PreviewCardProps {
   loanData: LoanDetails;
@@ -111,6 +112,33 @@ export function PreviewCard({ loanData, hasImprovedAccuracy }: PreviewCardProps)
             </div>
           )}
         </div>
+
+        {/* Location Details */}
+        {(loanData.state || loanData.county) && (
+          <>
+            <Separator />
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 mb-2">
+                <MapPin className="w-4 h-4 text-slate-500" />
+                <span className="text-sm font-medium">Location</span>
+              </div>
+              
+              {loanData.state && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-600">State</span>
+                  <span className="text-sm font-medium">{getStateName(loanData.state)}</span>
+                </div>
+              )}
+              
+              {loanData.county && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-600">County</span>
+                  <span className="text-sm font-medium">{loanData.county}</span>
+                </div>
+              )}
+            </div>
+          </>
+        )}
 
         {/* Enhanced Fields */}
         {hasImprovedAccuracy && loanData.debtToIncome > 0 && (

@@ -3,43 +3,45 @@
  * CREDENTIALS CONFIGURATION
  * ====================================
  * 
- * 🔑 INPUT YOUR CREDENTIALS HERE:
+ * 🔑 ENVIRONMENT VARIABLES SETUP:
  * 
- * 1. AWS S3 Credentials (S3 Webhub):
- *    - AWS_ACCESS_KEY_ID: Your S3 webhub access key
- *    - AWS_SECRET_ACCESS_KEY: Your S3 webhub secret key
- *    - AWS_S3_BUCKET: Your S3 bucket name for document storage
- *    - AWS_S3_REGION: Your S3 region (default: us-east-1)
+ * For local development:
+ * 1. Copy .env.example to .env
+ * 2. Add your actual credentials to .env
+ * 3. Never commit .env to git (already in .gitignore)
  * 
- * 2. Rack Stack API Credentials (Airflow):
- *    - RACK_STACK_API_URL: Already set to UAT environment
- *    - RACK_STACK_USERNAME: Already set to "airflow"
- *    - RACK_STACK_PASSWORD: Already set
+ * For Vercel deployment:
+ * 1. Go to your Vercel project settings
+ * 2. Navigate to "Environment Variables"
+ * 3. Add each VITE_* variable with your values
  * 
- * 3. Output Configuration:
- *    - RACK_STACK_OUTPUT_BUCKET: Bucket where Rack Stack saves results
- *    - RACK_STACK_OUTPUT_PREFIX: Folder prefix for results
+ * Required Environment Variables:
+ * - VITE_AWS_ACCESS_KEY_ID: Your S3 webhub access key
+ * - VITE_AWS_SECRET_ACCESS_KEY: Your S3 webhub secret key
+ * - VITE_AWS_S3_BUCKET: Your S3 bucket name
+ * - VITE_AWS_REGION: Your S3 region (default: us-east-1)
+ * - VITE_RACK_STACK_OUTPUT_BUCKET: Output bucket for Rack Stack results
  */
 
 // ==========================================
-// 🔑 AWS S3 CONFIGURATION - INPUT YOUR CREDENTIALS HERE
+// 🔑 AWS S3 CONFIGURATION - LOADED FROM ENV VARS
 // ==========================================
 export const AWS_CONFIG = {
-  ACCESS_KEY_ID: '', // 👈 INPUT YOUR S3 WEBHUB ACCESS KEY HERE
-  SECRET_ACCESS_KEY: '', // 👈 INPUT YOUR S3 WEBHUB SECRET KEY HERE
-  BUCKET: '', // 👈 INPUT YOUR S3 BUCKET NAME HERE (e.g., 'nqm-documents')
-  REGION: 'us-east-1', // Change if needed
+  ACCESS_KEY_ID: import.meta.env.VITE_AWS_ACCESS_KEY_ID || '',
+  SECRET_ACCESS_KEY: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY || '',
+  BUCKET: import.meta.env.VITE_AWS_S3_BUCKET || 'quick-quote-demo',
+  REGION: import.meta.env.VITE_AWS_REGION || 'us-east-1',
 };
 
 // ==========================================
 // 🔑 RACK STACK API CONFIGURATION
 // ==========================================
 export const RACK_STACK_CONFIG = {
-  API_URL: 'https://uat-airflow-llm.cybersoftbpo.ai/api/v1/dags/rack_stack/dagRuns',
-  USERNAME: 'airflow',
-  PASSWORD: 'jXe4wZgMUsJrWSUwaLHJuFTWnfsMp5DQDC+',
-  OUTPUT_BUCKET: '', // 👈 INPUT OUTPUT BUCKET NAME HERE (e.g., 'nqm-rack-stack-results')
-  OUTPUT_PREFIX: 'results/', // Folder structure in output bucket
+  API_URL: import.meta.env.VITE_RACK_STACK_API_URL || 'https://uat-airflow-llm.cybersoftbpo.ai/api/v1/dags/rack_stack/dagRuns',
+  USERNAME: import.meta.env.VITE_RACK_STACK_USERNAME || 'airflow',
+  PASSWORD: import.meta.env.VITE_RACK_STACK_PASSWORD || 'jXe4wZgMUsJrWSUwaLHJuFTWnfsMp5DQDC+',
+  OUTPUT_BUCKET: import.meta.env.VITE_RACK_STACK_OUTPUT_BUCKET || '',
+  OUTPUT_PREFIX: import.meta.env.VITE_RACK_STACK_OUTPUT_PREFIX || 'results/',
 };
 
 // ==========================================

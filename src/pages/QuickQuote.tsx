@@ -21,7 +21,8 @@ export default function QuickQuote() {
     setEligibilityApiResponse,
     setLoanPrograms,
     setIneligiblePrograms,
-    setEligibilityRules
+    setEligibilityRules,
+    addTimelineEvent
   } = useAppStore();
   const [formData, setFormData] = useState<LoanDetails>(PLACEHOLDER_LOAN_DETAILS);
   const [showImproveAccuracy, setShowImproveAccuracy] = useState(false);
@@ -90,6 +91,15 @@ export default function QuickQuote() {
       toast.dismiss(loadingToast);
       toast.success(`Analysis complete! Found ${transformedData.eligible.length} eligible programs`);
       
+      // Add timeline event for eligibility analysis
+      addTimelineEvent({
+        id: `timeline_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        event: "Eligibility Analysis Complete",
+        description: `Analyzed loan eligibility - Found ${transformedData.eligible.length} eligible programs`,
+        status: "completed",
+      });
+      
       // Navigate to programs page - it will now use the API data from store
       navigate('/programs');
       
@@ -111,7 +121,9 @@ export default function QuickQuote() {
       debtToIncome: 0,
       propertyType: '',
       occupancyType: '',
-      loanPurpose: ''
+      loanPurpose: '',
+      state: '',
+      county: ''
     });
     setShowImproveAccuracy(false);
     setIsMinimalComplete(false);

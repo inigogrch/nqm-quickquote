@@ -29,6 +29,8 @@ export const PLACEHOLDER_LOAN_DETAILS = {
   propertyType: "Single Family Residence",
   occupancyType: "Primary Residence",
   loanPurpose: "Purchase",
+  state: "CA",
+  county: "Los Angeles",
   has_initial_1003: true,
   has_credit_report: true
 };
@@ -170,50 +172,7 @@ export const PLACEHOLDER_AGENT_STEPS = [
 ];
 
 // Timeline events for Summary page
-export const PLACEHOLDER_TIMELINE_EVENTS = [
-  {
-    id: "timeline_001",
-    timestamp: "2024-01-15T10:30:00Z",
-    event: "Application Submitted",
-    description: "Quick Quote form completed and submitted",
-    status: "completed"
-  },
-  {
-    id: "timeline_002",
-    timestamp: "2024-01-15T10:45:00Z", 
-    event: "Documents Uploaded",
-    description: "Minimum required documents uploaded successfully",
-    status: "completed"
-  },
-  {
-    id: "timeline_003",
-    timestamp: "2024-01-15T11:15:00Z",
-    event: "Verification Started", 
-    description: "Document verification agent initiated review",
-    status: "completed"
-  },
-  {
-    id: "timeline_004",
-    timestamp: "2024-01-15T11:30:00Z",
-    event: "HITL Review Required",
-    description: "Human-in-the-loop review requested for income analysis", 
-    status: "in_progress"
-  },
-  {
-    id: "timeline_005",
-    timestamp: "2024-01-15T12:00:00Z",
-    event: "Pre-Submission Review",
-    description: "Automated pre-submission package assembly initiated",
-    status: "pending"
-  },
-  {
-    id: "timeline_006", 
-    timestamp: "2024-01-15T12:30:00Z",
-    event: "Queued to Encompass",
-    description: "Loan package queued for LOS submission",
-    status: "pending"
-  }
-];
+export const PLACEHOLDER_TIMELINE_EVENTS = [];
 
 // Package summary data
 export const PLACEHOLDER_PACKAGE = {
