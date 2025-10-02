@@ -256,17 +256,20 @@ export default function QuickQuote() {
           }
 
           // Process and map the returned loan_data to form fields
-          const loanData = data.loan_data
+          // TODO: confirm mapping with actual API response structure
           const mappedData: Partial<LoanDetails> = {
-            borrowerName: loanData.borrower_name || '',
-            loanAmount: loanData.loan_amount || 0,
-            propertyValue: loanData.property_value || 0,
-            creditScore: loanData.credit_score || 0,
-            loanToValue: loanData.loan_to_value || 0,
-            debtToIncome: loanData.debt_to_income || 0,
-            propertyType: loanData.property_type || '',
-            occupancyType: loanData.occupancy_type || '',
-            loanPurpose: loanData.loan_purpose || '',
+            borrowerName: data?.applications[0]?.borrower?.fullName || '',
+            loanAmount: data?.borrowerRequestedLoanAmount || 0,
+            propertyValue:
+              data?.propertyAppraisedValueAmount ||
+              data?.propertyEstimatedValueAmount ||
+              0,
+            creditScore: 0,
+            loanToValue: 0,
+            debtToIncome: 0,
+            propertyType: data?.property?.propertyRightsType || '',
+            occupancyType: '',
+            loanPurpose: data?.property?.loanPurposeType || '',
           }
 
           setFormData((prev) => ({ ...prev, ...mappedData }))
