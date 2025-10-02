@@ -43,11 +43,11 @@ export default function Programs() {
 
     // upload loan record to supabase
     try {
-      // i need it to return the id of the loan record
       const { data, error } = await supabase.from('loans').insert({
         loan_details: loanDetails,
         program_name: selectedProgram?.name || 'Selected Program',
-        required_steps: ['Upload Docs', 'Income Verification', 'Credit Check'] // TODO: Get from API later
+        required_steps: ['Upload Docs', 'Income Verification', 'Credit Check'], // TODO: Get from API later
+        documents: []
       }).select().single();
 
       if (!error) {

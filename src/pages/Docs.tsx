@@ -1,24 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ExternalLink, Settings } from "lucide-react";
-import { DocumentsFolder } from "../../components/submission/DocumentsFolder";
-import { PackageComposer } from "../../components/submission/PackageComposer";
-import { UploaderDialog } from "../../components/dialogs/UploaderDialog";
-import { ExplainDrawer } from "../../components/drawers/ExplainDrawer";
-import { useAppStore } from "../../lib/store";
-import { PLACEHOLDER_PROGRAM } from "../../lib/fixtures";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { ExternalLink, Settings } from 'lucide-react';
+import { DocumentsFolder } from '../../components/submission/DocumentsFolder';
+import { PackageComposer } from '../../components/submission/PackageComposer';
+// Removed UploaderDialog - now handled inside DocumentsFolder component
+import { ExplainDrawer } from '../../components/drawers/ExplainDrawer';
+import { useAppStore } from '../../lib/store';
+import { PLACEHOLDER_PROGRAM } from '../../lib/fixtures';
+import { toast } from 'sonner';
 
 export default function Docs() {
   const navigate = useNavigate();
-  const [uploaderOpen, setUploaderOpen] = useState(false);
   const [explainOpen, setExplainOpen] = useState(false);
-  const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const { addTimelineEvent, selectedProgramId, loanPrograms, currentLoanId } = useAppStore();
 
   console.log('currentLoanId', currentLoanId);
@@ -29,8 +27,8 @@ export default function Docs() {
     : null;
 
   const handleDocumentClick = (docId: string) => {
-    setSelectedDocId(docId);
-    setUploaderOpen(true);
+    // Removed - now handled inside DocumentsFolder component
+    console.log('Document clicked:', docId);
   };
 
   const handleAddToPackage = (docId: string) => {
@@ -133,9 +131,6 @@ export default function Docs() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Column - Documents Folder */}
         <Card className="p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-6">
-            Documents Folder
-          </h2>
           <DocumentsFolder
             onAddToPackage={handleAddToPackage}
             onDocumentClick={handleDocumentClick}
@@ -153,17 +148,11 @@ export default function Docs() {
       </div>
 
       {/* Dialogs */}
-      <UploaderDialog
-        isOpen={uploaderOpen}
-        onClose={() => setUploaderOpen(false)}
-        documentId={selectedDocId}
-      />
-
       <ExplainDrawer
-        isOpen={explainOpen}
-        onClose={() => setExplainOpen(false)}
-        selectedProgramId={selectedProgramId}
-      />
+          isOpen={explainOpen}
+          onClose={() => setExplainOpen(false)}
+          selectedProgramId={selectedProgramId}
+        />
     </div>
   );
 }
