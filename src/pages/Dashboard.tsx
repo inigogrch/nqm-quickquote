@@ -1,7 +1,7 @@
 "use client";
 
 import { useNavigate } from "react-router-dom";
-import { Calculator, Search, Clock, FileText } from "lucide-react";
+import { Calculator, Clock, FileText } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { LoanRecordCard } from "../../components/ui/LoanRecordCard";
 import { useAppStore } from "../../lib/store";
-import { PLACEHOLDER_TEXT } from "../../lib/fixtures";
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 
@@ -88,65 +87,37 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Hero Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card
-            className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-brand/5 to-brand/10 border-brand/20"
-            onClick={() => {
-              handleQuickQuoteClick();
-              setCurrentLoanId(null);
-            }}
-            data-testid="quick-quote-card"
-          >
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-brand rounded-xl flex items-center justify-center">
-                  <Calculator className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Quick Quote</CardTitle>
-                  <CardDescription>
-                    Get instant loan program eligibility
-                  </CardDescription>
-                </div>
+        {/* Hero Card */}
+        <Card
+          className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-brand/5 to-brand/10 border-brand/20"
+          onClick={() => {
+            handleQuickQuoteClick();
+            setCurrentLoanId(null);
+          }}
+          data-testid="quick-quote-card"
+        >
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-brand rounded-xl flex items-center justify-center">
+                <Calculator className="w-6 h-6 text-white" />
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 mb-4" data-placeholder="true">
-                {PLACEHOLDER_TEXT}
-                {/* TODO: replace with live dashboard service */}
-              </p>
-              <Button className="bg-brand hover:bg-brand-600">
-                Start Quick Quote
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-slate-100/50 to-slate-200/50">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-slate-600 rounded-xl flex items-center justify-center">
-                  <Search className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Smart Search</CardTitle>
-                  <CardDescription>
-                    Advanced loan program discovery
-                  </CardDescription>
-                </div>
+              <div>
+                <CardTitle className="text-xl">Quick Quote</CardTitle>
+                <CardDescription>
+                  Get instant loan program eligibility
+                </CardDescription>
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 mb-4" data-placeholder="true">
-                {PLACEHOLDER_TEXT}
-                {/* TODO: replace with live dashboard service */}
-              </p>
-              <Button variant="outline" disabled>
-                Coming Soon
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-slate-600 mb-4">
+            QuickQuote provides immediate loan eligibility and program determination, generates a documented requirements list, and validates submissions using AI with human oversight, producing an auditable, underwriter-ready package. The result is a tighter application-to-review cycle and fewer manual touches, enabling materially higher volume without sacrificing control.
+            </p>
+            <Button className="bg-brand hover:bg-brand-600">
+              Start Quick Quote
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Recent Timeline Widget */}
         <Card>
