@@ -104,28 +104,60 @@ const getStatusIcon = (status: string) => {
 
 // Accurate status badges
 const getStatusBadge = (doc: Document) => {
-  const { status } = doc;
+  const { status, classificationConfidence } = doc;
   
-  switch (status) {
-    case 'ai-verified':
-      return <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
-      
-    case 'needs_attention':
-      return <Badge className="bg-orange-500 text-white hover:bg-orange-600">Needs Attention</Badge>;
-      
-    case 'failed':
-      return <Badge className="bg-bad text-white hover:bg-bad/90">Failed</Badge>;
-      
-    case 'in_progress':
-      return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
-      
-    case 'uploaded':
-      return <Badge className="bg-slate-400 text-white hover:bg-slate-500">Uploaded</Badge>;
-      
-    case 'pending':
-    default:
-      return <Badge variant="outline" className="text-slate-600">Pending</Badge>;
+  // Helper to format confidence as percentage with 2 decimal places
+  const formatConfidence = (confidence: number | undefined) => {
+    if (confidence === undefined || confidence === null) return null;
+    return `${(confidence * 100).toFixed(2)}%`;
+  };
+
+  const confidenceText = formatConfidence(classificationConfidence);
+  
+  const renderBadge = () => {
+    switch (status) {
+      case 'ai-verified':
+        return <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
+        
+      case 'needs_attention':
+        return <Badge className="bg-orange-500 text-white hover:bg-orange-600">Needs Attention</Badge>;
+        
+      case 'failed':
+        return <Badge className="bg-bad text-white hover:bg-bad/90">Failed</Badge>;
+        
+      case 'in_progress':
+        return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
+        
+      case 'uploaded':
+        return <Badge className="bg-slate-400 text-white hover:bg-slate-500">Uploaded</Badge>;
+        
+      case 'pending':
+      default:
+        return <Badge variant="outline" className="text-slate-600">Pending</Badge>;
+    }
+  };
+
+  // If there's a confidence score (for ai-verified or failed statuses), wrap in tooltip
+  if (confidenceText && (status === 'ai-verified' || status === 'failed' || status === 'needs_attention')) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {renderBadge()}
+        </TooltipTrigger>
+        <TooltipContent>
+          <div className="text-xs">
+            <p className="font-medium">Confidence Score</p>
+            <p>{confidenceText}</p>
+            {doc.classificationCategory && (
+              <p className="text-slate-400 mt-1">Category: {doc.classificationCategory}</p>
+            )}
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    );
   }
+  
+  return renderBadge();
 };
 
 // Mock documents based on checklist

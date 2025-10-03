@@ -59,23 +59,27 @@ export interface CheckConditionsResponse {
  * Trigger check_condition_v2 workflow
  * @param conditions - Array of conditions to check
  * @param s3PdfPaths - Array of S3 PDF paths to analyze
- * @param outputBucket - S3 bucket for results (default: 'quick-quote-demo')
- * @param outputPrefix - S3 prefix for results (default: 'mock/')
+ * @param outputBucket - S3 bucket for results (defaults to RACK_STACK_CONFIG.OUTPUT_BUCKET)
+ * @param outputPrefix - S3 prefix for results (defaults to RACK_STACK_CONFIG.OUTPUT_PREFIX)
  */
 export async function triggerConditionsCheck(
   conditions: ConditionRequest[],
   s3PdfPaths: S3PdfPath[],
-  outputBucket: string = 'quick-quote-demo',
-  outputPrefix: string = 'mock/'
+  outputBucket?: string,
+  outputPrefix?: string
 ): Promise<{ success: boolean; dag_run_id?: string; message?: string; output_destination?: string }> {
   try {
     if (!isRackStackConfigured()) {
       throw new Error('Rack Stack API credentials not configured in src/lib/config/credentials.ts');
     }
 
+    // Use environment variables if not provided
+    const bucket = outputBucket || RACK_STACK_CONFIG.OUTPUT_BUCKET;
+    const prefix = outputPrefix || RACK_STACK_CONFIG.OUTPUT_PREFIX;
+
     // Generate output destination
     const timestamp = Date.now();
-    const outputDestination = `${outputBucket}/${outputPrefix}conditions_${timestamp}.json`;
+    const outputDestination = `${bucket}/${prefix}conditions_${timestamp}.json`;
     
     const requestPayload: CheckConditionsRequest = {
       conf: {
@@ -87,6 +91,11 @@ export async function triggerConditionsCheck(
 
     console.log('🚀 Triggering Conditions Check API:', {
       endpoint: 'https://uat-airflow-llm.cybersoftbpo.ai/api/v1/dags/check_condition_v2/dagRuns',
+      outputBucket: bucket,
+      outputPrefix: prefix,
+      outputDestination: outputDestination,
+      conditionsCount: conditions.length,
+      pdfsCount: s3PdfPaths.length,
       payload: requestPayload,
     });
 
@@ -151,26 +160,26 @@ export async function triggerConditionsCheck(
 }
 
 /**
- * Poll for conditions check results
+ * Poll for conditions check results indefinitely (no timeout)
  * @param outputDestination - S3 path where results will be saved (without s3:// prefix)
- * @param maxAttempts - Maximum number of polling attempts (default: 12 for ~2 minutes)
+ * @param maxAttempts - Maximum number of polling attempts (default: Infinity - polls indefinitely)
  * @param intervalMs - Interval between attempts in milliseconds (default: 10000 = 10 seconds)
  */
 export async function pollForConditionsResults(
   outputDestination: string,
-  maxAttempts: number = 12,
+  maxAttempts: number = Infinity,
   intervalMs: number = 10000
 ): Promise<{ success: boolean; data?: CheckConditionsResponse; message?: string }> {
-  console.log('🔄 Starting polling for conditions results:', {
+  console.log('🔄 Starting polling for conditions results (no timeout):', {
     outputDestination,
-    maxAttempts,
     intervalMs,
-    totalWaitTime: `${(maxAttempts * intervalMs) / 1000} seconds`
+    note: 'Will poll indefinitely until result is available'
   });
 
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+  let attempt = 1;
+  while (true) {
     try {
-      console.log(`🔍 Polling attempt ${attempt}/${maxAttempts}...`);
+      console.log(`🔍 Polling attempt ${attempt}...`);
       
       const result = await readJsonFromS3(`s3://${outputDestination}`);
       
@@ -191,28 +200,16 @@ export async function pollForConditionsResults(
         }
       }
       
-      if (attempt < maxAttempts) {
-        console.log(`⏳ Result not ready, waiting ${intervalMs / 1000} seconds before retry...`);
-        await new Promise(resolve => setTimeout(resolve, intervalMs));
-      }
+      console.log(`⏳ Result not ready, waiting ${intervalMs / 1000} seconds before retry...`);
+      await new Promise(resolve => setTimeout(resolve, intervalMs));
+      attempt++;
       
     } catch (error) {
       console.error(`❌ Error during polling attempt ${attempt}:`, error);
       
-      if (attempt === maxAttempts) {
-        return {
-          success: false,
-          message: `Polling failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-        };
-      }
-      
       await new Promise(resolve => setTimeout(resolve, intervalMs));
+      attempt++;
     }
   }
-  
-  return {
-    success: false,
-    message: `Processing timeout: Result not available after ${(maxAttempts * intervalMs) / 1000} seconds`
-  };
 }
 

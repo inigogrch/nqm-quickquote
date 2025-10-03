@@ -1,19 +1,34 @@
 /**
  * 🔑 ENVIRONMENT VARIABLES SETUP:
-
+ *
  * For Vercel deployment:
  * 1. Go to your Vercel project settings
  * 2. Navigate to "Environment Variables"
  * 3. Add each VITE_* variable with your values
  * 
  * Required Environment Variables:
- * - VITE_AWS_ACCESS_KEY_ID: Your S3 webhub access key
- * - VITE_AWS_SECRET_ACCESS_KEY: Your S3 webhub secret key
- * - VITE_AWS_S3_BUCKET: Your S3 bucket name
- * - VITE_AWS_REGION: Your S3 region (default: us-east-1)
- * - VITE_RACK_STACK_OUTPUT_BUCKET: Output bucket for Rack Stack results
+ * ================================
+ * AWS S3 (for document uploads & reading results):
+ * - VITE_AWS_ACCESS_KEY_ID: Your S3 access key
+ * - VITE_AWS_SECRET_ACCESS_KEY: Your S3 secret key  
+ * - VITE_AWS_S3_BUCKET: Your S3 bucket name (e.g., 'quick-quote-demo')
+ * - VITE_AWS_REGION: Your S3 region (default: 'us-east-1')
+ * 
+ * Rack Stack API (for conditions check & document classification):
+ * - VITE_RACK_STACK_USERNAME: Airflow username (default: 'airflow')
+ * - VITE_RACK_STACK_PASSWORD: Airflow password
+ * - VITE_RACK_STACK_OUTPUT_BUCKET: S3 bucket for API results
+ *   → Can be the SAME as VITE_AWS_S3_BUCKET (recommended for simplicity)
+ *   → Results will be written to: {bucket}/{prefix}conditions_*.json
+ * 
+ * Optional Environment Variables:
+ * ================================
+ * - VITE_RACK_STACK_OUTPUT_PREFIX: Path prefix for results (default: 'results/')
+ * - VITE_RACK_STACK_API_URL: Override Airflow endpoint
  * - VITE_SUPABASE_URL: Your Supabase URL
  * - VITE_SUPABASE_ANON_KEY: Your Supabase anon key
+ * - VITE_ENHANCED_RAG_API_URL: Enhanced RAG API endpoint
+ * - VITE_ELIGIBILITY_ENGINE_BASE_URL: Eligibility engine endpoint
  */
 
 // ==========================================
@@ -29,6 +44,10 @@ export const AWS_CONFIG = {
 // ==========================================
 // 🔑 RACK STACK API CONFIGURATION
 // ==========================================
+// NOTE: OUTPUT_BUCKET can be the SAME as AWS_CONFIG.BUCKET
+// Documents are uploaded to: s3://{AWS_CONFIG.BUCKET}/documents/...
+// Results are written to: s3://{OUTPUT_BUCKET}/{OUTPUT_PREFIX}conditions_*.json
+// Using the same bucket is recommended for simplicity
 export const RACK_STACK_CONFIG = {
   API_URL: import.meta.env.VITE_RACK_STACK_API_URL || 'https://uat-airflow-llm.cybersoftbpo.ai/api/v1/dags/rack_stack/dagRuns',
   USERNAME: import.meta.env.VITE_RACK_STACK_USERNAME || 'airflow',
@@ -67,6 +86,9 @@ export function isRackStackConfigured(): boolean {
 }
 
 export function getConfigurationStatus() {
+  const bucketsMatch = AWS_CONFIG.BUCKET === RACK_STACK_CONFIG.OUTPUT_BUCKET;
+  const bucketsConfigured = !!(AWS_CONFIG.BUCKET && RACK_STACK_CONFIG.OUTPUT_BUCKET);
+  
   return {
     s3: {
       configured: isS3Configured(),
@@ -80,7 +102,13 @@ export function getConfigurationStatus() {
       apiUrl: RACK_STACK_CONFIG.API_URL ? '✅ Set' : '❌ Missing',
       credentials: (RACK_STACK_CONFIG.USERNAME && RACK_STACK_CONFIG.PASSWORD) ? '✅ Set' : '❌ Missing',
       outputBucket: RACK_STACK_CONFIG.OUTPUT_BUCKET ? `✅ ${RACK_STACK_CONFIG.OUTPUT_BUCKET}` : '❌ Missing',
+      outputPrefix: RACK_STACK_CONFIG.OUTPUT_PREFIX,
     },
+    bucketSetup: bucketsConfigured 
+      ? (bucketsMatch 
+          ? `✅ Using same bucket: ${AWS_CONFIG.BUCKET}` 
+          : `⚠️  Different buckets - S3: ${AWS_CONFIG.BUCKET} / Output: ${RACK_STACK_CONFIG.OUTPUT_BUCKET}`)
+      : '⏳ Buckets not yet configured',
   };
 }
 

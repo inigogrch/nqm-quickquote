@@ -72,29 +72,29 @@ function extractCategoryId(category: string): string | null {
 }
 
 /**
- * Poll S3 for processing results with timeout
+ * Poll S3 for processing results indefinitely (no timeout)
  * @param outputDestination - S3 URI where results will be saved
  * @param expectedDocumentId - Expected document ID to validate against (e.g., "349", "502")
- * @param maxAttempts - Maximum number of polling attempts (default: 9 for ~90 seconds)
+ * @param maxAttempts - Maximum number of polling attempts (default: Infinity - polls indefinitely)
  * @param intervalMs - Interval between attempts in milliseconds (default: 10000 = 10 seconds)
  */
 export async function pollForResults(
   outputDestination: string,
   expectedDocumentId?: string,
-  maxAttempts: number = 9,
+  maxAttempts: number = Infinity,
   intervalMs: number = 10000
 ): Promise<ProcessingResult> {
-  console.log('🔄 Starting polling for results:', {
+  console.log('🔄 Starting polling for results (no timeout):', {
     outputDestination,
     expectedDocumentId,
-    maxAttempts,
     intervalMs,
-    totalWaitTime: `${(maxAttempts * intervalMs) / 1000} seconds`
+    note: 'Will poll indefinitely until result is available'
   });
 
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+  let attempt = 1;
+  while (true) {
     try {
-      console.log(`🔍 Polling attempt ${attempt}/${maxAttempts}...`);
+      console.log(`🔍 Polling attempt ${attempt}...`);
       
       const result = await readJsonFromS3(outputDestination);
       
@@ -186,34 +186,18 @@ export async function pollForResults(
       }
       
       // Result not found yet, wait before next attempt
-      if (attempt < maxAttempts) {
-        console.log(`⏳ Result not ready, waiting ${intervalMs / 1000} seconds before retry...`);
-        await new Promise(resolve => setTimeout(resolve, intervalMs));
-      }
+      console.log(`⏳ Result not ready, waiting ${intervalMs / 1000} seconds before retry...`);
+      await new Promise(resolve => setTimeout(resolve, intervalMs));
+      attempt++;
       
     } catch (error) {
       console.error(`❌ Error during polling attempt ${attempt}:`, error);
       
-      // If it's the last attempt, return failure
-      if (attempt === maxAttempts) {
-        return {
-          success: false,
-          status: 'failed',
-          message: `Polling failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-        };
-      }
-      
-      // Otherwise, wait and retry
+      // Wait and retry
       await new Promise(resolve => setTimeout(resolve, intervalMs));
+      attempt++;
     }
   }
-  
-  // Timeout - processing took too long
-  return {
-    success: false,
-    status: 'failed',
-    message: `Processing timeout: Result not available after ${(maxAttempts * intervalMs) / 1000} seconds`
-  };
 }
 
 /**
