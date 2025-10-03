@@ -18,13 +18,32 @@ import { uploadFilesToS3, isS3Configured } from '../../src/lib/api/s3-upload';
 import { triggerRackStackProcessing, isRackStackConfigured, pollForResults } from '../../src/lib/api/rack-stack';
 import supabase from '../../lib/supabase';
 
-// Document ID mapping for Rack Stack classification validation
-const DOCUMENT_ID_MAPPING: Record<string, string> = {
-  'min_0': '349',  // 1003 Application
-  'min_1': '502',  // Bank Statements
-  'min_2': '2174', // Title Fee Sheet
-  'min_3': '117',  // Credit Report
-  'min_4': '237',  // Borrower Certification Form
+// Document category mapping for Rack Stack classification validation
+// Maps document names to their expected category IDs
+const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
+  '1003 Application': '349',
+  'Bank Statements': '502',
+  'Title Fee Sheet': '2174',
+  'Credit Report': '117',
+  'Borrower Certification Form': '237',
+};
+
+// Helper function to get expected category ID for a document
+const getExpectedCategoryId = (docName: string): string | undefined => {
+  // Try exact match first
+  if (DOCUMENT_CATEGORY_MAPPING[docName]) {
+    return DOCUMENT_CATEGORY_MAPPING[docName];
+  }
+  
+  // Try partial match (case-insensitive)
+  const normalizedName = docName.toLowerCase();
+  for (const [key, value] of Object.entries(DOCUMENT_CATEGORY_MAPPING)) {
+    if (normalizedName.includes(key.toLowerCase()) || key.toLowerCase().includes(normalizedName)) {
+      return value;
+    }
+  }
+  
+  return undefined;
 };
 
 interface Document {
@@ -67,13 +86,14 @@ interface DocumentsFolderProps {
 // Accurate status icons based on actual document state
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case 'completed':
     case 'ai-verified':
       return <CheckCircle className="w-5 h-5 text-ok" />;
     case 'in_progress':
       return <Clock className="w-5 h-5 text-blue-500 animate-spin" />;
     case 'uploaded':
-      return <AlertCircle className="w-5 h-5 text-warn" />;
+      return <AlertCircle className="w-5 h-5 text-slate-400" />;
+    case 'needs_attention':
+      return <AlertCircle className="w-5 h-5 text-orange-500" />;
     case 'failed':
       return <AlertCircle className="w-5 h-5 text-bad" />;
     case 'pending':
@@ -90,20 +110,63 @@ const getStatusBadge = (doc: Document) => {
   const hasVerificationData = classificationCategory !== undefined && classificationConfidence !== undefined;
   
   let badge;
+  let tooltipContent: React.ReactNode | null = null;
+  
   switch (status) {
-    case 'completed':
     case 'ai-verified':
       badge = <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
+      if (hasVerificationData) {
+        const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
+        tooltipContent = (
+          <div className="text-xs space-y-1">
+            <div className="font-semibold">✅ Verified</div>
+            <div>Category: {classificationCategory}</div>
+            <div>Confidence: {confidencePercent}%</div>
+          </div>
+        );
+      }
       break;
+      
+    case 'needs_attention':
+      badge = <Badge className="bg-orange-500 text-white hover:bg-orange-600">Needs Attention</Badge>;
+      if (hasVerificationData) {
+        const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
+        const expectedId = getExpectedCategoryId(doc.name);
+        tooltipContent = (
+          <div className="text-xs space-y-1">
+            <div className="font-semibold">⚠️ Low Confidence</div>
+            <div>Confidence: {confidencePercent}% (required: 95%)</div>
+            <div>Category: {classificationCategory}</div>
+            <div className="text-slate-300 text-[10px] mt-1">Category match verified ✓</div>
+          </div>
+        );
+      }
+      break;
+      
+    case 'failed':
+      badge = <Badge className="bg-bad text-white hover:bg-bad/90">Failed</Badge>;
+      if (hasVerificationData) {
+        const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
+        const expectedId = getExpectedCategoryId(doc.name);
+        tooltipContent = (
+          <div className="text-xs space-y-1">
+            <div className="font-semibold">❌ Category Mismatch</div>
+            <div>Expected: {expectedId || 'Unknown'}</div>
+            <div>Got: {classificationCategoryId || 'Unknown'}</div>
+            <div>Confidence: {confidencePercent}%</div>
+          </div>
+        );
+      }
+      break;
+      
     case 'in_progress':
       badge = <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
       break;
+      
     case 'uploaded':
-      badge = <Badge className="bg-warn text-white hover:bg-warn/90">Uploaded</Badge>;
+      badge = <Badge className="bg-slate-400 text-white hover:bg-slate-500">Uploaded</Badge>;
       break;
-    case 'failed':
-      badge = <Badge className="bg-bad text-white hover:bg-bad/90">Needs Attention</Badge>;
-      break;
+      
     case 'pending':
     default:
       badge = <Badge variant="outline" className="text-slate-600">Pending</Badge>;
@@ -111,64 +174,15 @@ const getStatusBadge = (doc: Document) => {
   }
   
   // Wrap badge in tooltip if verification data is available
-  if (hasVerificationData) {
-    const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
-    const expectedId = DOCUMENT_ID_MAPPING[doc.id];
-    
-    let tooltipContent: React.ReactNode;
-    
-    if (status === 'ai-verified') {
-      // Success case
-      tooltipContent = (
-        <div className="text-xs">
-          <div className="font-semibold mb-1">✅ Verified</div>
-          <div>Category: {classificationCategory}</div>
-          <div>Confidence: {confidencePercent}%</div>
-        </div>
-      );
-    } else if (status === 'failed') {
-      // Failure case
-      tooltipContent = (
-        <div className="text-xs">
-          <div className="font-semibold mb-1">❌ Failed</div>
-          {failureReason === 'both' && (
-            <>
-              <div>• Low confidence: {confidencePercent}% (required: 95%)</div>
-              <div>• Expected category: {expectedId}</div>
-              <div>• Got category: {classificationCategoryId || 'Unknown'}</div>
-            </>
-          )}
-          {failureReason === 'low_confidence' && (
-            <>
-              <div>• Low confidence: {confidencePercent}% (required: 95%)</div>
-              <div>• Category: {classificationCategory}</div>
-            </>
-          )}
-          {failureReason === 'category_mismatch' && (
-            <>
-              <div>• Confidence: {confidencePercent}%</div>
-              <div>• Expected category: {expectedId}</div>
-              <div>• Got category: {classificationCategoryId || 'Unknown'}</div>
-            </>
-          )}
-        </div>
-      );
-    } else {
-      // Other statuses with verification data
-      tooltipContent = (
-        <div className="text-xs">
-          <div>Category: {classificationCategory}</div>
-          <div>Confidence: {confidencePercent}%</div>
-        </div>
-      );
-    }
-    
+  if (tooltipContent) {
     return (
       <Tooltip>
         <TooltipTrigger asChild>
-          {badge}
+          <div className="cursor-help">
+            {badge}
+          </div>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent side="top" className="max-w-xs">
           {tooltipContent}
         </TooltipContent>
       </Tooltip>
@@ -428,14 +442,14 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
             <div className="space-y-2">
               <h4 className="text-sm font-medium">Selected Files:</h4>
               {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center justify-between p-2 bg-slate-50 rounded">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <FileText className="w-4 h-4 text-slate-500 flex-shrink-0" />
-                    <span className="text-sm truncate">{file.name}</span>
-                    <span className="text-xs text-slate-500 flex-shrink-0">
-                      ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                    </span>
-                  </div>
+                <div key={index} className="grid grid-cols-[20px_1fr_auto_auto] gap-2 items-center p-2 bg-slate-50 rounded">
+                  <FileText className="w-4 h-4 text-slate-500" />
+                  <p className="text-sm truncate overflow-hidden text-ellipsis whitespace-nowrap min-w-0" title={file.name}>
+                    {file.name}
+                  </p>
+                  <span className="text-xs text-slate-500 whitespace-nowrap">
+                    ({(file.size / 1024 / 1024).toFixed(1)} MB)
+                  </span>
                   <Button
                     type="button"
                     variant="ghost"
@@ -762,8 +776,15 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     // Step 3: Poll for all results in parallel
     const pollPromises = successfulTriggers.map(async ({ doc, triggerResult }) => {
       try {
-        // Get the expected document ID for validation
-        const expectedDocumentId = DOCUMENT_ID_MAPPING[doc.id];
+        // Get the expected document category ID for validation based on document name
+        const expectedDocumentId = getExpectedCategoryId(doc.name);
+        
+        console.log(`🔍 Verifying ${doc.name}:`, {
+          docId: doc.id,
+          docName: doc.name,
+          expectedCategoryId: expectedDocumentId,
+          outputDestination: triggerResult!.output_destination
+        });
         
         const pollResult = await pollForResults(
           triggerResult!.output_destination!,
@@ -916,13 +937,15 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
         {doc.uploadedFiles && doc.uploadedFiles.length > 0 && (
           <div className="mt-2 space-y-1">
             {doc.uploadedFiles.map((file) => (
-              <div key={file.id} className="flex items-center gap-2 text-xs text-slate-600">
+              <div key={file.id} className="grid grid-cols-[16px_1fr_auto_auto] gap-2 items-center text-xs text-slate-600">
                 <FileText className="w-3 h-3 text-slate-400" />
-                <span className="truncate max-w-xs">{file.originalName}</span>
-                <span className="text-slate-400">
+                <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap min-w-0" title={file.originalName}>
+                  {file.originalName}
+                </span>
+                <span className="text-slate-400 whitespace-nowrap">
                   ({(file.fileSize / 1024 / 1024).toFixed(1)} MB)
                 </span>
-                {file.url && (
+                {file.url ? (
                   <a 
                     href={file.url} 
                     target="_blank" 
@@ -932,6 +955,8 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
                   >
                     <Download className="w-3 h-3" />
                   </a>
+                ) : (
+                  <span className="w-3" />
                 )}
               </div>
             ))}

@@ -52,14 +52,14 @@ export interface RackStackJobStatus {
 
 export interface ProcessingResult {
   success: boolean;
-  status: 'ai-verified' | 'failed' | 'in_progress';
+  status: 'ai-verified' | 'failed' | 'needs_attention' | 'in_progress';
   confidence?: number;
   category?: string;
   categoryId?: string;
   processing_status?: string;
   message?: string;
   fullResult?: RackStackResponse;
-  failureReason?: 'low_confidence' | 'category_mismatch' | 'both';
+  failureReason?: 'low_confidence' | 'category_mismatch';
 }
 
 /**
@@ -113,41 +113,24 @@ export async function pollForResults(
           // Round confidence to 2 decimal places
           const roundedConfidence = Math.round(confidence * 100) / 100;
           
-          // Check confidence threshold (95% = 0.95)
-          const hasLowConfidence = confidence < 0.95;
+          // TWO-STEP VERIFICATION LOGIC
+          console.log('🎯 Category Validation:', {
+            expectedDocumentId,
+            extractedCategoryId: categoryId,
+            fullCategory: category,
+            confidence: roundedConfidence,
+            willCheckCategory: !!expectedDocumentId
+          });
           
-          // Check category match if expectedDocumentId is provided
+          // Step 1: Check category match (if expectedDocumentId is provided)
           const hasCategoryMismatch = expectedDocumentId && categoryId !== expectedDocumentId;
           
-          // Determine if verification passed
-          const verificationPassed = !hasLowConfidence && !hasCategoryMismatch;
-          
-          if (verificationPassed) {
-            return {
-              success: true,
-              status: 'ai-verified',
-              confidence: roundedConfidence,
-              category,
-              categoryId: categoryId || undefined,
-              processing_status,
-              message: `Document classified as ${category} with ${(roundedConfidence * 100).toFixed(0)}% confidence`,
-              fullResult: result
-            };
-          } else {
-            // Determine failure reason
-            let failureReason: 'low_confidence' | 'category_mismatch' | 'both';
-            let message: string;
-            
-            if (hasLowConfidence && hasCategoryMismatch) {
-              failureReason = 'both';
-              message = `Low confidence: ${(roundedConfidence * 100).toFixed(0)}% (required: 95%) AND category mismatch: expected ${expectedDocumentId}, got ${categoryId}`;
-            } else if (hasLowConfidence) {
-              failureReason = 'low_confidence';
-              message = `Low confidence: ${(roundedConfidence * 100).toFixed(0)}% (required: 95%)`;
-            } else {
-              failureReason = 'category_mismatch';
-              message = `Category mismatch: expected ${expectedDocumentId}, got ${categoryId}`;
-            }
+          if (hasCategoryMismatch) {
+            // Category mismatch = FAILED (red badge)
+            console.log('❌ CATEGORY MISMATCH DETECTED:', {
+              expected: expectedDocumentId,
+              got: categoryId
+            });
             
             return {
               success: false,
@@ -156,11 +139,41 @@ export async function pollForResults(
               category,
               categoryId: categoryId || undefined,
               processing_status,
-              message,
-              failureReason,
+              message: `Category mismatch: expected ${expectedDocumentId}, got ${categoryId || 'Unknown'}`,
+              failureReason: 'category_mismatch',
               fullResult: result
             };
           }
+          
+          // Step 2: Category matches, now check confidence
+          const hasLowConfidence = confidence < 0.95;
+          
+          if (hasLowConfidence) {
+            // Low confidence = NEEDS ATTENTION (orange badge)
+            return {
+              success: false,
+              status: 'needs_attention',
+              confidence: roundedConfidence,
+              category,
+              categoryId: categoryId || undefined,
+              processing_status,
+              message: `Low confidence: ${(roundedConfidence * 100).toFixed(0)}% (required: 95%)`,
+              failureReason: 'low_confidence',
+              fullResult: result
+            };
+          }
+          
+          // Both checks passed = AI-VERIFIED (green badge)
+          return {
+            success: true,
+            status: 'ai-verified',
+            confidence: roundedConfidence,
+            category,
+            categoryId: categoryId || undefined,
+            processing_status,
+            message: `Document verified as ${category} with ${(roundedConfidence * 100).toFixed(0)}% confidence`,
+            fullResult: result
+          };
         } else {
           // Processing completed but not successfully
           return {

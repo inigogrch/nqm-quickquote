@@ -68,7 +68,7 @@ export interface Document {
   id: string;
   name: string;
   type: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'uploaded' | 'ai-verified';
+  status: 'pending' | 'in_progress' | 'failed' | 'uploaded' | 'ai-verified' | 'needs_attention';
   required: boolean;
   category: 'minimum' | 'likely_conditions';
   uploadedFiles?: Array<{
@@ -90,7 +90,7 @@ export interface Document {
   classificationCategoryId?: string; // Extracted category ID (e.g., "349")
   classificationConfidence?: number; // Confidence score (0-1) from AI classification
   verificationMessage?: string; // Verification result message
-  failureReason?: 'low_confidence' | 'category_mismatch' | 'both'; // Reason for verification failure
+  failureReason?: 'low_confidence' | 'category_mismatch'; // Reason for verification failure
 }
 
 export interface AgentStep {
