@@ -55,24 +55,38 @@ export interface ProcessingResult {
   status: 'ai-verified' | 'failed' | 'in_progress';
   confidence?: number;
   category?: string;
+  categoryId?: string;
   processing_status?: string;
   message?: string;
   fullResult?: RackStackResponse;
+  failureReason?: 'low_confidence' | 'category_mismatch' | 'both';
+}
+
+/**
+ * Extract category ID from classification category string
+ * Example: "349_Borrowers_Authorization" -> "349"
+ */
+function extractCategoryId(category: string): string | null {
+  const match = category.match(/^(\d+)_/);
+  return match ? match[1] : null;
 }
 
 /**
  * Poll S3 for processing results with timeout
  * @param outputDestination - S3 URI where results will be saved
+ * @param expectedDocumentId - Expected document ID to validate against (e.g., "349", "502")
  * @param maxAttempts - Maximum number of polling attempts (default: 9 for ~90 seconds)
  * @param intervalMs - Interval between attempts in milliseconds (default: 10000 = 10 seconds)
  */
 export async function pollForResults(
   outputDestination: string,
+  expectedDocumentId?: string,
   maxAttempts: number = 9,
   intervalMs: number = 10000
 ): Promise<ProcessingResult> {
   console.log('🔄 Starting polling for results:', {
     outputDestination,
+    expectedDocumentId,
     maxAttempts,
     intervalMs,
     totalWaitTime: `${(maxAttempts * intervalMs) / 1000} seconds`
@@ -94,26 +108,57 @@ export async function pollForResults(
         if (processing_status === 'completed') {
           const confidence = classification?.confidence || 0;
           const category = classification?.category || 'Unknown';
+          const categoryId = extractCategoryId(category);
+          
+          // Round confidence to 2 decimal places
+          const roundedConfidence = Math.round(confidence * 100) / 100;
           
           // Check confidence threshold (95% = 0.95)
-          if (confidence >= 0.95) {
+          const hasLowConfidence = confidence < 0.95;
+          
+          // Check category match if expectedDocumentId is provided
+          const hasCategoryMismatch = expectedDocumentId && categoryId !== expectedDocumentId;
+          
+          // Determine if verification passed
+          const verificationPassed = !hasLowConfidence && !hasCategoryMismatch;
+          
+          if (verificationPassed) {
             return {
               success: true,
               status: 'ai-verified',
-              confidence,
+              confidence: roundedConfidence,
               category,
+              categoryId: categoryId || undefined,
               processing_status,
-              message: `Document classified as ${category} with ${(confidence * 100).toFixed(1)}% confidence`,
+              message: `Document classified as ${category} with ${(roundedConfidence * 100).toFixed(0)}% confidence`,
               fullResult: result
             };
           } else {
+            // Determine failure reason
+            let failureReason: 'low_confidence' | 'category_mismatch' | 'both';
+            let message: string;
+            
+            if (hasLowConfidence && hasCategoryMismatch) {
+              failureReason = 'both';
+              message = `Low confidence: ${(roundedConfidence * 100).toFixed(0)}% (required: 95%) AND category mismatch: expected ${expectedDocumentId}, got ${categoryId}`;
+            } else if (hasLowConfidence) {
+              failureReason = 'low_confidence';
+              message = `Low confidence: ${(roundedConfidence * 100).toFixed(0)}% (required: 95%)`;
+            } else {
+              failureReason = 'category_mismatch';
+              message = `Category mismatch: expected ${expectedDocumentId}, got ${categoryId}`;
+            }
+            
             return {
               success: false,
               status: 'failed',
-              confidence,
+              confidence: roundedConfidence,
               category,
+              categoryId: categoryId || undefined,
               processing_status,
-              message: `Low confidence: ${(confidence * 100).toFixed(1)}% (required: 95%)`
+              message,
+              failureReason,
+              fullResult: result
             };
           }
         } else {

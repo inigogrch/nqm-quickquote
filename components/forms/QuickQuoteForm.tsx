@@ -10,9 +10,10 @@ import { US_STATES, getCountiesByState } from '../../lib/location-data';
 interface QuickQuoteFormProps {
   data: LoanDetails;
   onChange: (updates: Partial<LoanDetails>) => void;
+  showValidationErrors?: boolean;
 }
 
-export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
+export function QuickQuoteForm({ data, onChange, showValidationErrors = false }: QuickQuoteFormProps) {
   const handleInputChange = (field: keyof LoanDetails, value: string | number) => {
     onChange({ [field]: value });
   };
@@ -45,11 +46,12 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
           placeholder="1,234,567"
           data-testid="loan-amount-input"
           data-placeholder="true"
-          className="text-right"
+          className={`text-right ${showValidationErrors && !data.loanAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
         />
-        <p className="text-xs text-slate-500">
-          Enter the loan amount you're seeking
-          {/* TODO: replace with live validation service */}
+        <p className={`text-xs ${showValidationErrors && !data.loanAmount ? 'text-red-500' : 'text-slate-500'}`}>
+          {showValidationErrors && !data.loanAmount 
+            ? 'This field is required' 
+            : "Enter the loan amount you're seeking"}
         </p>
       </div>
 
@@ -69,10 +71,12 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
           min="0"
           max="100"
           step="0.1"
-          className="text-right"
+          className={`text-right ${showValidationErrors && !data.loanToValue ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
         />
-        <p className="text-xs text-slate-500">
-          Loan-to-value ratio (typical range 0-100%)
+        <p className={`text-xs ${showValidationErrors && !data.loanToValue ? 'text-red-500' : 'text-slate-500'}`}>
+          {showValidationErrors && !data.loanToValue 
+            ? 'This field is required' 
+            : 'Loan-to-value ratio (typical range 0-100%)'}
         </p>
       </div>
 
@@ -85,7 +89,10 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
           value={data.state || ''}
           onValueChange={handleStateChange}
         >
-          <SelectTrigger data-testid="state-select">
+          <SelectTrigger 
+            data-testid="state-select"
+            className={showValidationErrors && !data.state ? 'border-red-500 focus:ring-red-500' : ''}
+          >
             <SelectValue placeholder="Select state" />
           </SelectTrigger>
           <SelectContent className="max-h-[300px]">
@@ -96,8 +103,10 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
             ))}
           </SelectContent>
         </Select>
-        <p className="text-xs text-slate-500">
-          Property location state
+        <p className={`text-xs ${showValidationErrors && !data.state ? 'text-red-500' : 'text-slate-500'}`}>
+          {showValidationErrors && !data.state 
+            ? 'This field is required' 
+            : 'Property location state'}
         </p>
       </div>
 
@@ -111,7 +120,10 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
           onValueChange={(value) => handleInputChange('county', value)}
           disabled={!data.state}
         >
-          <SelectTrigger data-testid="county-select">
+          <SelectTrigger 
+            data-testid="county-select"
+            className={showValidationErrors && !data.county ? 'border-red-500 focus:ring-red-500' : ''}
+          >
             <SelectValue placeholder={data.state ? "Select county" : "Select state first"} />
           </SelectTrigger>
           <SelectContent className="max-h-[300px]">
@@ -122,8 +134,10 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
             ))}
           </SelectContent>
         </Select>
-        <p className="text-xs text-slate-500">
-          Property location county
+        <p className={`text-xs ${showValidationErrors && !data.county ? 'text-red-500' : 'text-slate-500'}`}>
+          {showValidationErrors && !data.county 
+            ? 'This field is required' 
+            : 'Property location county'}
         </p>
       </div>
 
@@ -142,10 +156,12 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
           data-placeholder="true"
           min="300"
           max="850"
-          className="text-right md:w-48"
+          className={`text-right md:w-48 ${showValidationErrors && !data.creditScore ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
         />
-        <p className="text-xs text-slate-500">
-          Credit score (typical range 300-850)
+        <p className={`text-xs ${showValidationErrors && !data.creditScore ? 'text-red-500' : 'text-slate-500'}`}>
+          {showValidationErrors && !data.creditScore 
+            ? 'This field is required' 
+            : 'Credit score (typical range 300-850)'}
         </p>
       </div>
     </div>

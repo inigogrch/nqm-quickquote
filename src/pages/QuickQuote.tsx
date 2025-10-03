@@ -39,24 +39,42 @@ export default function QuickQuote() {
   const [showImproveAccuracy, setShowImproveAccuracy] = useState(false);
   const [isMinimalComplete, setIsMinimalComplete] = useState(true); // Start with placeholder data
   const [isLoading, setIsLoading] = useState(false);
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   const handleFormChange = (updates: Partial<LoanDetails>) => {
     const newData = { ...formData, ...updates };
     setFormData(newData);
     
-    // Check if minimal fields are complete
+    // Check if minimal fields are complete (5 required fields with *)
     const minimalComplete = !!(
       newData.loanAmount &&
       newData.loanToValue &&
-      newData.propertyType &&
+      newData.state &&
+      newData.county &&
       newData.creditScore
     );
     setIsMinimalComplete(minimalComplete);
+    
+    // Clear validation errors when user starts fixing the form
+    if (showValidationErrors && minimalComplete) {
+      setShowValidationErrors(false);
+    }
   };
 
   const handleSeePrograms = async () => {
     if (!isMinimalComplete) {
-      toast.error('Please complete all required fields');
+      // Show validation errors on the form
+      setShowValidationErrors(true);
+      
+      // Identify which required fields are missing
+      const missingFields = [];
+      if (!formData.loanAmount) missingFields.push('First Lien Amount');
+      if (!formData.loanToValue) missingFields.push('LTV');
+      if (!formData.state) missingFields.push('State');
+      if (!formData.county) missingFields.push('County');
+      if (!formData.creditScore) missingFields.push('FICO Score');
+      
+      toast.error(`Please complete all required fields: ${missingFields.join(', ')}`);
       return;
     }
 
@@ -141,6 +159,7 @@ export default function QuickQuote() {
     });
     setShowImproveAccuracy(false);
     setIsMinimalComplete(false);
+    setShowValidationErrors(false);
   };
 
   /* FNMA */
@@ -465,6 +484,7 @@ export default function QuickQuote() {
               <QuickQuoteForm 
                 data={formData}
                 onChange={handleFormChange}
+                showValidationErrors={showValidationErrors}
               />
 
               <ImproveAccuracyAccordion

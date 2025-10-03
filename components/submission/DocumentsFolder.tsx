@@ -18,6 +18,15 @@ import { uploadFilesToS3, isS3Configured } from '../../src/lib/api/s3-upload';
 import { triggerRackStackProcessing, isRackStackConfigured, pollForResults } from '../../src/lib/api/rack-stack';
 import supabase from '../../lib/supabase';
 
+// Document ID mapping for Rack Stack classification validation
+const DOCUMENT_ID_MAPPING: Record<string, string> = {
+  'min_0': '349',  // 1003 Application
+  'min_1': '502',  // Bank Statements
+  'min_2': '2174', // Title Fee Sheet
+  'min_3': '117',  // Credit Report
+  'min_4': '237',  // Borrower Certification Form
+};
+
 interface Document {
   id: string;
   name: string;
@@ -44,7 +53,10 @@ interface Document {
   rackStackJobId?: string;
   outputDestination?: string;
   classificationCategory?: string;
+  classificationCategoryId?: string;
   classificationConfidence?: number;
+  verificationMessage?: string;
+  failureReason?: 'low_confidence' | 'category_mismatch' | 'both';
 }
 
 interface DocumentsFolderProps {
@@ -70,22 +82,100 @@ const getStatusIcon = (status: string) => {
   }
 };
 
-// Accurate status badges
-const getStatusBadge = (status: string) => {
+// Accurate status badges with optional tooltip for verification details
+const getStatusBadge = (doc: Document) => {
+  const { status, classificationCategory, classificationCategoryId, classificationConfidence, verificationMessage, failureReason } = doc;
+  
+  // Determine if we should show tooltip (only if AI verification has been run)
+  const hasVerificationData = classificationCategory !== undefined && classificationConfidence !== undefined;
+  
+  let badge;
   switch (status) {
     case 'completed':
     case 'ai-verified':
-      return <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
+      badge = <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
+      break;
     case 'in_progress':
-      return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
+      badge = <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
+      break;
     case 'uploaded':
-      return <Badge className="bg-warn text-white hover:bg-warn/90">Uploaded</Badge>;
+      badge = <Badge className="bg-warn text-white hover:bg-warn/90">Uploaded</Badge>;
+      break;
     case 'failed':
-      return <Badge className="bg-bad text-white hover:bg-bad/90">Needs Attention</Badge>;
+      badge = <Badge className="bg-bad text-white hover:bg-bad/90">Needs Attention</Badge>;
+      break;
     case 'pending':
     default:
-      return <Badge variant="outline" className="text-slate-600">Pending</Badge>;
+      badge = <Badge variant="outline" className="text-slate-600">Pending</Badge>;
+      break;
   }
+  
+  // Wrap badge in tooltip if verification data is available
+  if (hasVerificationData) {
+    const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
+    const expectedId = DOCUMENT_ID_MAPPING[doc.id];
+    
+    let tooltipContent: React.ReactNode;
+    
+    if (status === 'ai-verified') {
+      // Success case
+      tooltipContent = (
+        <div className="text-xs">
+          <div className="font-semibold mb-1">✅ Verified</div>
+          <div>Category: {classificationCategory}</div>
+          <div>Confidence: {confidencePercent}%</div>
+        </div>
+      );
+    } else if (status === 'failed') {
+      // Failure case
+      tooltipContent = (
+        <div className="text-xs">
+          <div className="font-semibold mb-1">❌ Failed</div>
+          {failureReason === 'both' && (
+            <>
+              <div>• Low confidence: {confidencePercent}% (required: 95%)</div>
+              <div>• Expected category: {expectedId}</div>
+              <div>• Got category: {classificationCategoryId || 'Unknown'}</div>
+            </>
+          )}
+          {failureReason === 'low_confidence' && (
+            <>
+              <div>• Low confidence: {confidencePercent}% (required: 95%)</div>
+              <div>• Category: {classificationCategory}</div>
+            </>
+          )}
+          {failureReason === 'category_mismatch' && (
+            <>
+              <div>• Confidence: {confidencePercent}%</div>
+              <div>• Expected category: {expectedId}</div>
+              <div>• Got category: {classificationCategoryId || 'Unknown'}</div>
+            </>
+          )}
+        </div>
+      );
+    } else {
+      // Other statuses with verification data
+      tooltipContent = (
+        <div className="text-xs">
+          <div>Category: {classificationCategory}</div>
+          <div>Confidence: {confidencePercent}%</div>
+        </div>
+      );
+    }
+    
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {badge}
+        </TooltipTrigger>
+        <TooltipContent>
+          {tooltipContent}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+  
+  return badge;
 };
 
 // Mock documents based on checklist
@@ -672,24 +762,34 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     // Step 3: Poll for all results in parallel
     const pollPromises = successfulTriggers.map(async ({ doc, triggerResult }) => {
       try {
-        const pollResult = await pollForResults(triggerResult!.output_destination!);
+        // Get the expected document ID for validation
+        const expectedDocumentId = DOCUMENT_ID_MAPPING[doc.id];
+        
+        const pollResult = await pollForResults(
+          triggerResult!.output_destination!,
+          expectedDocumentId
+        );
 
         if (pollResult.status === 'ai-verified') {
           // Success! Update document with verification details
           updateDocument(doc.id, {
             status: 'ai-verified' as any,
             classificationCategory: pollResult.category as any,
-            classificationConfidence: pollResult.confidence as any
+            classificationCategoryId: pollResult.categoryId as any,
+            classificationConfidence: pollResult.confidence as any,
+            verificationMessage: pollResult.message as any,
+            failureReason: undefined as any
           });
 
           console.log('AI Verified:', doc.id);
 
           // Add success timeline event
+          const confidencePercent = ((pollResult.confidence || 0) * 100).toFixed(0);
           addTimelineEvent({
             id: `timeline_${Date.now()}_${doc.id}`,
             timestamp: new Date().toISOString(),
             event: 'AI Verification Completed',
-            description: `${doc.name} verified as ${pollResult.category} (${(pollResult.confidence! * 100).toFixed(1)}% confidence)`,
+            description: `${doc.name} verified as ${pollResult.category} (${confidencePercent}% confidence)`,
             status: 'completed'
           });
 
@@ -705,11 +805,14 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
 
           return { doc, success: true };
         } else {
-          // Failed verification.
+          // Failed verification - store all verification details including failure reason
           updateDocument(doc.id, {
             status: 'failed' as any,
             classificationCategory: pollResult.category as any,
-            classificationConfidence: pollResult.confidence as any
+            classificationCategoryId: pollResult.categoryId as any,
+            classificationConfidence: pollResult.confidence as any,
+            verificationMessage: pollResult.message as any,
+            failureReason: pollResult.failureReason as any
           });
 
           // Add failure timeline event
@@ -854,7 +957,7 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
       </div>
 
       <div className="flex items-center gap-3">
-        {getStatusBadge(doc.status)}
+        {getStatusBadge(doc)}
         <Button
           size="sm"
           variant="outline"

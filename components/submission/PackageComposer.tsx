@@ -44,14 +44,18 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
   // Use package documents from global store (starts empty)
   const packageDocs = packageDocuments;
 
+  // Hardcoded total counts
+  const totalMinimumDocs = 5;
+  const totalLikelyDocs = 0; // Will be made dynamic later
+
   const minimumDocs = packageDocs.filter(doc => doc.category === 'minimum');
   const likelyDocs = packageDocs.filter(doc => doc.category === 'likely');
   
   const minimumCompleted = minimumDocs.filter(doc => doc.verified).length;
   const likelyCompleted = likelyDocs.filter(doc => doc.verified).length;
   
-  const minimumProgress = minimumDocs.length > 0 ? (minimumCompleted / minimumDocs.length) * 100 : 0;
-  const likelyProgress = likelyDocs.length > 0 ? (likelyCompleted / likelyDocs.length) * 100 : 0;
+  const minimumProgress = (minimumCompleted / totalMinimumDocs) * 100;
+  const likelyProgress = totalLikelyDocs > 0 ? (likelyCompleted / totalLikelyDocs) * 100 : 0;
   
   const canSubmit = minimumDocs.length > 0 && minimumDocs.every(doc => doc.verified);
 
@@ -79,13 +83,13 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
         <div className="flex gap-4">
           <div className="space-y-2">
             <Badge variant="outline" className="text-xs">
-              Minimum for Submit {minimumCompleted}/{minimumDocs.length}
+              Minimum for Submit {minimumCompleted}/{totalMinimumDocs}
             </Badge>
             <Progress value={minimumProgress} className="h-1 w-32" />
           </div>
           <div className="space-y-2">
             <Badge variant="outline" className="text-xs">
-              Likely Conditions {likelyCompleted}/{likelyDocs.length}
+              Likely Conditions {likelyCompleted}/{totalLikelyDocs}
             </Badge>
             <Progress value={likelyProgress} className="h-1 w-32" />
           </div>
