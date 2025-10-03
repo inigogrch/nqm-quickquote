@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import supabase from "../../lib/supabase";
 
 interface Loan {
+  loan_id: string;
   id: string;
   created_at: string;
   documents: any[];
@@ -102,7 +103,7 @@ export default function Summary() {
               <Badge className="bg-ok text-white">Ready</Badge>
             </div>
             <p className="text-slate-600" data-placeholder="true">
-              Package ID: {loan.id} • Generated{" "}
+              Package ID: {loan.loan_id} • Generated{" "}
               {new Date(loan.created_at).toLocaleDateString()}
               {/* TODO: replace with live package service */}
             </p>
