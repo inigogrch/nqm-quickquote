@@ -32,6 +32,26 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Borrower Name */}
+      <div className="space-y-2">
+        <Label htmlFor="borrowerName" className="text-sm font-medium">
+          Borrower Name *
+        </Label>
+        <Input
+          id="borrowerName"
+          type="text"
+          value={data.borrowerName}
+          onChange={(e) => handleInputChange('borrowerName', e.target.value)}
+          placeholder="John Doe"
+          data-testid="loan-amount-input"
+          data-placeholder="true"
+          className="text-left"
+        />
+        <p className="text-xs text-slate-500">
+          Enter borrower name here
+        </p>
+      </div>
+
       {/* First Lien Amount */}
       <div className="space-y-2">
         <Label htmlFor="loanAmount" className="text-sm font-medium">
@@ -128,7 +148,7 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
       </div>
 
       {/* FICO */}
-      <div className="space-y-2 md:col-span-2">
+      <div className="space-y-2">
         <Label htmlFor="fico" className="text-sm font-medium">
           FICO Score *
         </Label>
@@ -142,7 +162,7 @@ export function QuickQuoteForm({ data, onChange }: QuickQuoteFormProps) {
           data-placeholder="true"
           min="300"
           max="850"
-          className="text-right md:w-48"
+          className="text-right"
         />
         <p className="text-xs text-slate-500">
           Credit score (typical range 300-850)
