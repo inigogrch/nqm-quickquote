@@ -51,6 +51,12 @@ interface AppStore extends AppState {
   // Workflow state
   workflow: WorkflowState;
   
+  // Conditions state
+  showConditions: boolean;
+  conditionsStatus: 'idle' | 'running' | 'completed' | 'failed';
+  conditionsResults: any | null;
+  conditionsError: string | null;
+  
   // Actions
   setCurrentStep: (step: AppState['currentStep']) => void;
   setLoanDetails: (details: AppState['loanDetails']) => void;
@@ -87,6 +93,13 @@ interface AppStore extends AppState {
   unlockSubmission: () => void;
   unlockSummary: () => void;
   
+  // Conditions actions
+  setShowConditions: (show: boolean) => void;
+  setConditionsStatus: (status: 'idle' | 'running' | 'completed' | 'failed') => void;
+  setConditionsResults: (results: any) => void;
+  setConditionsError: (error: string | null) => void;
+  resetConditions: () => void;
+  
   resetState: () => void;
 }
 
@@ -118,6 +131,10 @@ export const useAppStore = create<AppStore>((set, get) => ({
     submissionUnlocked: false,
     summaryUnlocked: false
   },
+  showConditions: false,
+  conditionsStatus: 'idle',
+  conditionsResults: null,
+  conditionsError: null,
 
   setCurrentStep: (step) => set({ currentStep: step }),
   
@@ -210,11 +227,26 @@ export const useAppStore = create<AppStore>((set, get) => ({
     workflow: { ...state.workflow, summaryUnlocked: true } 
   })),
   
+  // Conditions management
+  setShowConditions: (show) => set({ showConditions: show }),
+  setConditionsStatus: (status) => set({ conditionsStatus: status }),
+  setConditionsResults: (results) => set({ conditionsResults: results }),
+  setConditionsError: (error) => set({ conditionsError: error }),
+  resetConditions: () => set({ 
+    conditionsStatus: 'idle', 
+    conditionsResults: null, 
+    conditionsError: null 
+  }),
+  
   resetState: () => set({ 
     ...initialState, 
     packageDocuments: [], 
     loanRecords: [], 
     selectedProgramId: null,
+    showConditions: false,
+    conditionsStatus: 'idle',
+    conditionsResults: null,
+    conditionsError: null,
     workflow: {
       quickQuoteUnlocked: false,
       programsUnlocked: false,

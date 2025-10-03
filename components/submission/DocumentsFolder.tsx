@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X, Download } from 'lucide-react';
+import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -102,94 +102,30 @@ const getStatusIcon = (status: string) => {
   }
 };
 
-// Accurate status badges with optional tooltip for verification details
+// Accurate status badges
 const getStatusBadge = (doc: Document) => {
-  const { status, classificationCategory, classificationCategoryId, classificationConfidence, verificationMessage, failureReason } = doc;
-  
-  // Determine if we should show tooltip (only if AI verification has been run)
-  const hasVerificationData = classificationCategory !== undefined && classificationConfidence !== undefined;
-  
-  let badge;
-  let tooltipContent: React.ReactNode | null = null;
+  const { status } = doc;
   
   switch (status) {
     case 'ai-verified':
-      badge = <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
-      if (hasVerificationData) {
-        const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
-        tooltipContent = (
-          <div className="text-xs space-y-1">
-            <div className="font-semibold">✅ Verified</div>
-            <div>Category: {classificationCategory}</div>
-            <div>Confidence: {confidencePercent}%</div>
-          </div>
-        );
-      }
-      break;
+      return <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
       
     case 'needs_attention':
-      badge = <Badge className="bg-orange-500 text-white hover:bg-orange-600">Needs Attention</Badge>;
-      if (hasVerificationData) {
-        const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
-        const expectedId = getExpectedCategoryId(doc.name);
-        tooltipContent = (
-          <div className="text-xs space-y-1">
-            <div className="font-semibold">⚠️ Low Confidence</div>
-            <div>Confidence: {confidencePercent}% (required: 95%)</div>
-            <div>Category: {classificationCategory}</div>
-            <div className="text-slate-300 text-[10px] mt-1">Category match verified ✓</div>
-          </div>
-        );
-      }
-      break;
+      return <Badge className="bg-orange-500 text-white hover:bg-orange-600">Needs Attention</Badge>;
       
     case 'failed':
-      badge = <Badge className="bg-bad text-white hover:bg-bad/90">Failed</Badge>;
-      if (hasVerificationData) {
-        const confidencePercent = ((classificationConfidence || 0) * 100).toFixed(0);
-        const expectedId = getExpectedCategoryId(doc.name);
-        tooltipContent = (
-          <div className="text-xs space-y-1">
-            <div className="font-semibold">❌ Category Mismatch</div>
-            <div>Expected: {expectedId || 'Unknown'}</div>
-            <div>Got: {classificationCategoryId || 'Unknown'}</div>
-            <div>Confidence: {confidencePercent}%</div>
-          </div>
-        );
-      }
-      break;
+      return <Badge className="bg-bad text-white hover:bg-bad/90">Failed</Badge>;
       
     case 'in_progress':
-      badge = <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
-      break;
+      return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
       
     case 'uploaded':
-      badge = <Badge className="bg-slate-400 text-white hover:bg-slate-500">Uploaded</Badge>;
-      break;
+      return <Badge className="bg-slate-400 text-white hover:bg-slate-500">Uploaded</Badge>;
       
     case 'pending':
     default:
-      badge = <Badge variant="outline" className="text-slate-600">Pending</Badge>;
-      break;
+      return <Badge variant="outline" className="text-slate-600">Pending</Badge>;
   }
-  
-  // Wrap badge in tooltip if verification data is available
-  if (tooltipContent) {
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="cursor-help">
-            {badge}
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="top" className="max-w-xs">
-          {tooltipContent}
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
-  
-  return badge;
 };
 
 // Mock documents based on checklist
@@ -945,19 +881,21 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
                 <span className="text-slate-400 whitespace-nowrap">
                   ({(file.fileSize / 1024 / 1024).toFixed(1)} MB)
                 </span>
-                {file.url ? (
-                  <a 
-                    href={file.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700"
-                    title="View document"
-                  >
-                    <Download className="w-3 h-3" />
-                  </a>
-                ) : (
-                  <span className="w-3" />
-                )}
+                <button
+                  onClick={() => {
+                    // Remove this file from the document's uploadedFiles array
+                    const updatedFiles = doc.uploadedFiles?.filter(f => f.id !== file.id) || [];
+                    updateDocument(doc.id, {
+                      uploadedFiles: updatedFiles as any,
+                      status: (updatedFiles.length === 0 ? 'pending' : doc.status) as any
+                    });
+                    toast.success(`Removed ${file.originalName}`);
+                  }}
+                  className="text-red-600 hover:text-red-700 cursor-pointer"
+                  title="Remove file"
+                >
+                  <X className="w-3 h-3" />
+                </button>
               </div>
             ))}
           </div>
@@ -1095,16 +1033,6 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
                 {minimumDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
               </div>
             </div>
-
-            {/* Likely Conditions Documents */}
-            {likelyDocs.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="font-semibold text-slate-900">Likely Conditions</h3>
-                <div className="space-y-3">
-                  {likelyDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
-                </div>
-              </div>
-            )}
 
             {/* Additional Categories (if showing all) */}
             {showAllCategories && additionalDocs.length > 0 && (

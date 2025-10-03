@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Checkbox } from '@/components/ui/checkbox';
-import { GripVertical, Download, Send } from 'lucide-react';
+import { X, Download, Send, Clock } from 'lucide-react';
 import { PLACEHOLDER_PROGRAM } from '../../lib/fixtures';
 import { useAppStore } from '../../lib/store';
 
@@ -25,13 +25,15 @@ interface PackageComposerProps {
 }
 
 export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: PackageComposerProps) {
+  const [isVerifying, setIsVerifying] = useState(false);
+  
   const { 
     selectedProgramId, 
     loanPrograms, 
     packageDocuments, 
     updatePackageDocument, 
     removeFromPackage,
-    reorderPackageDocuments 
+    setShowConditions
   } = useAppStore();
   
   // Get the selected program name
@@ -57,7 +59,8 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
   const minimumProgress = (minimumCompleted / totalMinimumDocs) * 100;
   const likelyProgress = totalLikelyDocs > 0 ? (likelyCompleted / totalLikelyDocs) * 100 : 0;
   
-  const canSubmit = minimumDocs.length > 0 && minimumDocs.every(doc => doc.verified);
+  // Button is enabled only when all 5 minimum documents are included in the package
+  const canSubmit = minimumDocs.length === totalMinimumDocs && minimumDocs.every(doc => doc.verified);
 
   const handleDocumentToggle = (docId: string, checked: boolean) => {
     updatePackageDocument(docId, { verified: checked });
@@ -67,8 +70,15 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
     removeFromPackage(docId);
   };
 
-  const handleReorder = (dragIndex: number, hoverIndex: number) => {
-    reorderPackageDocuments(dragIndex, hoverIndex);
+  const handleVerifyPackage = async () => {
+    setIsVerifying(true);
+    
+    // Wait 10 seconds
+    await new Promise(resolve => setTimeout(resolve, 10000));
+    
+    // Show conditions pane
+    setShowConditions(true);
+    setIsVerifying(false);
   };
 
   return (
@@ -89,7 +99,7 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
           </div>
           <div className="space-y-2">
             <Badge variant="outline" className="text-xs">
-              Likely Conditions {likelyCompleted}/{totalLikelyDocs}
+              Conditions {likelyCompleted}/{totalLikelyDocs}
             </Badge>
             <Progress value={likelyProgress} className="h-1 w-32" />
           </div>
@@ -110,10 +120,14 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
               className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50/50"
               data-testid={`package-doc-${doc.id}`}
             >
-              <GripVertical 
-                className="w-4 h-4 text-slate-400 cursor-grab" 
-                data-testid={`drag-handle-${doc.id}`}
-              />
+              <button
+                onClick={() => handleRemoveDocument(doc.id)}
+                className="text-red-600 hover:text-red-700 cursor-pointer"
+                title="Remove from package"
+                data-testid={`remove-${doc.id}`}
+              >
+                <X className="w-4 h-4" />
+              </button>
               
               <Checkbox
                 checked={doc.verified}
@@ -164,18 +178,30 @@ export function PackageComposer({ onSubmit, onDownloadPDF, onDownloadZIP }: Pack
         </div>
         
         <Button
-          onClick={onSubmit}
-          disabled={!canSubmit}
+          onClick={handleVerifyPackage}
+          disabled={!canSubmit || isVerifying}
           className="w-full bg-brand hover:bg-brand-600"
           data-testid="submit-package"
         >
-          <Send className="w-4 h-4 mr-2" />
-          Submit Package
+          {isVerifying ? (
+            <>
+              <Clock className="w-4 h-4 mr-2 animate-spin" />
+              Verifying...
+            </>
+          ) : (
+            <>
+              <Send className="w-4 h-4 mr-2" />
+              Verify Package
+            </>
+          )}
         </Button>
         
         {!canSubmit && (
           <p className="text-xs text-slate-500 text-center" data-placeholder="true">
-            All minimum documents must be verified to submit
+            {minimumDocs.length < totalMinimumDocs 
+              ? `Add all ${totalMinimumDocs} minimum documents to verify (${minimumDocs.length}/${totalMinimumDocs} added)`
+              : 'All minimum documents must be verified to submit'
+            }
             {/* TODO: replace with live validation service */}
           </p>
         )}
