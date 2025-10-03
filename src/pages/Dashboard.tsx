@@ -43,15 +43,12 @@ export default function Dashboard() {
   const handleQuickQuoteClick = () => {
     // Unlock QuickQuote section in the workflow
     unlockQuickQuote();
-    navigate('/quickquote');
+    navigate("/quickquote");
   };
 
   const handleRemoveLoanRecord = async (loanId: string) => {
     // delete loan record with matching id from supabase
-    const { error } = await supabase
-      .from("loans")
-      .delete()
-      .eq("id", loanId);
+    const { error } = await supabase.from("loans").delete().eq("id", loanId);
     if (error) {
       console.error("Error deleting loan record:", error);
     } else {
@@ -95,7 +92,10 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-brand/5 to-brand/10 border-brand/20"
-            onClick={handleQuickQuoteClick}
+            onClick={() => {
+              handleQuickQuoteClick();
+              setCurrentLoanId(null);
+            }}
             data-testid="quick-quote-card"
           >
             <CardHeader>

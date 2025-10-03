@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { PackageCards } from "../../components/summary/PackageCards";
 import { BSACard } from "../../components/summary/BSACard";
 import { ShareModal } from "../../components/modals/ShareModal";
-import { EmailBanner } from "../../components/banners/EmailBanner";
 import { TimelineDrawer } from "../../components/drawers/TimelineDrawer";
 import { Share2, Clock, Download } from "lucide-react";
 import { useAppStore } from "../../lib/store";
@@ -27,11 +26,13 @@ export default function Summary() {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [loan, setLoan] = useState<Loan | null>(null);
+  const [loading, setLoading] = useState(false);
   const { loanPackage, addTimelineEvent, currentLoanId } = useAppStore();
 
   // fetch loan from supabase using currentLoanId
   useEffect(() => {
     const fetchLoanFromSupabase = async () => {
+      setLoading(true);
       const { data, error } = await supabase
         .from("loans")
         .select("*")
@@ -43,6 +44,7 @@ export default function Summary() {
         console.log("Loan fetched from supabase:", data);
         setLoan(data);
       }
+      setLoading(false);
     };
 
     fetchLoanFromSupabase();
@@ -64,7 +66,13 @@ export default function Summary() {
     setShareModalOpen(true);
   };
 
-  if (!loan) {
+  if (loading) {
+    return (
+      <div className="w-full h-full bg-neutral-300 animate-pulse"></div>
+    )
+  }
+
+  if (!loan && !loading) {
     return (
       <div className="max-w-4xl mx-auto">
         <Card className="p-8 text-center">
@@ -82,8 +90,6 @@ export default function Summary() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      {/* Email Banner */}
-      <EmailBanner />
 
       {/* Header */}
       <Card className="p-6">
@@ -96,7 +102,7 @@ export default function Summary() {
               <Badge className="bg-ok text-white">Ready</Badge>
             </div>
             <p className="text-slate-600" data-placeholder="true">
-              Package ID: {loanPackage.id} • Generated{" "}
+              Package ID: {loan.id} • Generated{" "}
               {new Date(loan.created_at).toLocaleDateString()}
               {/* TODO: replace with live package service */}
             </p>
