@@ -27,6 +27,12 @@ export function PreviewCard({ loanData, hasImprovedAccuracy }: PreviewCardProps)
     return `${value.toFixed(1)}%`;
   };
 
+  // Calculate Property Value from Loan Amount and LTV
+  // Property Value = Loan Amount / (LTV / 100)
+  const calculatedPropertyValue = loanData.loanAmount && loanData.loanToValue 
+    ? loanData.loanAmount / (loanData.loanToValue / 100)
+    : loanData.propertyValue || 0;
+
   return (
     <Card className="sticky top-6">
       <CardHeader>
@@ -59,7 +65,7 @@ export function PreviewCard({ loanData, hasImprovedAccuracy }: PreviewCardProps)
           
           <div className="flex justify-between items-center">
             <span className="text-sm text-slate-600">Property Value</span>
-            <span className="font-medium">{formatCurrency(loanData.propertyValue)}</span>
+            <span className="font-medium">{formatCurrency(calculatedPropertyValue)}</span>
           </div>
           
           <div className="flex justify-between items-center">

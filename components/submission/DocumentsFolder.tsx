@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X, Download } from 'lucide-react';
+import { FileText, Upload, CheckCircle, AlertCircle, Clock, Info, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -17,6 +17,34 @@ import { extractDocumentStatusesForProgram, DocumentStatus } from '../../src/lib
 import { uploadFilesToS3, isS3Configured } from '../../src/lib/api/s3-upload';
 import { triggerRackStackProcessing, isRackStackConfigured, pollForResults } from '../../src/lib/api/rack-stack';
 import supabase from '../../lib/supabase';
+
+// Document category mapping for Rack Stack classification validation
+// Maps document names to their expected category IDs
+const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
+  '1003 Application': '349',
+  'Bank Statements': '502',
+  'Title Fee Sheet': '2174',
+  'Credit Report': '117',
+  'Borrower Certification Form': '237',
+};
+
+// Helper function to get expected category ID for a document
+const getExpectedCategoryId = (docName: string): string | undefined => {
+  // Try exact match first
+  if (DOCUMENT_CATEGORY_MAPPING[docName]) {
+    return DOCUMENT_CATEGORY_MAPPING[docName];
+  }
+  
+  // Try partial match (case-insensitive)
+  const normalizedName = docName.toLowerCase();
+  for (const [key, value] of Object.entries(DOCUMENT_CATEGORY_MAPPING)) {
+    if (normalizedName.includes(key.toLowerCase()) || key.toLowerCase().includes(normalizedName)) {
+      return value;
+    }
+  }
+  
+  return undefined;
+};
 
 interface Document {
   id: string;
@@ -44,7 +72,10 @@ interface Document {
   rackStackJobId?: string;
   outputDestination?: string;
   classificationCategory?: string;
+  classificationCategoryId?: string;
   classificationConfidence?: number;
+  verificationMessage?: string;
+  failureReason?: 'low_confidence' | 'category_mismatch' | 'both';
 }
 
 interface DocumentsFolderProps {
@@ -55,13 +86,14 @@ interface DocumentsFolderProps {
 // Accurate status icons based on actual document state
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case 'completed':
     case 'ai-verified':
       return <CheckCircle className="w-5 h-5 text-ok" />;
     case 'in_progress':
       return <Clock className="w-5 h-5 text-blue-500 animate-spin" />;
     case 'uploaded':
-      return <AlertCircle className="w-5 h-5 text-warn" />;
+      return <AlertCircle className="w-5 h-5 text-slate-400" />;
+    case 'needs_attention':
+      return <AlertCircle className="w-5 h-5 text-orange-500" />;
     case 'failed':
       return <AlertCircle className="w-5 h-5 text-bad" />;
     case 'pending':
@@ -71,17 +103,25 @@ const getStatusIcon = (status: string) => {
 };
 
 // Accurate status badges
-const getStatusBadge = (status: string) => {
+const getStatusBadge = (doc: Document) => {
+  const { status } = doc;
+  
   switch (status) {
-    case 'completed':
     case 'ai-verified':
       return <Badge className="bg-ok text-white hover:bg-ok/90">AI-Verified</Badge>;
+      
+    case 'needs_attention':
+      return <Badge className="bg-orange-500 text-white hover:bg-orange-600">Needs Attention</Badge>;
+      
+    case 'failed':
+      return <Badge className="bg-bad text-white hover:bg-bad/90">Failed</Badge>;
+      
     case 'in_progress':
       return <Badge className="bg-blue-500 text-white hover:bg-blue-600">Running</Badge>;
+      
     case 'uploaded':
-      return <Badge className="bg-warn text-white hover:bg-warn/90">Uploaded</Badge>;
-    case 'failed':
-      return <Badge className="bg-bad text-white hover:bg-bad/90">Needs Attention</Badge>;
+      return <Badge className="bg-slate-400 text-white hover:bg-slate-500">Uploaded</Badge>;
+      
     case 'pending':
     default:
       return <Badge variant="outline" className="text-slate-600">Pending</Badge>;
@@ -338,14 +378,14 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
             <div className="space-y-2">
               <h4 className="text-sm font-medium">Selected Files:</h4>
               {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center justify-between p-2 bg-slate-50 rounded">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <FileText className="w-4 h-4 text-slate-500 flex-shrink-0" />
-                    <span className="text-sm truncate">{file.name}</span>
-                    <span className="text-xs text-slate-500 flex-shrink-0">
-                      ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                    </span>
-                  </div>
+                <div key={index} className="grid grid-cols-[20px_1fr_auto_auto] gap-2 items-center p-2 bg-slate-50 rounded">
+                  <FileText className="w-4 h-4 text-slate-500" />
+                  <p className="text-sm truncate overflow-hidden text-ellipsis whitespace-nowrap min-w-0" title={file.name}>
+                    {file.name}
+                  </p>
+                  <span className="text-xs text-slate-500 whitespace-nowrap">
+                    ({(file.size / 1024 / 1024).toFixed(1)} MB)
+                  </span>
                   <Button
                     type="button"
                     variant="ghost"
@@ -672,24 +712,41 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     // Step 3: Poll for all results in parallel
     const pollPromises = successfulTriggers.map(async ({ doc, triggerResult }) => {
       try {
-        const pollResult = await pollForResults(triggerResult!.output_destination!);
+        // Get the expected document category ID for validation based on document name
+        const expectedDocumentId = getExpectedCategoryId(doc.name);
+        
+        console.log(`🔍 Verifying ${doc.name}:`, {
+          docId: doc.id,
+          docName: doc.name,
+          expectedCategoryId: expectedDocumentId,
+          outputDestination: triggerResult!.output_destination
+        });
+        
+        const pollResult = await pollForResults(
+          triggerResult!.output_destination!,
+          expectedDocumentId
+        );
 
         if (pollResult.status === 'ai-verified') {
           // Success! Update document with verification details
           updateDocument(doc.id, {
             status: 'ai-verified' as any,
             classificationCategory: pollResult.category as any,
-            classificationConfidence: pollResult.confidence as any
+            classificationCategoryId: pollResult.categoryId as any,
+            classificationConfidence: pollResult.confidence as any,
+            verificationMessage: pollResult.message as any,
+            failureReason: undefined as any
           });
 
           console.log('AI Verified:', doc.id);
 
           // Add success timeline event
+          const confidencePercent = ((pollResult.confidence || 0) * 100).toFixed(0);
           addTimelineEvent({
             id: `timeline_${Date.now()}_${doc.id}`,
             timestamp: new Date().toISOString(),
             event: 'AI Verification Completed',
-            description: `${doc.name} verified as ${pollResult.category} (${(pollResult.confidence! * 100).toFixed(1)}% confidence)`,
+            description: `${doc.name} verified as ${pollResult.category} (${confidencePercent}% confidence)`,
             status: 'completed'
           });
 
@@ -705,11 +762,14 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
 
           return { doc, success: true };
         } else {
-          // Failed verification.
+          // Failed verification - store all verification details including failure reason
           updateDocument(doc.id, {
             status: 'failed' as any,
             classificationCategory: pollResult.category as any,
-            classificationConfidence: pollResult.confidence as any
+            classificationCategoryId: pollResult.categoryId as any,
+            classificationConfidence: pollResult.confidence as any,
+            verificationMessage: pollResult.message as any,
+            failureReason: pollResult.failureReason as any
           });
 
           // Add failure timeline event
@@ -813,23 +873,29 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
         {doc.uploadedFiles && doc.uploadedFiles.length > 0 && (
           <div className="mt-2 space-y-1">
             {doc.uploadedFiles.map((file) => (
-              <div key={file.id} className="flex items-center gap-2 text-xs text-slate-600">
+              <div key={file.id} className="grid grid-cols-[16px_1fr_auto_auto] gap-2 items-center text-xs text-slate-600">
                 <FileText className="w-3 h-3 text-slate-400" />
-                <span className="truncate max-w-xs">{file.originalName}</span>
-                <span className="text-slate-400">
+                <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap min-w-0" title={file.originalName}>
+                  {file.originalName}
+                </span>
+                <span className="text-slate-400 whitespace-nowrap">
                   ({(file.fileSize / 1024 / 1024).toFixed(1)} MB)
                 </span>
-                {file.url && (
-                  <a 
-                    href={file.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700"
-                    title="View document"
-                  >
-                    <Download className="w-3 h-3" />
-                  </a>
-                )}
+                <button
+                  onClick={() => {
+                    // Remove this file from the document's uploadedFiles array
+                    const updatedFiles = doc.uploadedFiles?.filter(f => f.id !== file.id) || [];
+                    updateDocument(doc.id, {
+                      uploadedFiles: updatedFiles as any,
+                      status: (updatedFiles.length === 0 ? 'pending' : doc.status) as any
+                    });
+                    toast.success(`Removed ${file.originalName}`);
+                  }}
+                  className="text-red-600 hover:text-red-700 cursor-pointer"
+                  title="Remove file"
+                >
+                  <X className="w-3 h-3" />
+                </button>
               </div>
             ))}
           </div>
@@ -854,7 +920,7 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
       </div>
 
       <div className="flex items-center gap-3">
-        {getStatusBadge(doc.status)}
+        {getStatusBadge(doc)}
         <Button
           size="sm"
           variant="outline"
@@ -967,16 +1033,6 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
                 {minimumDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
               </div>
             </div>
-
-            {/* Likely Conditions Documents */}
-            {likelyDocs.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="font-semibold text-slate-900">Likely Conditions</h3>
-                <div className="space-y-3">
-                  {likelyDocs.map(doc => <DocumentRow key={doc.id} doc={doc} />)}
-                </div>
-              </div>
-            )}
 
             {/* Additional Categories (if showing all) */}
             {showAllCategories && additionalDocs.length > 0 && (

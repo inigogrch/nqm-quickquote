@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { ExternalLink, Settings } from 'lucide-react';
 import { DocumentsFolder } from '../../components/submission/DocumentsFolder';
 import { PackageComposer } from '../../components/submission/PackageComposer';
+import { ConditionsSection } from '../../components/submission/ConditionsSection';
 // Removed UploaderDialog - now handled inside DocumentsFolder component
 import { ExplainDrawer } from '../../components/drawers/ExplainDrawer';
 import { useAppStore } from '../../lib/store';
@@ -17,9 +18,31 @@ import { toast } from 'sonner';
 export default function Docs() {
   const navigate = useNavigate();
   const [explainOpen, setExplainOpen] = useState(false);
-  const { addTimelineEvent, selectedProgramId, loanPrograms, currentLoanId } = useAppStore();
+  const { addTimelineEvent, selectedProgramId, loanPrograms, currentLoanId, showConditions } = useAppStore();
 
   console.log('currentLoanId', currentLoanId);
+
+  // Hardcoded conditions data from the JSON
+  const conditions = [
+    {
+      id: 1,
+      name: "Appraisal: Appraisal Delivery",
+      category: "Property",
+      description: "Provide Evidence That Appraisal Was Delivered To Borrower; Must be given to the borrower within 3 days prior to closing or provide a fully executed 3 Day Waiver for Appraisal Receipt."
+    },
+    {
+      id: 2,
+      name: "Property:  Title Company Documents",
+      category: "Property",
+      description: "Wiring instructions from Title Company"
+    },
+    {
+      id: 3,
+      name: "Assets:  100 percent Access Letter",
+      category: "Assets",
+      description: " 100 percent Access Letter from non-borrowing party on bank statement."
+    }
+  ];
 
   // Get the selected program name
   const selectedProgram = selectedProgramId
@@ -137,12 +160,14 @@ export default function Docs() {
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Column - Documents Folder */}
-        <Card className="p-6">
-          <DocumentsFolder
-            onAddToPackage={handleAddToPackage}
-            onDocumentClick={handleDocumentClick}
-          />
-        </Card>
+        <div className="space-y-8">
+          <Card className="p-6">
+            <DocumentsFolder
+              onAddToPackage={handleAddToPackage}
+              onDocumentClick={handleDocumentClick}
+            />
+          </Card>
+        </div>
 
         {/* Right Column - Package Composer */}
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -153,6 +178,13 @@ export default function Docs() {
           />
         </div>
       </div>
+
+      {/* Conditions Section - Full Width Below Grid */}
+      {showConditions && (
+        <Card className="p-6 mt-12">
+          <ConditionsSection conditions={conditions} />
+        </Card>
+      )}
 
       {/* Dialogs */}
       <ExplainDrawer
