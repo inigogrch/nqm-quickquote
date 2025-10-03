@@ -225,7 +225,7 @@ const DocumentUploadDialog = ({ selectedDocument, isOpen, onClose }: {
         console.error('Error getting loan:', loanError);
       }
 
-      let newDocument = { status: 'uploaded', ...uploadedFileMetadata[0] };
+      let newDocument = { status: 'uploaded', uploadedFiles: updatedFiles };
       console.log('New document:', newDocument);
 
       let {data: updatedLoanData, error: updatedLoanError} = await supabase
@@ -410,7 +410,8 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     setDocuments, 
     addTimelineEvent,
     addToPackage,
-    packageDocuments 
+    packageDocuments,
+    currentLoanId
   } = useAppStore();
   
   // Generate documents from API response, merging with existing store documents
@@ -586,6 +587,19 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     // Show single consolidated toast message
     toast.info(`Processing uploaded documents... This may take up to 90 seconds.`);
 
+    // get loan in supabase with updated documents
+    let {data: loanData, error: loanError} = await supabase
+      .from('loans')
+      .select('*')
+      .eq('id', currentLoanId)
+      .single();
+
+    if (loanError) {
+      console.error('Error getting loan:', loanError);
+    }
+
+    let tempDocuments = loanData.documents;
+
     // Step 1: Set all documents to in_progress immediately
     docsToVerify.forEach(doc => {
       updateDocument(doc.id, {
@@ -668,6 +682,8 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
             classificationConfidence: pollResult.confidence as any
           });
 
+          console.log('AI Verified:', doc.id);
+
           // Add success timeline event
           addTimelineEvent({
             id: `timeline_${Date.now()}_${doc.id}`,
@@ -677,9 +693,19 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
             status: 'completed'
           });
 
+          tempDocuments.forEach((document: any) => {
+            document.uploadedFiles.forEach((file: any) => {
+              if (file.s3Key.includes(doc.id)) {
+                document.status = 'ai-verified' as any;
+              }
+            });
+          });
+
+          console.log('tempDocuments:', tempDocuments);
+
           return { doc, success: true };
         } else {
-          // Failed verification
+          // Failed verification.
           updateDocument(doc.id, {
             status: 'failed' as any,
             classificationCategory: pollResult.category as any,
@@ -695,6 +721,14 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
             status: 'failed'
           });
 
+          tempDocuments.forEach((document: any) => {
+            document.uploadedFiles.forEach((file: any) => {
+              if (file.s3Key.includes(doc.id)) {
+                document.status = 'failed' as any;
+              }
+            });
+          });
+
           return { doc, success: false };
         }
       } catch (error) {
@@ -703,6 +737,14 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
         // Revert to uploaded status
         updateDocument(doc.id, {
           status: 'uploaded' as any
+        });
+
+        tempDocuments.forEach((document: any) => {
+          document.uploadedFiles.forEach((file: any) => {
+            if (file.s3Key.includes(doc.id)) {
+              document.status = 'uploaded' as any;
+            }
+          });
         });
 
         return { doc, success: false };
@@ -722,6 +764,16 @@ export function DocumentsFolder({ onAddToPackage, onDocumentClick }: DocumentsFo
     }
     if (failCount > 0) {
       toast.error(`${failCount} document(s) failed verification`);
+    }
+
+    // update loan in supabase with updated documents
+    let {data: updatedLoanData, error: updatedLoanError} = await supabase
+      .from('loans')
+      .update({ documents: tempDocuments })
+      .eq('id', currentLoanId);
+
+    if (updatedLoanError) {
+      console.error('Error updating loan:', updatedLoanError);
     }
   };
 

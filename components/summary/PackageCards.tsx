@@ -19,10 +19,20 @@ import {
   CheckCircle,
   AlertTriangle,
 } from "lucide-react";
+import { useState } from "react";
+import { getSignedUrlFromS3 } from "../../src/lib/api/s3-url";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "../../src/components/ui/dialog";
 
 export function PackageCards({ loan }: { loan: any }) {
   const { loanPackage, loanDetails, documents, currentLoanId, loanPrograms } =
     useAppStore();
+  const [previewDocument, setPreviewDocument] = useState<any>(null);
 
   if (!loanPackage || !loanDetails || !loan) {
     return (
@@ -36,8 +46,13 @@ export function PackageCards({ loan }: { loan: any }) {
     (program) => program.id === loan.program_name
   );
 
-  const completedDocs = documents.filter((doc) => doc.status === "completed");
-  const pendingDocs = documents.filter((doc) => doc.status === "pending");
+  const loanDocuments = loan.documents;
+  const completedDocs = loanDocuments.filter(
+    (doc) => doc.status === "completed" || doc.status === "ai-verified"
+  );
+  const pendingDocs = loanDocuments.filter(
+    (doc) => doc.status === "pending" || doc.status === "uploaded" || doc.status === "failed"
+  );
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -46,6 +61,22 @@ export function PackageCards({ loan }: { loan: any }) {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
+  };
+
+  // Fetch signed URL for document preview
+  const getDocument = async (doc) => {
+    try {
+      const hourInSeconds = 60 * 60;
+      const expiry = Date.now() + hourInSeconds * 1000;
+
+      const { url } = await getSignedUrlFromS3(doc.path, hourInSeconds);
+
+      console.log('url', url);
+
+      return { ...doc, url, expiry };
+    } catch (error) {
+      console.error("Error fetching document", error);
+    }
   };
 
   return (
@@ -192,21 +223,34 @@ export function PackageCards({ loan }: { loan: any }) {
             <p className="text-sm font-medium text-slate-900">
               Recent Verifications
             </p>
-            {completedDocs.slice(0, 3).map((doc) => (
-              <div
-                key={doc.id}
-                className="flex items-center justify-between py-1"
-              >
-                <span
-                  className="text-sm text-slate-600"
-                  data-placeholder="true"
+            {completedDocs.map((doc) =>
+              doc.uploadedFiles.map((file) => (
+                <div
+                  key={file.id}
+                  className="flex items-center justify-between py-1"
                 >
-                  {doc.name}
-                  {/* TODO: replace with live document service */}
-                </span>
-                <CheckCircle className="w-4 h-4 text-ok" />
-              </div>
-            ))}
+                  <span
+                    className="text-sm text-slate-600 font-medium cursor-pointer hover:underline"
+                    data-placeholder="true"
+                    onClick={async () => {
+                      console.log('clicked');
+                      console.log('file', file);
+                      let tempDoc = { path: file.s3Key, name: file.originalName, url:null, expiry:null };
+                      if (!tempDoc.url) {
+                        tempDoc = await getDocument(tempDoc);
+                      } else if (tempDoc.expiry < Date.now()) {
+                        tempDoc = await getDocument(tempDoc);
+                      }
+                      setPreviewDocument(tempDoc);
+                    }}
+                  >
+                    {file.originalName}
+                    {/* TODO: replace with live document service */}
+                  </span>
+                  <CheckCircle className="w-4 h-4 text-ok" />
+                </div>
+              ))
+            )}
           </div>
 
           {pendingDocs.length > 0 && (
@@ -217,26 +261,39 @@ export function PackageCards({ loan }: { loan: any }) {
                   <AlertTriangle className="w-4 h-4 text-warn" />
                   Outstanding Items
                 </p>
-                {pendingDocs.slice(0, 2).map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between py-1"
-                  >
-                    <span
-                      className="text-sm text-slate-600"
-                      data-placeholder="true"
+                {pendingDocs.map((doc) =>
+                  doc.uploadedFiles.map((file) => (
+                    <div
+                      key={file.id}
+                      className="flex items-center justify-between py-1"
                     >
-                      {doc.name}
-                      {/* TODO: replace with live document service */}
-                    </span>
-                    <Badge
-                      variant="outline"
-                      className="text-xs border-warn text-warn"
-                    >
-                      Pending
-                    </Badge>
-                  </div>
-                ))}
+                      <span
+                        className="text-sm text-slate-600 font-medium cursor-pointer hover:underline"
+                        data-placeholder="true"
+                        onClick={async () => {
+                          console.log('clicked');
+                          console.log('file', file);
+                          let tempDoc = { path: file.s3Key, name: file.originalName, url:null, expiry:null };
+                          if (!tempDoc.url) {
+                            tempDoc = await getDocument(tempDoc);
+                          } else if (tempDoc.expiry < Date.now()) {
+                            tempDoc = await getDocument(tempDoc);
+                          }
+                          setPreviewDocument(tempDoc);
+                        }}
+                      >
+                        {file.originalName}
+                        {/* TODO: replace with live document service */}
+                      </span>
+                      <Badge
+                        variant="outline"
+                        className="text-xs border-warn text-warn"
+                      >
+                        Pending
+                      </Badge>
+                    </div>
+                  ))
+                )}
               </div>
             </>
           )}
@@ -248,25 +305,82 @@ export function PackageCards({ loan }: { loan: any }) {
               <FileText className="w-4 h-4 text-ok" />
               Uploaded Documents
             </p>
-            {loan.documents.map((doc) => (
-              <div
-                key={doc.id}
-                className="flex items-center justify-between py-1"
-              >
-                <span
-                  className="text-sm text-slate-600 font-medium cursor-pointer hover:underline"
-                  data-placeholder="true"
+            {completedDocs.map((doc) =>
+              doc.uploadedFiles.map((file) => (
+                <div
+                  key={file.id}
+                  className="flex items-center justify-between py-1"
                 >
-                  {doc.originalName}
-                </span>
-                <Badge variant="outline" className="text-xs border-ok text-ok">
-                  Uploaded
-                </Badge>
-              </div>
-            ))}
+                  <span
+                    className="text-sm text-slate-600 font-medium cursor-pointer hover:underline"
+                    data-placeholder="true"
+                    onClick={async () => {
+                      console.log('clicked');
+                      console.log('file', file);
+                      let tempDoc = { path: file.s3Key, name: file.originalName, url:null, expiry:null };
+                      if (!tempDoc.url) {
+                        tempDoc = await getDocument(tempDoc);
+                      } else if (tempDoc.expiry < Date.now()) {
+                        tempDoc = await getDocument(tempDoc);
+                      }
+                      setPreviewDocument(tempDoc);
+                    }}
+                  >
+                    {file.originalName}
+                    {/* TODO: replace with live document service */}
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className="text-xs border-ok text-ok"
+                  >
+                    Uploaded
+                  </Badge>
+                </div>
+              ))
+            )}
           </div>
         </CardContent>
       </Card>
+
+      {/* Document Preview Dialog */}
+      <Dialog open={!!previewDocument} onOpenChange={(open) => { if (!open) setPreviewDocument(null); }}>
+        <DialogContent className="max-w-3xl w-full">
+          <DialogHeader>
+            <DialogTitle className="truncate">{previewDocument?.name}</DialogTitle>
+            <DialogDescription>Document Preview</DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center gap-2 mb-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                if (!previewDocument?.url) return;
+                const response = await fetch(previewDocument.url);
+                const blob = await response.blob();
+                if (typeof window !== 'undefined' && window.URL && window.URL.createObjectURL) {
+                  const link = document.createElement('a');
+                  link.href = window.URL.createObjectURL(blob);
+                  link.download = previewDocument.name || 'document.pdf';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+              }}
+            >
+              <Download className="w-4 h-4 mr-1" /> Download
+            </Button>
+          </div>
+          <div className="w-full h-[70vh]">
+            <iframe
+              src={previewDocument?.url}
+              title="Document Preview"
+              width="100%"
+              height="100%"
+              className="h-full w-full border-none rounded"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* TODO: COMPLIANCE CHECK - TEMPORARILY HIDDEN - WILL BE RE-ENABLED LATER */}
       {/* Uncomment this section when ready to show Compliance Check again */}
