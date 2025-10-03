@@ -1,88 +1,109 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ScenarioChips } from '../../components/ui/ScenarioChips';
-import { EligibleTable } from '../../components/tables/EligibleTable';
-import { IneligibleTable } from '../../components/tables/IneligibleTable';
-import { ExplainDrawer } from '../../components/drawers/ExplainDrawer';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useAppStore } from '../../lib/store';
-import supabase from '../../lib/supabase';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ScenarioChips } from "../../components/ui/ScenarioChips";
+import { EligibleTable } from "../../components/tables/EligibleTable";
+import { IneligibleTable } from "../../components/tables/IneligibleTable";
+import { ExplainDrawer } from "../../components/drawers/ExplainDrawer";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useAppStore } from "../../lib/store";
+import supabase from "../../lib/supabase";
 
 export default function Programs() {
   const navigate = useNavigate();
   const [isExplainOpen, setIsExplainOpen] = useState(false);
-  const [localSelectedProgramId, setLocalSelectedProgramId] = useState<string | null>(null);
-  const { 
-    loanDetails, 
-    isMinimumLane, 
-    addLoanRecord, 
-    loanPrograms, 
+  const [localSelectedProgramId, setLocalSelectedProgramId] = useState<
+    string | null
+  >(null);
+  const {
+    loanDetails,
+    isMinimumLane,
+    addLoanRecord,
+    loanPrograms,
     ineligiblePrograms,
     eligibilityApiResponse,
     setSelectedProgramId,
     setCurrentLoanId,
     addTimelineEvent,
     unlockSubmission,
-    unlockSummary
+    unlockSummary,
   } = useAppStore();
 
   const handleSelectProgram = async (programId: string) => {
     // Store the selected program ID in the global store
     setSelectedProgramId(programId);
-    
+
     // Find the selected program from the API data
-    const selectedProgram = loanPrograms.find(program => program.id === programId);
-    
+    const selectedProgram = loanPrograms.find(
+      (program) => program.id === programId
+    );
+
     // Add loan record when program is selected
     addLoanRecord({
-      profileName: loanDetails?.borrowerName || 'Unknown Borrower',
-      programName: selectedProgram?.name || 'Selected Program',
-      requiredSteps: ['Upload Docs', 'Income Verification', 'Credit Check'] // TODO: Get from API later
+      profileName: loanDetails?.borrowerName || "Unknown Borrower",
+      programName: selectedProgram?.name || "Selected Program",
+      requiredSteps: ["Upload Docs", "Income Verification", "Credit Check"], // TODO: Get from API later
     });
 
     // upload loan record to supabase
     try {
-      const { data, error } = await supabase.from('loans').insert({
-        loan_details: loanDetails,
-        program_name: selectedProgram?.name || 'Selected Program',
-        required_steps: ['Upload Docs', 'Income Verification', 'Credit Check'], // TODO: Get from API later
-        documents: []
-      }).select().single();
+      // get loan count from supabase
+      const { count, error: loanCountError } = await supabase
+        .from("loans") // Replace 'your_table_name' with the actual table name
+        .select("*", { count: "exact", head: true });
+
+      console.log("Loan count", count);
+
+      const { data, error } = await supabase
+        .from("loans")
+        .insert({
+          loan_id: `pkg_${String(count + 1).padStart(3, '0')}`,
+          loan_details: loanDetails,
+          program_name: selectedProgram?.name || "Selected Program",
+          required_steps: [
+            "Upload Docs",
+            "Income Verification",
+            "Credit Check",
+          ], // TODO: Get from API later
+          documents: [],
+        })
+        .select()
+        .single();
 
       if (!error) {
-        console.log('Loan record inserted', data);
+        console.log("Loan record inserted", data);
         setCurrentLoanId(data.id);
       }
-
     } catch (error) {
-      console.error('Error inserting loan record:', error);
+      console.error("Error inserting loan record:", error);
     }
-    
+
     // Add timeline event for Eligible Programs Selection completion
     addTimelineEvent({
       id: `timeline_${Date.now()}`,
       timestamp: new Date().toISOString(),
-      event: 'Eligible Programs Selection',
-      description: `Selected program: ${selectedProgram?.name || 'Selected Program'}`,
-      status: 'completed'
+      event: "Eligible Programs Selection",
+      description: `Selected program: ${
+        selectedProgram?.name || "Selected Program"
+      }`,
+      status: "completed",
     });
-    
+
     // Unlock Submission and Summary sections in the workflow
     unlockSubmission();
     unlockSummary();
-    
-    navigate('/docs');
+
+    navigate("/docs");
   };
 
   const handleEditScenario = () => {
-    navigate('/quickquote');
+    navigate("/quickquote");
   };
 
   if (!loanDetails) {
-    navigate('/quickquote');
+    navigate("/quickquote");
     return null;
   }
 
@@ -109,7 +130,7 @@ export default function Programs() {
               variant="outline"
               onClick={() => setIsExplainOpen(!isExplainOpen)}
               data-testid="explain-toggle"
-              className={isExplainOpen ? 'bg-brand/10 text-brand' : ''}
+              className={isExplainOpen ? "bg-brand/10 text-brand" : ""}
             >
               Explain
             </Button>
@@ -119,9 +140,11 @@ export default function Programs() {
 
       <div className="flex gap-6">
         {/* Tables */}
-        <div className={`flex-1 space-y-6 transition-all duration-300 ${
-          isExplainOpen ? 'mr-96' : ''
-        }`}>
+        <div
+          className={`flex-1 space-y-6 transition-all duration-300 ${
+            isExplainOpen ? "mr-96" : ""
+          }`}
+        >
           {/* Eligible Programs */}
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
@@ -129,10 +152,10 @@ export default function Programs() {
                 Eligible Programs
               </h3>
               <div className="text-sm text-slate-500">
-                {isMinimumLane ? 'Minimum Lane' : 'Full Lane'} • Ranked by rate
+                {isMinimumLane ? "Minimum Lane" : "Full Lane"} • Ranked by rate
               </div>
             </div>
-            <EligibleTable 
+            <EligibleTable
               onSelectProgram={handleSelectProgram}
               isMinimumLane={isMinimumLane}
               programs={loanPrograms}
@@ -149,7 +172,7 @@ export default function Programs() {
         </div>
 
         {/* Explain Drawer */}
-        <ExplainDrawer 
+        <ExplainDrawer
           isOpen={isExplainOpen}
           onClose={() => setIsExplainOpen(false)}
           selectedProgramId={localSelectedProgramId}
