@@ -30,14 +30,3 @@ guidelinesChatIntegration.md
 .env
 .env.local
 .env.production
-
-# Credentials (IMPORTANT: Don't commit real credentials!)
-src/lib/config/credentials.ts
-
-# S3 Configuration
-s3-bucket-policy.json
-
-# Documentation
-QUICK_START.md
-DOCUMENTS_SETUP.md
-S3_CORS_FIX.md
