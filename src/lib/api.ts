@@ -64,9 +64,17 @@ function transformLoanDetailsToApiFormat(loanDetails: any) {
     PropertyType: loanDetails.propertyType || 'Single Family',
     OccupancyType: loanDetails.occupancyType || 'Primary',
     LoanPurpose: loanDetails.loanPurpose || 'Purchase',
+    State: loanDetails.state || '',
+    County: loanDetails.county || '',
     
-    // Test document status fields for development (case-sensitive)
-
+    // Additional fields from ImproveAccuracyAccordion
+    IncomeDocType: loanDetails.incomeDocType || '',
+    Reserves: loanDetails.reserves || 0,
+    SubordinateAmount: loanDetails.subordinateAmount || 0,
+    Escrow: loanDetails.escrow || '',
+    Citizenship: loanDetails.citizenship || '',
+    ITIN: loanDetails.itin || '',
+    LoanType: loanDetails.loanType || '',
   };
 }
 

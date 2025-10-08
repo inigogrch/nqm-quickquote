@@ -12,6 +12,14 @@ export interface LoanDetails {
   loanPurpose: string;
   state: string;
   county: string;
+  // Additional fields from ImproveAccuracyAccordion
+  incomeDocType?: string;
+  reserves?: number;
+  subordinateAmount?: number;
+  escrow?: string;
+  citizenship?: string;
+  itin?: string;
+  loanType?: string;
 }
 
 export interface RuleHit {
