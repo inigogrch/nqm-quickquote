@@ -42,6 +42,12 @@ export default function QuickQuote() {
   const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   const handleFormChange = (updates: Partial<LoanDetails>) => {
+    // Update property value if loan amount or loan to value changes
+    if (updates.loanAmount) {
+      updates.propertyValue = Number((updates.loanAmount / (formData.loanToValue / 100)).toFixed(0) || 0)
+    } else if (updates.loanToValue) {
+      updates.propertyValue = Number((formData.loanAmount / (updates.loanToValue / 100)).toFixed(0) || 0)
+    }
     const newData = { ...formData, ...updates };
     setFormData(newData);
     
