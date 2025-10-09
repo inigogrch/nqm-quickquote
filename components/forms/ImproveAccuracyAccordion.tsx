@@ -113,10 +113,10 @@ export function ImproveAccuracyAccordion({
                       <SelectValue placeholder="Select doc type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bank-statement">Bank Statement</SelectItem>
-                      <SelectItem value="tax-returns">Tax Returns</SelectItem>
-                      <SelectItem value="p&l">P&L Statement</SelectItem>
-                      <SelectItem value="asset-depletion">Asset Depletion</SelectItem>
+                      <SelectItem value="Bank Statement">Bank Statement</SelectItem>
+                      <SelectItem value="Tax Returns">Tax Returns</SelectItem>
+                      <SelectItem value="P&L Statement">P&L Statement</SelectItem>
+                      <SelectItem value="Asset Depletion">Asset Depletion</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -187,8 +187,8 @@ export function ImproveAccuracyAccordion({
                       <SelectValue placeholder="Select escrow" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -206,9 +206,9 @@ export function ImproveAccuracyAccordion({
                       <SelectValue placeholder="Select citizenship" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="us-citizen">US Citizen</SelectItem>
-                      <SelectItem value="permanent-resident">Permanent Resident</SelectItem>
-                      <SelectItem value="non-permanent-resident">Non-Permanent Resident</SelectItem>
+                      <SelectItem value="US Citizen">US Citizen</SelectItem>
+                      <SelectItem value="Permanent Resident">Permanent Resident</SelectItem>
+                      <SelectItem value="Non-Permanent Resident">Non-Permanent Resident</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -226,8 +226,8 @@ export function ImproveAccuracyAccordion({
                       <SelectValue placeholder="Select ITIN" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -265,10 +265,10 @@ export function ImproveAccuracyAccordion({
                       <SelectValue placeholder="Select loan type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="non-qm">Non-QM</SelectItem>
-                      <SelectItem value="jumbo">Jumbo</SelectItem>
-                      <SelectItem value="dscr">DSCR</SelectItem>
-                      <SelectItem value="asset-depletion">Asset Depletion</SelectItem>
+                      <SelectItem value="Non-QM">Non-QM</SelectItem>
+                      <SelectItem value="Jumbo">Jumbo</SelectItem>
+                      <SelectItem value="DSCR">DSCR</SelectItem>
+                      <SelectItem value="Asset Depletion">Asset Depletion</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

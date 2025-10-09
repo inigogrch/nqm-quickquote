@@ -32,13 +32,13 @@ export const PLACEHOLDER_LOAN_DETAILS = {
   state: "CA",
   county: "Los Angeles",
   // Additional fields from ImproveAccuracyAccordion
-  incomeDocType: "bank-statement",
+  incomeDocType: "Bank Statement",
   reserves: 6,
   subordinateAmount: 0,
-  escrow: "yes",
-  citizenship: "us-citizen",
-  itin: "no",
-  loanType: "non-qm",
+  escrow: "Yes",
+  citizenship: "US Citizen",
+  itin: "No",
+  loanType: "Non-QM",
   has_initial_1003: true,
   has_credit_report: true
 };

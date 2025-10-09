@@ -50,8 +50,23 @@ export interface EligibilityApiResponse {
   complete_results: any;
 }
 
+// Helper function to convert occupancy type to short code
+function getOccupancyCode(occupancyType: string): string {
+  const occupancyMap: Record<string, string> = {
+    'Primary Residence': 'OO',  // Owner Occupied
+    'Second Home': 'SH',
+    'Investment Property': 'NOO',  // Non-Owner Occupied
+    'Primary': 'OO',  // Fallback for short form
+    'Investment': 'NOO'  // Fallback for short form
+  };
+  
+  return occupancyMap[occupancyType] || 'OO';  // Default to OO
+}
+
 // Transform frontend loan details to API format based on your engine's expected schema
 function transformLoanDetailsToApiFormat(loanDetails: any) {
+  const occupancyType = loanDetails.occupancyType || 'Primary Residence';
+  
   return {
     BorrowerName: loanDetails.borrowerName || 'Test Borrower',
     LoanAmount: loanDetails.loanAmount || 0,
@@ -60,26 +75,61 @@ function transformLoanDetailsToApiFormat(loanDetails: any) {
     LTV: loanDetails.loanToValue || 0,
     CLTV: loanDetails.loanToValue || 0, // Assuming same as LTV for now
     DTI: loanDetails.debtToIncome || 0,
-    DSCRRatio: 1.0, // Default value since not in form
+    DSCR: 1.3, // Default value since not in form
     PropertyType: loanDetails.propertyType || 'Single Family',
-    OccupancyType: loanDetails.occupancyType || 'Primary',
+    Occupancy: getOccupancyCode(occupancyType),  // Short code: OO, SH, NOO
+    OccupancyType: occupancyType,  // Full text: Primary Residence, Second Home, Investment Property
     LoanPurpose: loanDetails.loanPurpose || 'Purchase',
     State: loanDetails.state || '',
     County: loanDetails.county || '',
     
     // Additional fields from ImproveAccuracyAccordion
-    IncomeDocType: loanDetails.incomeDocType || '',
     Reserves: loanDetails.reserves || 0,
     SubordinateAmount: loanDetails.subordinateAmount || 0,
-    Escrow: loanDetails.escrow || '',
-    Citizenship: loanDetails.citizenship || '',
-    ITIN: loanDetails.itin || '',
-    LoanType: loanDetails.loanType || '',
+    Escrow: loanDetails.escrow || 'Yes',
+    BorrowerType: loanDetails.citizenship || 'US Citizen',
+    is_select_itin: loanDetails.itin === 'Yes',
+    IncomeDocType: loanDetails.incomeDocType || 'Bank Statement',
   };
 }
 
 export async function fetchProgramEligibility(loanDetails: any): Promise<EligibilityApiResponse> {
   try {
+    // Check if API is configured
+    if (!API_BASE_URL) {
+      console.warn('⚠️ Eligibility Engine API not configured - returning demo data for UI testing');
+      
+      // Return mock data structure for UI testing
+      return {
+        status: 'success',
+        timestamp: new Date().toISOString(),
+        formatted_results: [
+          {
+            Program: 'Demo Eligible Program',
+            Status: 'ELIGIBLE',
+            Rate: '6.75%',
+            Details: 'Demo mode - API not configured'
+          },
+          {
+            Program: 'Demo Ineligible Program',
+            Status: 'INELIGIBLE',
+            Details: 'Demo mode - Failed LTV requirement'
+          }
+        ],
+        detailed_results: {
+          program_results: {},
+          eligible_programs: ['Demo Eligible Program'],
+          ineligible_programs: ['Demo Ineligible Program'],
+          evaluation_summary: {
+            total_programs_evaluated: 2,
+            programs_passed: 1,
+            programs_failed: 1,
+          }
+        },
+        complete_results: {}
+      };
+    }
+    
     console.log('🔍 Calling eligibility engine API...');
     
     const apiPayload = transformLoanDetailsToApiFormat(loanDetails);
