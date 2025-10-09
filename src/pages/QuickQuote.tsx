@@ -155,7 +155,15 @@ export default function QuickQuote() {
       occupancyType: '',
       loanPurpose: '',
       state: '',
-      county: ''
+      county: '',
+      // Additional fields from ImproveAccuracyAccordion
+      incomeDocType: '',
+      reserves: 0,
+      subordinateAmount: 0,
+      escrow: '',
+      citizenship: '',
+      itin: '',
+      loanType: ''
     });
     setShowImproveAccuracy(false);
     setIsMinimalComplete(false);
