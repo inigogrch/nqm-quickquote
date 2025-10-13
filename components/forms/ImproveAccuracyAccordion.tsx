@@ -1,12 +1,13 @@
 'use client';
 
+import React from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
-import { LoanDetails } from '@/lib/types';
+import { LoanDetails } from '../../lib/types';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ImproveAccuracyAccordionProps {
@@ -104,15 +105,18 @@ export function ImproveAccuracyAccordion({
                   <Label htmlFor="incomeDocType" className="text-sm font-medium">
                     Income Doc Type
                   </Label>
-                  <Select defaultValue="bank-statement">
+                  <Select 
+                    value={data.incomeDocType}
+                    onValueChange={(value) => handleInputChange('incomeDocType', value)}
+                  >
                     <SelectTrigger data-testid="income-doc-select" data-placeholder="true">
                       <SelectValue placeholder="Select doc type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bank-statement">Bank Statement</SelectItem>
-                      <SelectItem value="tax-returns">Tax Returns</SelectItem>
-                      <SelectItem value="p&l">P&L Statement</SelectItem>
-                      <SelectItem value="asset-depletion">Asset Depletion</SelectItem>
+                      <SelectItem value="Bank Statement">Bank Statement</SelectItem>
+                      <SelectItem value="Tax Returns">Tax Returns</SelectItem>
+                      <SelectItem value="P&L Statement">P&L Statement</SelectItem>
+                      <SelectItem value="Asset Depletion">Asset Depletion</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -143,6 +147,8 @@ export function ImproveAccuracyAccordion({
                   <Input
                     id="reserves"
                     type="number"
+                    value={data.reserves || ''}
+                    onChange={(e) => handleInputChange('reserves', parseFloat(e.target.value) || 0)}
                     placeholder="6"
                     data-testid="reserves-input"
                     data-placeholder="true"
@@ -158,8 +164,10 @@ export function ImproveAccuracyAccordion({
                   </Label>
                   <Input
                     id="subordinate"
-                    type="text"
-                    placeholder="$0"
+                    type="number"
+                    value={data.subordinateAmount || ''}
+                    onChange={(e) => handleInputChange('subordinateAmount', parseFloat(e.target.value) || 0)}
+                    placeholder="0"
                     data-testid="subordinate-input"
                     data-placeholder="true"
                     className="text-right"
@@ -171,13 +179,16 @@ export function ImproveAccuracyAccordion({
                   <Label htmlFor="escrow" className="text-sm font-medium">
                     Escrow
                   </Label>
-                  <Select defaultValue="yes">
+                  <Select 
+                    value={data.escrow}
+                    onValueChange={(value) => handleInputChange('escrow', value)}
+                  >
                     <SelectTrigger data-testid="escrow-select" data-placeholder="true">
                       <SelectValue placeholder="Select escrow" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -187,14 +198,17 @@ export function ImproveAccuracyAccordion({
                   <Label htmlFor="citizenship" className="text-sm font-medium">
                     Citizenship
                   </Label>
-                  <Select defaultValue="us-citizen">
+                  <Select 
+                    value={data.citizenship}
+                    onValueChange={(value) => handleInputChange('citizenship', value)}
+                  >
                     <SelectTrigger data-testid="citizenship-select" data-placeholder="true">
                       <SelectValue placeholder="Select citizenship" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="us-citizen">US Citizen</SelectItem>
-                      <SelectItem value="permanent-resident">Permanent Resident</SelectItem>
-                      <SelectItem value="non-permanent-resident">Non-Permanent Resident</SelectItem>
+                      <SelectItem value="US Citizen">US Citizen</SelectItem>
+                      <SelectItem value="Permanent Resident">Permanent Resident</SelectItem>
+                      <SelectItem value="Non-Permanent Resident">Non-Permanent Resident</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -204,13 +218,16 @@ export function ImproveAccuracyAccordion({
                   <Label htmlFor="itin" className="text-sm font-medium">
                     ITIN
                   </Label>
-                  <Select defaultValue="no">
+                  <Select 
+                    value={data.itin}
+                    onValueChange={(value) => handleInputChange('itin', value)}
+                  >
                     <SelectTrigger data-testid="itin-select" data-placeholder="true">
                       <SelectValue placeholder="Select ITIN" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -240,15 +257,18 @@ export function ImproveAccuracyAccordion({
                   <Label htmlFor="loanType" className="text-sm font-medium">
                     Loan Type
                   </Label>
-                  <Select defaultValue="non-qm">
+                  <Select 
+                    value={data.loanType}
+                    onValueChange={(value) => handleInputChange('loanType', value)}
+                  >
                     <SelectTrigger data-testid="loan-type-select" data-placeholder="true">
                       <SelectValue placeholder="Select loan type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="non-qm">Non-QM</SelectItem>
-                      <SelectItem value="jumbo">Jumbo</SelectItem>
-                      <SelectItem value="dscr">DSCR</SelectItem>
-                      <SelectItem value="asset-depletion">Asset Depletion</SelectItem>
+                      <SelectItem value="Non-QM">Non-QM</SelectItem>
+                      <SelectItem value="Jumbo">Jumbo</SelectItem>
+                      <SelectItem value="DSCR">DSCR</SelectItem>
+                      <SelectItem value="Asset Depletion">Asset Depletion</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
