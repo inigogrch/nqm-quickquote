@@ -3792,11 +3792,642 @@ const UnderwritingGuidelines = () => {
           </div>
           {/* End of Select ITIN */}
 
-          {/* TODO: Add remaining programs (Super Jumbo, Second Lien Select, Foreign National) */}
+          {/* Super Jumbo */}
+          <div id="super-jumbo-overview" className="scroll-mt-20 mb-12 mt-16">
+            <h3 className="text-2xl font-semibold mb-4">
+              Super Jumbo Overview
+            </h3>
+            <p className="text-sm leading-relaxed mb-4">
+              The Super Jumbo Program is a specialty program for high-net-worth
+              borrowers with solid and stable income and credit, as well as
+              considerable assets to cover down payment, closing costs and
+              reserves. Refer to the Super Jumbo Matrix for specific program
+              requirements.
+            </p>
+            <p className="text-sm leading-relaxed mb-6 font-semibold">
+              All loans must be approved by the NQM Funding, LLC Credit
+              Committee.
+            </p>
+
+            {/* Super Jumbo - General Requirements */}
+            <div
+              id="super-jumbo-general-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Super Jumbo - General Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Exceptions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Product Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30 Year Fixed Fully Amortizing</li>
+                          <li>
+                            40 Year Fixed IO (10 year I/O period, and remaining
+                            term fully amortizing)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interest Only
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible with no additional requirements
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Amounts
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Min $3,500,001 – Max $5,000,000
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        2-1 Buydown
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Primary Residence only
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Purpose
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Purchase, Rate & Term Refinance and Cash-Out
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Cash-Out
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Max cash-out: $1,500,000</li>
+                          <li>
+                            Cash Out proceeds may not be used to meet reserves
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interested Party Contributions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">6%</td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Subordinate Financing
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Escrow Waivers
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Prepayment Penalty
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Age of Loan Documentation
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Credit: 120 days</li>
+                          <li>Income and Assets: 90 days</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Super Jumbo - Borrower Eligibility */}
+            <div
+              id="super-jumbo-borrower-eligibility"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Super Jumbo - Borrower Eligibility
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-4">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Borrower Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3 font-medium">Eligible:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>U.S. Citizens</li>
+                          <li>Permanent Resident Aliens</li>
+                          <li>
+                            Non-Permanent Resident Aliens (U.S. credit only)
+                          </li>
+                        </ul>
+                        <p className="mb-3 font-medium">Ineligible:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>ITIN</li>
+                          <li>DACA</li>
+                          <li>Foreign Nationals</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Non-Occupant Co-Borrower
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        First Time Homebuyer (FTHB)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Super Jumbo - Credit Requirements */}
+            <div
+              id="super-jumbo-credit-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Super Jumbo - Credit Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Credit Score
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>Minimum credit score 720 for all borrowers</li>
+                          <li>
+                            The Representative Score is based on the primary
+                            wage earners' credit score, qualify as follows:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>
+                                Middle of 3 credit scores or lower of 2 credit
+                                scores
+                              </li>
+                              <li>
+                                When qualifying income is equal for all
+                                borrowers on the loan, the highest
+                                representative score will be used.
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Tradeline requirements are not waived when the
+                            Primary borrower has 3 credit scores
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Tradelines
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Each borrower must meet the following minimum
+                          tradeline requirements:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Min 2 open & reporting 24 months; OR</li>
+                          <li>3 open and reporting 12 months; OR</li>
+                          <li>24-months mortgage rating reporting on credit</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Housing History
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        0x30x24
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Credit / Housing Events
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        4 years seasoning required
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Super Jumbo - DTI and Residual Income Requirements */}
+            <div id="super-jumbo-dti-residual" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Super Jumbo - DTI and Residual Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Max DTI
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 38%
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Residual Income
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not required
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Super Jumbo - Income Requirements */}
+            <div id="super-jumbo-income" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Super Jumbo - Income Requirements
+              </h4>
+
+              <h5 className="font-semibold text-md mb-3 mt-6">
+                Overall Income Requirements
+              </h5>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Self-Employment
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Borrower must have 2 years in the current business
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 className="font-semibold text-md mb-3 mt-6">
+                Full Doc - Income Requirements
+              </h5>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Wage Earners
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        30 days of paystubs reflecting YTD earnings, 1 or 2
+                        years W-2 or an electronic verification of employment,
+                        W-2 transcripts and a fully executed and signed IRS
+                        Form-4506C
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Self-Employment
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Self-Employed: 1 or 2 Years of Personal and Business Tax
+                        Returns, Year to date P&L, Tax Transcripts, 2 months of
+                        most recent bank statements
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rental Income
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3 font-medium">
+                          Rental income on Tax Returns:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            When tax returns are used to qualify, an average of
+                            2 years of rental income will be used unless the
+                            income is declining in which case the most recent
+                            year's income will be used for qualifying
+                          </li>
+                          <li>
+                            Cash flow Analysis of the Schedule E should be
+                            completed.
+                          </li>
+                        </ul>
+                        <p className="mb-3 font-medium">
+                          Rental Income NOT on Tax Returns:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            Evidence of borrower's ownership of the property
+                          </li>
+                          <li>
+                            For a refinance and/or to document rental income on
+                            other REOs
+                          </li>
+                          <li>Lease agreement</li>
+                          <li>
+                            Two months of bank statements demonstrating receipt
+                            of rental income.
+                          </li>
+                          <li>
+                            Evidence the rental amount is at market rate, which
+                            can be documented via a 1007 or through an online
+                            source
+                          </li>
+                          <li>
+                            75% of the rental amount on the lease is used for
+                            qualifying
+                          </li>
+                        </ul>
+                        <p className="mb-3">
+                          Rental from Departing Primary Residence: Eligible per
+                          Guide.
+                        </p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 className="font-semibold text-md mb-3 mt-6">
+                Alt Doc – Income Requirements
+              </h5>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Personal Bank Statements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            24 months of personal and 2 months of business bank
+                            statements
+                          </li>
+                          <li>
+                            Qualifying income is determined by the total
+                            eligible deposits from the 24 months of personal
+                            statements divided by the number of statements
+                          </li>
+                          <li>
+                            The business bank statements must reflect business
+                            activity and transfers to the personal account
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Business/Co-Mingled Bank Statements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3">
+                          24 months of business bank statements. Qualifying
+                          income is determined by ONE of the following analysis
+                          methods:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>Fixed Expense Ratio (50%); OR</li>
+                          <li>
+                            Expense Ratio provided by a 3rd party (CPA/EA or
+                            PTIN tax preparer), min ratio of 20%, OR
+                          </li>
+                          <li>
+                            3rd party prepared Profit & Loss Statement (CPA/EA
+                            or PTIN tax preparer) min ratio of 20%
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Asset Utilization
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>Eligible as sole source of income only</li>
+                          <li>Assets must be seasoned for 3 months</li>
+                          <li>
+                            Monthly Income Calculation:
+                            <ul className="list-circle pl-6 mt-1">
+                              <li>Net Qualified Assets /84 Months</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Super Jumbo - Asset and Reserve Requirements */}
+            <div id="super-jumbo-assets" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Super Jumbo - Asset and Reserve Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Assets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        30-day asset verification required
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Reserves
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            &gt; $3,500,000 to $4,000,000: 12 months min PITIA
+                            reserves
+                          </li>
+                          <li>
+                            &gt; $4,000,000 to $5,000,000: 18 months min PITIA
+                            reserves
+                          </li>
+                          <li>
+                            Cash-Out proceeds may not be used to meet reserves
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Gift Funds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible after 20% minimum borrower contribution towards
+                        down payment, closing costs, prepaids; and reserves must
+                        be met from Borrower's own funds
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Super Jumbo - Property Requirements */}
+            <div id="super-jumbo-property" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Super Jumbo - Property Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Property Types
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3 font-medium">
+                          Single Family 1-Unit, PUD, Townhouse (Attached/
+                          Detached)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            Single Family residences may have a max of 1
+                            accessory dwelling unit (ADU) are permitted if
+                            subject property is in a municipality that allows.
+                          </li>
+                          <li>
+                            The Appraiser must specifically confirm compliance
+                            with local regulations and provide 2 similar
+                            comparables.
+                          </li>
+                        </ul>
+                        <p className="mb-3 font-medium">
+                          Condo (Warrantable/ Non-Warrantable)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Eligible without additional restrictions</li>
+                          <li>Condominium leaseholds are ineligible</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rural Properties
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Appraisal Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Two (2) Full Appraisals (interior/exterior)
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Declining Markets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Purchase and Rate & Term Refinance: the lesser of
+                            matrix LTV or max 65%.
+                          </li>
+                          <li>Cash-Out: the lesser of matrix LTV or max 55%</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Acreage
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 2 acres
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          {/* End of Super Jumbo */}
+
+          {/* TODO: Add remaining programs (Second Lien Select, Foreign National) */}
           <div className="mt-12 p-6 bg-muted/30 rounded-lg border border-border">
             <p className="text-sm text-muted-foreground italic text-center">
-              Additional programs (Super Jumbo, Second Lien Select, Foreign
-              National) to be added...
+              Additional programs (Second Lien Select, Foreign National) to be
+              added...
             </p>
           </div>
         </section>
