@@ -4423,13 +4423,2009 @@ const UnderwritingGuidelines = () => {
           </div>
           {/* End of Super Jumbo */}
 
-          {/* TODO: Add remaining programs (Second Lien Select, Foreign National) */}
-          <div className="mt-12 p-6 bg-muted/30 rounded-lg border border-border">
-            <p className="text-sm text-muted-foreground italic text-center">
-              Additional programs (Second Lien Select, Foreign National) to be
-              added...
+          {/* Second Lien Select */}
+          <div
+            id="second-lien-select-overview"
+            className="scroll-mt-20 mb-12 mt-16"
+          >
+            <h3 className="text-2xl font-semibold mb-4">
+              Second Lien Select Overview
+            </h3>
+            <p className="text-sm leading-relaxed mb-6">
+              The Second Lien Select Program is designed to cover to cover a
+              range of options for the borrower who desires a closed end second
+              lien loan. Refer to the Second Lien Select Matrix for specific
+              program requirements.
             </p>
+
+            {/* Second Lien Select - General Requirements */}
+            <div
+              id="second-lien-select-general-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Second Lien Select - General Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Exceptions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Compliance
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Loans must comply with all applicable federal and
+                            state regulations.
+                          </li>
+                          <li>Fully documented ATR</li>
+                          <li>
+                            Higher-Priced Mortgage Loans (HPML) and
+                            Higher-Priced Covered Transactions (HPCT) are
+                            permitted subject to complying with all applicable
+                            regulatory requirements.
+                          </li>
+                          <li>
+                            Loans that do not pass the NY Subprime test are
+                            ineligible.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        High Cost Thresholds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Loans that are considered High Cost solely due to
+                            exceeding the High Cost APR Threshold, provided the
+                            Section 32 Loan Disclosure was provided to the
+                            Borrower(s) no later than three (3) days prior to
+                            closing, will be considered.
+                          </li>
+                          <li>
+                            Not Permitted:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>
+                                When the points and fees test exceeds the 5%
+                                limitation, or
+                              </li>
+                              <li>
+                                For any loan that fails a State High Cost test
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Product Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        15, 20, 25 and 30 Year Fixed Terms - Fully Amortizing
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interest Only
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Amounts
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Min: $125,000 – Max $500,000
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        2-1 Buydown
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Primary Residence and Second Home
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Purpose
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Purchase, Rate & Term Refinance and Cash Out Refinance
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Cash-Out
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Cash Out with less than six (6) months seasoning is
+                            eligible, provided the LTV is based off the lesser
+                            of the purchase price or the appraised value.
+                          </li>
+                          <li>
+                            For a refinance transaction paying off an existing
+                            subordinate lien, if that subordinate lien was a
+                            Cash Out Refinance transaction, a minimum of six (6)
+                            months seasoning must elapse prior to the new
+                            refinance.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interested Party Contributions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Senior Lien Product Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3 font-medium">Eligible:</p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            A copy of the first lien note is required to
+                            evidence:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>
+                                Remaining term of five (5) years at time of
+                                close (60 payments left).
+                              </li>
+                              <li>
+                                Interest Only (I/O) First Mortgage must be
+                                qualified at the greater of the fully amortizing
+                                P&I payment or Note rate.
+                              </li>
+                              <li>
+                                Whether fully amortizing or interest only, the
+                                remaining term must be a minimum of five (5)
+                                years (60 payments left) at time of closing.
+                              </li>
+                              <li>
+                                Financing must not permit the note holder to
+                                "call" the loan due within the first five years
+                                following the loan closing.
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            On a stand-alone second, if the mortgage statement
+                            or credit report has sufficient information to
+                            determine the payment and the terms, a copy of the
+                            first lien note is not required.
+                          </li>
+                          <li>
+                            It is acceptable for our Borrower to have legally
+                            assumed a first lien mortgage, and apply for a
+                            second lien, if the first mortgage conforms to the
+                            eligibility criteria.
+                          </li>
+                          <li>
+                            For simultaneous transactions, the following is
+                            required in the second lien file:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>
+                                Copies of first lien note and mortgage/deed of
+                                trust
+                              </li>
+                              <li>
+                                Final Closing Disclosure for the first lien
+                                transaction that correspondents with the final
+                                CD for the subject second lien.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p className="mb-3 font-medium">Ineligible:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Negative amortization feature</li>
+                          <li>Balloon feature</li>
+                          <li>
+                            Material modifications (loan amount, interest rate,
+                            final maturity, or product structure regardless of
+                            seasoning, except for loans modified under a COVID
+                            related event meeting the Modifications and Covid
+                            Related Forbearance section.
+                          </li>
+                          <li>Amortization term greater than 40 years.</li>
+                          <li>Contract for Deed or Contract for Purchase.</li>
+                          <li>Privately held first lien.</li>
+                          <li>
+                            Loans with provisions prohibiting the placement of
+                            additional liens on the subject property.
+                          </li>
+                          <li>Loans with provisions for future advances.</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Escrow Waivers
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Follow First Lien Program requirements. Escrows are not
+                        required on second liens.
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Prepayment Penalty
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Age of Loan Documentation
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Credit: 120 days</li>
+                          <li>Income and Assets: 90 days</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Second Lien Select - Borrower Eligibility */}
+            <div
+              id="second-lien-select-borrower-eligibility"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Second Lien Select - Borrower Eligibility
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-4">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Borrower Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3 font-medium">Eligible:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>U.S. Citizens</li>
+                          <li>Permanent Resident Aliens</li>
+                          <li>Non-Permanent Resident Aliens</li>
+                        </ul>
+                        <p className="mb-3 font-medium">Ineligible:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>ITIN</li>
+                          <li>DACA</li>
+                          <li>Foreign National</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Non-Occupant Co-Borrower
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible on the first or second lien
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Second Lien Select - Credit Requirements */}
+            <div
+              id="second-lien-select-credit-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Second Lien Select - Credit Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Credit Score
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>Minimum credit score 680</li>
+                          <li>
+                            The Representative Credit Score is based on the
+                            primary borrowers' credit score; qualify as follows:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>
+                                Middle of 3 credit scores or lower of 2 credit
+                                scores
+                              </li>
+                              <li>
+                                Additional borrowers must have a minimum credit
+                                score of 620
+                              </li>
+                              <li>
+                                If the qualifying income is equal for all
+                                borrowers on the loan, the higher representative
+                                score will be used.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Tradelines
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            If the Primary borrower has 3 credit scores, there
+                            are no further tradeline requirements.
+                          </li>
+                          <li>
+                            Otherwise, trades must meet one of the following:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>
+                                3 reporting for 12+ months + activity within
+                                most recent 12 months (may be closed)
+                              </li>
+                              <li>
+                                2 reporting for 24+ with activity within most
+                                recent 12 months (may be closed)
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            24 months mortgage history reporting on credit
+                            report with a credit score
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Housing History
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        0x30x24 on all mortgages
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Credit / Housing Events
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        4 years seasoning is required
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Second Lien Select - DTI and Residual Income Requirements */}
+            <div
+              id="second-lien-select-dti-residual"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Second Lien Select - DTI and Residual Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Max DTI
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Max 50% Primary Residence</li>
+                          <li>Max 43% Second home</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Residual Income
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>Primary Residence and Second Home only</li>
+                          <li>Requirement based on # in household</li>
+                          <li>
+                            Defined as Gross Monthly Income – Total Monthly
+                            Obligations
+                          </li>
+                          <li>
+                            Applies to HPML loans or when the DTI &gt; 43%:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>1 person = $1,500</li>
+                              <li>2 people = $2,500</li>
+                              <li>Add $150 per additional household member</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        I/O First Mortgage Qualifying Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Interest Only (I/O) First Mortgage must be qualified at
+                        the fully amortizing P&I payment
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Second Lien Select - Income Requirements */}
+            <div id="second-lien-select-income" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Second Lien Select - Income Requirements
+              </h4>
+
+              <h5 className="font-semibold text-md mb-3 mt-6">
+                Full Doc - Income Requirements
+              </h5>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Wage Earners
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        30 days of paystubs reflecting YTD earnings, 2 years W-2
+                        or an electronic verification of employment, W-2
+                        Transcripts when electronic VOE not provided, and a
+                        fully executed and signed IRS Form-4506C.
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Self-Employment
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        2 Years personal and business Tax Returns, Year to date
+                        P&L, IRS Form 4506, 2 most recent and consecutive bank
+                        statements
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rental Income
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3 font-medium">
+                          Rental income on Tax Returns:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            When tax returns are used to qualify, an average of
+                            2 years of rental income will be used unless the
+                            income is declining in which case the most recent
+                            year's income will be used for qualifying.
+                          </li>
+                          <li>
+                            Cash flow Analysis of Schedule E should be completed
+                          </li>
+                        </ul>
+                        <p className="mb-3 font-medium">
+                          Rental Income NOT on Tax Returns:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Evidence of borrower's ownership of the property
+                          </li>
+                          <li>
+                            For a refinance and/or to document rental income on
+                            other REO:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>Lease agreement</li>
+                              <li>
+                                Two months of bank statements demonstrating
+                                receipt of rental income.
+                              </li>
+                              <li>
+                                Evidence the rental amount is at market rate,
+                                which can be documented via a 1007 or through an
+                                online source
+                              </li>
+                              <li>
+                                75% of the rental amount on the lease is used
+                                for qualifying
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 className="font-semibold text-md mb-3 mt-6">
+                Alt Doc - Income Requirements
+              </h5>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Personal Bank Statements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            24 months of Personal and 2 months of business bank
+                            statements.
+                          </li>
+                          <li>
+                            Qualifying income is determined by the total
+                            eligible deposits from the 24 months of personal
+                            statements divided by the number of statements
+                          </li>
+                          <li>
+                            The business bank statements must reflect business
+                            activity and transfers to the personal account
+                          </li>
+                          <li>
+                            Evidence within 30 days of the Note date that the
+                            business is active and operating with a minimum 2
+                            year operating history
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Business/Co-Mingled Bank Statements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3">
+                          24 months of business bank statements. Qualifying
+                          income is determined by ONE of the following analysis
+                          methods:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-3">
+                          <li>Fixed Expense Ratio (50%) OR</li>
+                          <li>
+                            Expense ratio provided by a 3rd party (CPA/EA or
+                            PTIN tax preparer) min ratio of 20% OR
+                          </li>
+                          <li>
+                            3rd party prepared Profit & Loss Statement (CPA/EA
+                            or PTIN tax preparer) min ratio of 20%
+                          </li>
+                        </ul>
+                        <p>
+                          Evidence within 30 days of the Note date that the
+                          business is active and operating with a minimum 2 year
+                          operating history
+                        </p>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        P&L Plus 2 Months Bank Statements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            24 months P&L, prepared by CPA/EA or PTIN tax
+                            preparer.
+                          </li>
+                          <li>
+                            CPA/EA or PTIN tax preparer must also attest to
+                            having prepared the borrower's most recent tax
+                            returns.
+                          </li>
+                          <li>
+                            When evaluating the P&L, the expenses are expected
+                            to be at least 20% of gross revenue. In the event
+                            less than 20% is reflected in expenses, the net
+                            income will be adjusted to reflect a 20% expense
+                            level when qualifying.
+                          </li>
+                          <li>
+                            Minimum of 2 months business bank statements must be
+                            provided.
+                          </li>
+                          <li>
+                            Qualifying Income is calculated by determining total
+                            deposits per bank statements (minus any disallowed
+                            deposits) multiplied by the expense percentage and
+                            divided by 24 months.
+                          </li>
+                          <li>
+                            Evidence within 30 days of the Note date that the
+                            business is active and operating with a minimum 2
+                            year operating history.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        IRS Form 1099
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>1 or 2 Years 1099</li>
+                          <li>Fixed Expense Ratio of 10%</li>
+                          <li>
+                            YTD Documentation to support continued receipt of
+                            income from same source, is required only when the
+                            most recent 1099 is &gt;90 days from the Note date
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Second Lien Select - Asset and Reserve Requirements */}
+            <div id="second-lien-select-assets" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Second Lien Select - Asset and Reserve Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Assets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>30 days' asset verification required</li>
+                          <li>
+                            Large deposits (&gt; 50% of gross income or average
+                            deposits) on a bank statement loan must be
+                            documented on purchase transactions
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Reserves
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>6 months' reserves required</li>
+                          <li>
+                            Cash Out Refinance may be used to satisfy
+                            requirement
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Gift Funds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Gift funds are eligible provided borrower meets the
+                            minimum contribution:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>5% Primary Residence</li>
+                              <li>10% Second Home</li>
+                            </ul>
+                          </li>
+                          <li>Gift funds are ineligible for reserves</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Second Lien Select - Property Requirements */}
+            <div id="second-lien-select-property" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Second Lien Select - Property Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Property Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-3 font-medium">
+                          Single Family, PUD or Townhome (Attached or Detached)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            Single Family Residence with 1 or more accessory
+                            dwelling units (ADU) are eligible if subject
+                            property is in a municipality that allows and 2
+                            similar comparables are provided.
+                          </li>
+                        </ul>
+                        <p className="mb-3 font-medium">Condos</p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>Warrantable & Non-Warrantable are eligible.</li>
+                          <li>
+                            Non-Warrantable Condominium: reduce 5% from matrix
+                            LTV.
+                          </li>
+                          <li>Condominium leaseholds are ineligible</li>
+                        </ul>
+                        <p className="mb-3 font-medium">Condotels</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Ineligible</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rural Properties
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Declining Markets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Declining markets, as identified by the appraiser,
+                        require a 5% LTV reduction off Matrix Max LTV, when
+                        &gt;65% LTV
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Appraisals
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Full interior/exterior appraisal required
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Acreage
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 20 acres Primary Residence & Second Home; max 5
+                        acres Investment Properties
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
+          {/* End of Second Lien Select */}
+
+          {/* Foreign National */}
+          <div
+            id="foreign-national-overview"
+            className="scroll-mt-20 mb-12 mt-16"
+          >
+            <h3 className="text-2xl font-semibold mb-4">
+              Foreign National Overview
+            </h3>
+            <p className="text-sm leading-relaxed mb-4">
+              The Foreign National Program is designed to cover a range of
+              income documentation types, and other program specific options for
+              the Foreign National Borrower. Refer to the Foreign National
+              Matrix for specific program requirements.
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-sm mb-6">
+              <li>
+                Foreign Nationals are eligible for DSCR (excluding Multi &
+                Mixed) under the Foreign National Program.
+              </li>
+              <li>
+                For Multi & Mixed-Use properties see the Multi & Mixed Program.
+              </li>
+            </ul>
+
+            {/* Foreign National - General Requirements */}
+            <div
+              id="foreign-national-general-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - General Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Exceptions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Product Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30 Year Fixed, 15 Year Fixed</li>
+                          <li>
+                            30 Year Fixed I/O (10 year I/O period, and remaining
+                            term fully amortizing).
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interest Only
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible on 30-Yr Fixed I/O
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Amounts
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Min: 150,000 and Max $3,000,000
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        2-1 Buydown
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Full Doc/Alt Doc: Second home (1-Unit only) and
+                            Investment Properties 1-4 Units
+                          </li>
+                          <li>
+                            DSCR: Investment properties 1-4 Units (Business
+                            Purpose)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Purpose
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Purchase, Rate & Term Refinance, and Cash Out Refinance
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Cash-Out
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>&gt; 55% LTV = $1,000,000; or</li>
+                          <li>&le; 55% LTV = Unlimited</li>
+                          <li>Condo and 2-4 Units = Max Cash LTV 65%</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interested Party Contributions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">Second homes:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>&le; 75% LTV = 9%</li>
+                        </ul>
+                        <p className="mb-2">Investment:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>ALL = 6%</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        ACH Payment
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Automatic Payment Authorization (ACH) Form is
+                            required for all foreign national borrowers. Funds
+                            must be from a U.S. Bank.
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>
+                                The executed ACH enrollment for payment of
+                                Principal, Interest, Taxes and Insurance must be
+                                provided.
+                              </li>
+                              <li>
+                                The ACH enrollment form must include the bank
+                                routing number, account number, and account
+                                type. Borrowers may select a date within the
+                                grace period stated on the Note.
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            To set up the Automatic Payment Authorization (ACH),
+                            a copy of the borrower's canceled check to validate
+                            the bank's routing and account number and the
+                            executed ACH form are required prior to or no later
+                            than closing.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Subordinate Financing
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Insurance Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            In addition to property and title insurance, Rent
+                            Loss Insurance for the subject property is required
+                            and must equal at least 6 months of PITIA.
+                          </li>
+                          <li>
+                            Rent Loss Insurance may be waived with three
+                            additional months of PITIA reserves.
+                          </li>
+                          <li>
+                            Blanket policies covering the subject property are
+                            permitted.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Escrow Waivers
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Prepayment Penalty
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Required where permitted for Investment Properties.
+                        Refer to the "Business Purpose Licensing & PPP
+                        Restrictions" PDF in the Documents Tab in the Client
+                        Portal.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Age of Loan Documentation
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Credit: 120 days</li>
+                          <li>Income and Assets: 90 days</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Foreign National - Borrower Eligibility */}
+            <div
+              id="foreign-national-borrower-eligibility"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - Borrower Eligibility
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Borrower Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            A Foreign National is a non-U.S. citizen that must
+                            live and work in another country and be a legal
+                            resident of that same country.
+                          </li>
+                          <li>
+                            Borrowers may not purchase property intended for use
+                            as a Primary Residence.
+                          </li>
+                          <li>
+                            If a non-U.S. Citizen is borrowing with a U.S.
+                            Citizen, Foreign National documentation requirements
+                            still apply
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Documentation Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            If a non-U.S. Citizen is borrowing with a U.S.
+                            Citizen, Foreign National documentation requirements
+                            still apply.
+                          </li>
+                          <li>
+                            The following documentation is required:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>
+                                Copy of the borrower's valid and unexpired
+                                passport and:
+                              </li>
+                              <li>
+                                Copy of the borrower's unexpired visa OR an
+                                I-797 form (Notice of Action) with valid
+                                extension dates and I-94 Form (Arrival/Departure
+                                Record), or
+                              </li>
+                              <li>
+                                Borrowers from countries participating in the
+                                State Department's Visa Waiver Program (VWP) are
+                                not required to provide a valid visa.
+                                <ul className="list-disc pl-5 mt-1">
+                                  <li>
+                                    Participating countries can be found at
+                                    https://travel.state.gov/content/travel/en/U.S.-visas/tourism-visit/visa-waiver-program.html.
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Citizens of Canada traveling to the United States do
+                            not require a nonimmigrant visa.
+                          </li>
+                          <li>
+                            A list of nonimmigrant Visa types is located on the
+                            U.S. Department of State website:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                https://travel.state.gov/content/travel/en/U.S.-visas/visa-information-resources/all-visa-categories.html
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            All parties (Borrower's and Seller's) involved on
+                            the transaction must be screened through
+                            exclusionary lists and must be cleared through
+                            OFAC's SND list:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>http://sdnsearch.ofac.treas.gov/</li>
+                            </ul>
+                          </li>
+                          <li>
+                            Borrowers from OFAC sanctioned countries are
+                            ineligible:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                http://www.treasury.gov/resourcecenter/sanctions/Programs/Pages/Programs.aspx
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Individuals with Diplomatic immunity are not
+                            eligible. Immunity status is listed on the reverse
+                            side of the U.S. issued ID card or at:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                https://2009-2017.state.gov/s/cpr/rls/dpl//index.htm
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Documents signed outside of the United States must
+                            be notarized by a U.S. embassy or consular official.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Non-Occupant Co-Borrower
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible when the non-occupying co-borrower is a U.S.
+                        Citizen taking title to the property
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        First Time Homebuyer (FTHB)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Investor Experience
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not Required
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Power of Attorney
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Foreign National - Credit Requirements */}
+            <div
+              id="foreign-national-credit-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - Credit Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Credit Score
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2 font-semibold">U.S. Credit:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>
+                            A U.S. credit report should be obtained for each
+                            borrower with a valid Social Security Number, and is
+                            not required for borrowers without a SSN. When a
+                            U.S. Credit report is obtained, the minimum credit
+                            score is 700.
+                          </li>
+                          <li>
+                            The primary borrower must have a valid credit score
+                            from at least 2 of the following 3 agencies:
+                            Experian (credit score), Transunion (Empirica), and
+                            Equifax (Beacon). Only credit scores from these
+                            agencies are acceptable.
+                          </li>
+                          <li>
+                            Select the middle credit score when 3 scores are
+                            provided and the lower credit score when only 2
+                            credit scores are provided.
+                          </li>
+                        </ul>
+                        <p className="mb-2 font-semibold">Foreign Credit:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            For borrowers without a valid Social Security
+                            Number, an Individual Taxpayer Identification Number
+                            (ITIN) is also eligible.
+                          </li>
+                          <li>
+                            Borrowers who do not have an SSN or ITIN may still
+                            proceed using Foreign Credit.
+                          </li>
+                          <li>
+                            The URLA should be updated with 999-99-9999 in the
+                            SSN field.
+                          </li>
+                          <li>All other Program requirements still apply.</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Tradelines
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2 font-semibold">
+                          Qualifying with U.S. Credit:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>
+                            Minimum: 2 open and reporting 24 months, or 3 open
+                            and reporting 12 months even if 3 credit scores are
+                            available.
+                          </li>
+                        </ul>
+                        <p className="mb-2 font-semibold">
+                          Qualifying Foreign Credit:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-3">
+                          <li>
+                            A Qualifying Foreign Credit borrower may or may not
+                            have a U.S. credit report with no credit score, a
+                            single credit score, or a credit score with
+                            insufficient tradelines.
+                          </li>
+                          <li>
+                            Must establish an acceptable credit history
+                            demonstrating either 2 open tradelines reporting for
+                            2 years with activity in the most recent 12 months
+                            displaying or three open trades with a 12+ month
+                            rating. in either example trades must experience no
+                            derogatory payments
+                          </li>
+                        </ul>
+                        <p className="mb-2 font-semibold">
+                          Qualifying Foreign Credit Tradeline Requirements can
+                          be accomplished by any of the following:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-3">
+                          <li>
+                            Tradelines evidenced on an international credit
+                            report if a U.S. credit report cannot be produced or
+                            does not reflect sufficient trades; and/or
+                          </li>
+                          <li>
+                            Alternative tradelines consisting of two credit
+                            reference letter(s) from the borrower's country of
+                            origin with the following information:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>
+                                State the type and length of the relationship,
+                                how the accounts are held, and status of the
+                                account.
+                              </li>
+                              <li>
+                                Contact information must be provided for the
+                                person signing the letter; and
+                              </li>
+                              <li>
+                                Any translation must be signed and dated by an
+                                unaffiliated certified translator. Google
+                                translator is not permitted.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            If a Primary Residence is owned free and clear but
+                            taxes and insurance are paid for 12 months, that can
+                            be considered one of the tradelines.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Housing History
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>0x30x12</li>
+                          <li>
+                            CPA Letter – Free and Clear Property Form or other
+                            evidence may be used as verification.
+                          </li>
+                          <li>
+                            Property Tax and/or Property Insurance paid in full
+                            annual invoice(s) may be used to validate housing
+                            expenses.
+                          </li>
+                          <li>
+                            Taxes and insurance must be included in the DTI,
+                            unless evidence is provided to support taxes and/or
+                            insurance does not exist.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Credit / Housing Event
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        4 years seasoning is required
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Foreign National - DTI and Residual Income Requirements */}
+            <div
+              id="foreign-national-dti-residual"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - DTI and Residual Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        DTI Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 50% for Full Doc or Asset Utilization
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Residual Income
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Required on Second Homes only</li>
+                          <li>
+                            Defined as Gross Monthly Income less Total Monthly
+                            Obligations.
+                          </li>
+                          <li>Requirement based on # in household</li>
+                          <li>
+                            Applies to HPML loans or when the DTI &gt; 43% on
+                            Second Homes only:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>1 person = $1,500</li>
+                              <li>2 people = $2,500</li>
+                              <li>
+                                Add $150 per additional household member (related
+                                or unrelated)
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Foreign National - Income Requirements */}
+            <div
+              id="foreign-national-income-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - Income Requirements
+              </h4>
+
+              <h5 className="font-semibold text-md mb-3 mt-6">
+                Full Doc - Income Requirements
+              </h5>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Wage Earners
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Letter from employer on company letterhead providing
+                            current monthly salary and YTD earnings, OR 2
+                            months' pay stubs with YTD earnings.
+                          </li>
+                          <li>
+                            Verification of earnings for the last 2 years
+                            (letter from employer or W-2 equivalent).
+                          </li>
+                          <li>
+                            Employer to be independently verified (via
+                            LexisNexis, D&B International Business Search,
+                            Google, or other means of verification).
+                          </li>
+                          <li>
+                            An unaffiliated certified translator must translate
+                            all documents.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Self-Employment
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Borrowers who have been self-employed for at least 2
+                            years are eligible.
+                          </li>
+                          <li>
+                            The following items must be obtained:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>
+                                Letter from a CPA providing income for the last
+                                2 years and year to date earnings.
+                              </li>
+                              <li>
+                                Self-employed business and CPA are to be
+                                independently verified (via Lexis Nexis, D&B
+                                international business search, google, or other
+                                means of verification).
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            An unaffiliated certified translator must translate
+                            all documents.
+                          </li>
+                          <li>
+                            Verbal verification of employment is not required.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rental Income
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Evidence of borrower's ownership of the property</li>
+                          <li>
+                            For a refinance and/or to document rental income on
+                            other REOs:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>Lease agreement</li>
+                              <li>
+                                Two months of bank statements demonstrating
+                                receipt of rental income.
+                              </li>
+                              <li>
+                                Evidence the rental amount is at market rate,
+                                which can be documented via a 1007 or through an
+                                online source.
+                              </li>
+                              <li>
+                                75% of the rental amount on the lease is used
+                                for qualifying.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 className="font-semibold text-md mb-3 mt-6">
+                Alt Doc - Income Requirements
+              </h5>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Asset Utilization
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Eligible as a sole source of income or combined with
+                            other income.
+                          </li>
+                          <li>
+                            Eligible Qualified Assets must be seasoned for a
+                            minimum of three (3) months.
+                          </li>
+                          <li>
+                            Borrowers must have the lesser of:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>1.5 times the loan balance or</li>
+                              <li>
+                                $1,000,000 in Qualified Assets, both of which
+                                must be net of down payment, closing costs, and
+                                required reserves to qualify.
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Monthly Income Calculation:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>Net Qualified Assets / 60 months</li>
+                            </ul>
+                          </li>
+                          <li>Foreign Assets are eligible.</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Foreign National - DSCR Ratio and Rental Income Requirements */}
+            <div
+              id="foreign-national-dscr-ratio"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - DSCR Ratio and Rental Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        DSCR Ratio
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Min 1.00</li>
+                          <li>Min 1.15 Short Term Rentals</li>
+                          <li>
+                            DSCR Ratio Calculation:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                Short or Long Term Gross Rental Income /PITIA
+                                Fully Amortizing or ITIA (for IO Loans)
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Lease and Occupancy Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            All refinance transactions require the property to
+                            be leased. Vacant properties are ineligible except
+                            for:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>
+                                Properties leased through short term rental
+                                agencies; or
+                              </li>
+                              <li>
+                                With evidence that property has been recently
+                                rehabbed and is currently listed for rent.
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Property cannot be occupied by the borrower(s), any
+                            member of the borrower's LLC or any family member.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Short Term Rentals (STR)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2 font-semibold">Short Term Rentals:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>
+                            Defined as properties leased on a nightly, weekly,
+                            monthly, or seasonal basis.
+                          </li>
+                          <li>Min DSCR &gt;= 1.15</li>
+                          <li>Max LTV: Lesser of 70% or the Matrix LTV/CLTV</li>
+                          <li>
+                            Evidence is required from a third party vendor (such
+                            as Property Guard, Vrolio or equivalent) validating
+                            that the governing municipality where the subject
+                            property is located allows properties to be rented
+                            as STRs
+                          </li>
+                        </ul>
+                        <p className="mb-2 font-semibold">
+                          Short Term Gross Rental Income:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>The following options are available:</li>
+                          <li>1007/1025 or</li>
+                          <li>
+                            Alternative Short Term Rent Analysis form developed
+                            by an AMC or
+                          </li>
+                          <li>
+                            12-month look back on rents received using bank
+                            statements or third party rental statements.
+                          </li>
+                          <li>
+                            When using the 1007/1025 or alternative Short Term
+                            Rent Analysis, the market rents must account for the
+                            seasonality of the subject property's rents.
+                          </li>
+                        </ul>
+                        <p className="mb-2 font-semibold">
+                          Geographic Restrictions:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Not permitted in the five (5) New York City Boroughs
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Long Term Rentals
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2 font-semibold">
+                          Long Term Gross Rental Income:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            If using the lesser of market rents or the lease,
+                            nothing further is required.
+                          </li>
+                          <li>
+                            If using a higher lease amount, evidence of 2 months
+                            of receipt is required, and the lease must be within
+                            120% of the market rents.
+                          </li>
+                          <li>
+                            If the actual rent exceeds 120% of the market rents,
+                            the rents are capped at 120%.
+                          </li>
+                          <li>
+                            If using a higher estimated market rent from the
+                            1007/1025, it must be within 120% of the lease
+                            amount.
+                          </li>
+                          <li>
+                            If the estimated market rent exceeds the lease by
+                            more than 120%, the estimated market rent is capped
+                            at 120%
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Foreign National - Asset and Reserve Requirements */}
+            <div id="foreign-national-assets" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - Asset and Reserve Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Assets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            30 days asset verification required for U.S. Based
+                            Accounts; 60 days for Foreign Assets
+                          </li>
+                          <li>
+                            Funds required for downpayment and closing costs
+                            must be seasoned in a U.S. depository institution
+                            for 10 days prior to closing unless funds are held
+                            in a foreign bank with U.S. Based FDIC insured
+                            branches OR wired directly to the closing agent
+                          </li>
+                          <li>
+                            Funds used for reserves may be held in a foreign
+                            account. The value of the asset must be converted to
+                            U.S. dollars and include a printout of the current
+                            exchange rate
+                          </li>
+                          <li>
+                            Large deposits (&gt; 50% of gross income) must be
+                            documented on Full and Alt Doc purchases.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Reserves
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>12 months of PITIA</li>
+                          <li>6-months with 5% LTV reduction.</li>
+                          <li>
+                            Cash Out Refinance may be used to satisfy
+                            requirements
+                          </li>
+                          <li>
+                            Reserves are not required when using Asset
+                            Utilization as sole source of income.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Gift Funds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Permitted after meeting minimum 10% borrower
+                            contribution, regardless of LTV.
+                          </li>
+                          <li>
+                            Max loan amount of $1,000,000 when there is a gift
+                          </li>
+                          <li>No maximum amount of donors</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Foreign National - Property Requirements */}
+            <div id="foreign-national-property" className="mb-8 scroll-mt-20">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Foreign National - Property Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Single Family, PUD, Townhome (Attached or Detached)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Single family residences with 1 or more accessory
+                        dwelling units(ADU) are eligible if subject property is
+                        in a municipality that allows. The appraiser must
+                        specifically confirm compliance with local regulations
+                        and provide 2 similar comparables.
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Property Types - Condominiums and 2-4 Units
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Condos: Warrantable and Non-Warrantable</li>
+                          <li>
+                            Condos and 2-4 Units Max LTV/CLTV:
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              <li>
+                                Purchase and Rate & Term Refinance = 70%
+                              </li>
+                              <li>Cash Out = 65%</li>
+                            </ul>
+                          </li>
+                          <li>Condominium leaseholds are ineligible</li>
+                          <li>
+                            2-4 Units with 1 ADU are eligible if subject
+                            property is in a municipality that allows. The
+                            appraiser must specifically confirm compliance with
+                            local regulations and provide 2 similar comparables.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Condotels
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <div className="mb-3">
+                          <p className="font-semibold mb-2">
+                            Full Doc Second Home & Investment Property Purchase
+                            or Rate & Term Refinance:
+                          </p>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>Max 70% LTV</li>
+                          </ul>
+                        </div>
+                        <div className="mb-3">
+                          <p className="font-semibold mb-2">
+                            Full Doc Second Home & Investment Property
+                            (including Business Purpose Loans):
+                          </p>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>Max 60% LTV</li>
+                          </ul>
+                        </div>
+                        <div className="mb-3">
+                          <p className="font-semibold mb-2">
+                            DSCR Purchase or Rate & Term Refinance:
+                          </p>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>Max 65% LTV</li>
+                          </ul>
+                        </div>
+                        <div className="mb-3">
+                          <p className="font-semibold mb-2">
+                            DSCR Cash Out Refinance:
+                          </p>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>Max 60% LTV</li>
+                          </ul>
+                        </div>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Max Loan Amount $1,500,000</li>
+                          <li>Must have full kitchen & 1 separate bedroom.</li>
+                          <li>
+                            Must be in a resort area or affiliated with a
+                            national hotel chain.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Multi-Family and Mixed-Use
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Refer to the DSCR Multi & Mixed Program
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rural Properties
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Ineligible</li>
+                          <li>
+                            Websites such as the below will be reviewed to
+                            analyze whether the property should be classified as
+                            rural and subject to rural guidelines.
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                https://www.consumerfinance.gov/rural-or-underserved-tool/
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Declining Markets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Declining markets, as identified by the appraiser,
+                        require a 5% LTV reduction off Matrix Max LTV when &gt;65%
+                        LTV
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Appraisals
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Full interior/exterior appraisal required</li>
+                          <li>
+                            Second appraisal required for loan amounts &gt; $2M
+                          </li>
+                          <li>
+                            DSCR:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                C3 condition rating is generally required;
+                                Properties with a C4 rating must be sufficiently
+                                justified to determine marketability and
+                                acceptance.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Acreage
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 2 acres
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          {/* End of Foreign National */}
         </section>
 
         <section id="dscr-programs" className="mb-16 scroll-mt-20">
