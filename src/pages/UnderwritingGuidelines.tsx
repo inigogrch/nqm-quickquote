@@ -5851,8 +5851,8 @@ const UnderwritingGuidelines = () => {
                               <li>1 person = $1,500</li>
                               <li>2 people = $2,500</li>
                               <li>
-                                Add $150 per additional household member (related
-                                or unrelated)
+                                Add $150 per additional household member
+                                (related or unrelated)
                               </li>
                             </ul>
                           </li>
@@ -5948,7 +5948,9 @@ const UnderwritingGuidelines = () => {
                       </td>
                       <td className="px-6 py-4 text-muted-foreground">
                         <ul className="list-disc pl-5 space-y-1">
-                          <li>Evidence of borrower's ownership of the property</li>
+                          <li>
+                            Evidence of borrower's ownership of the property
+                          </li>
                           <li>
                             For a refinance and/or to document rental income on
                             other REOs:
@@ -6024,10 +6026,7 @@ const UnderwritingGuidelines = () => {
             </div>
 
             {/* Foreign National - DSCR Ratio and Rental Income Requirements */}
-            <div
-              id="foreign-national-dscr-ratio"
-              className="mb-8 scroll-mt-20"
-            >
+            <div id="foreign-national-dscr-ratio" className="mb-8 scroll-mt-20">
               <h4 className="text-lg font-semibold mb-4 text-gray-900">
                 Foreign National - DSCR Ratio and Rental Income Requirements
               </h4>
@@ -6088,7 +6087,9 @@ const UnderwritingGuidelines = () => {
                         Short Term Rentals (STR)
                       </td>
                       <td className="px-6 py-4 text-muted-foreground">
-                        <p className="mb-2 font-semibold">Short Term Rentals:</p>
+                        <p className="mb-2 font-semibold">
+                          Short Term Rentals:
+                        </p>
                         <ul className="list-disc pl-5 space-y-1 mb-3">
                           <li>
                             Defined as properties leased on a nightly, weekly,
@@ -6285,9 +6286,7 @@ const UnderwritingGuidelines = () => {
                           <li>
                             Condos and 2-4 Units Max LTV/CLTV:
                             <ul className="list-disc pl-5 mt-1 space-y-1">
-                              <li>
-                                Purchase and Rate & Term Refinance = 70%
-                              </li>
+                              <li>Purchase and Rate & Term Refinance = 70%</li>
                               <li>Cash Out = 65%</li>
                             </ul>
                           </li>
@@ -6384,8 +6383,8 @@ const UnderwritingGuidelines = () => {
                       </td>
                       <td className="px-6 py-4 text-muted-foreground">
                         Declining markets, as identified by the appraiser,
-                        require a 5% LTV reduction off Matrix Max LTV when &gt;65%
-                        LTV
+                        require a 5% LTV reduction off Matrix Max LTV when
+                        &gt;65% LTV
                       </td>
                     </tr>
                     <tr className="border-b border-border">
@@ -6432,14 +6431,4140 @@ const UnderwritingGuidelines = () => {
           <h2 className="text-3xl font-bold border-b-2 border-gray-200 pb-4 mb-6">
             DSCR Programs
           </h2>
-          <p className="text-sm">Content from PDF...</p>
+
+          <div className="prose prose-sm max-w-none space-y-6 mb-12">
+            <p className="text-sm leading-relaxed">
+              DSCR Programs are designed for investment property loans that are
+              designated for business purpose only.
+            </p>
+          </div>
+
+          {/* DSCR General Requirements */}
+          <div id="dscr-general-requirements" className="scroll-mt-20 mb-12">
+            <h3 className="text-2xl font-semibold mb-4">
+              DSCR General Requirements
+            </h3>
+            <p className="text-sm leading-relaxed mb-6">
+              The following requirements apply to all DSCR transactions.
+            </p>
+
+            <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+              <table className="w-full text-sm border-collapse">
+                <tbody>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                      Forms and Affidavits
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>
+                          Business Purpose & Occupancy Affidavit (all borrowers
+                          are required to sign to declare that the property is,
+                          or will be, for commercial business or investment
+                          purposes only)
+                        </li>
+                        <li>
+                          Business Rider to the Mortgage/Deed of Trust: Applies
+                          to Retail and Wholesale channel transactions only.
+                        </li>
+                        <li>
+                          Compliance Agreement – DSCR Loans: NQMF, Compliance
+                          Agreement, or Client's equivalent document will be
+                          required (In which the borrower(s) agree(s) to furnish
+                          the Lender and its successors and/or assigns with
+                          current copies of all Lease Agreements within a
+                          reasonable time upon request.)
+                        </li>
+                        <li>
+                          1-4 Family Rider/Assignment of Rents (FNMA Form 3170)
+                        </li>
+                        <li>Guaranty (if applicable)</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      Fraud and Background Check
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>
+                          A third-party fraud detection report for all borrowers
+                          and/or guarantors is required.
+                        </li>
+                        <li>
+                          Report findings must cover standard areas of quality
+                          control including, but not limited to borrower
+                          validation, social security number verification,
+                          criminal records, and property information (subject
+                          property and other real estate owned).
+                        </li>
+                        <li>
+                          All high-level alerts on the report must be addressed.
+                        </li>
+                        <li>
+                          The fraud check should also include occupancy status
+                          to assist in the validation and endorsement of the
+                          Business Purpose & Occupancy Affidavit.
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      Vesting and Ownership
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <p className="mb-2">Acceptable forms of vesting are:</p>
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>Individuals</li>
+                        <li>Joint tenants</li>
+                        <li>
+                          Tenants in Common (No Ratio Program - only permitted
+                          if all borrowers match the actual borrowers on the
+                          loan.)
+                        </li>
+                        <li>Inter Vivos Revocable Trust</li>
+                        <li>
+                          Business Entity
+                          <ul className="list-disc pl-5 mt-1">
+                            <li>Limited Liability Company (LLC)</li>
+                            <li>Limited and General Partnerships</li>
+                            <li>Corporations</li>
+                            <li>S Corporations</li>
+                          </ul>
+                        </li>
+                      </ul>
+                      <p className="mt-2">
+                        Note: Only individuals can be borrowers. The other
+                        entities listed above relate only to an ownership
+                        interest in the subject property
+                      </p>
+                      <p className="mt-2">
+                        Vesting in non-profit entity is not permitted
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      Power of Attorney
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <p className="mb-2">
+                        A Limited Power of Attorney (POA) is acceptable when
+                        following requirements are met:
+                      </p>
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>POA is specific to the transaction</li>
+                        <li>Recorded with the mortgage/deed of trust</li>
+                        <li>Contains an expiration date</li>
+                        <li>Used only to execute the final loan documents</li>
+                        <li>
+                          Borrower who executed the POA signed the initial 1003
+                        </li>
+                      </ul>
+                      <p className="mt-2">
+                        No interested party to the transaction (such as property
+                        seller, broker, loan officer, realtor, etc.) may
+                        function as Power of Attorney
+                      </p>
+                      <ul className="list-disc pl-5 space-y-1 mt-2">
+                        <li>Not permitted on cash-out transactions</li>
+                        <li>
+                          Not permitted on loans vesting in the name of an
+                          Entity
+                        </li>
+                        <li>Not permitted on Foreign National transactions</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      Application
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      The application must include the subject property (when
+                      the transaction is a refinance) along with the borrower's
+                      Primary Residence on the Schedule of Real Estate owned.
+                      Other properties owned by the borrower are not required to
+                      be disclosed on the application
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      Credit Inquiries
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      An inquiry explanation is not required
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* DSCR Supreme */}
+          <div id="dscr-supreme-overview" className="scroll-mt-20 mb-12 mt-16">
+            <h3 className="text-2xl font-semibold mb-4">
+              DSCR Supreme Overview
+            </h3>
+            <p className="text-sm leading-relaxed mb-6">
+              The DSCR Supreme Program is designed for the most qualified
+              borrowers from a credit standpoint, with less complex
+              transactions. Refer to the DSCR Supreme Matrix for specific
+              program requirements.
+            </p>
+
+            {/* DSCR Supreme - General Requirements */}
+            <div
+              id="dscr-supreme-general-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Supreme - General Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Exceptions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Product Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30 Year Fixed Fully Amortizing</li>
+                          <li>
+                            30 Year Fixed I/O (10 year I/O period, and remaining
+                            term fully amortizing)
+                          </li>
+                          <li>
+                            40 Year Fixed I/O (10 year I/O period, and remaining
+                            term fully amortizing)
+                          </li>
+                          <li>5/6 & 7/6 SOFR ARMs – 30 Year Terms Only</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interest Only
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Borrower to qualify using the I/O payment based on the
+                        qualifying rate.
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Amounts
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Min $150,000 - Max $2,000,000
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interested Party Contributions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 6%
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Subordinate Financing
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Investment Properties Business Purpose ONLY
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Purpose
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Purchase, Rate & Term Refinance, and Cash Out Refinance
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        2-1 Buydown
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Cash-Out
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Minimum of 6 months seasoning from most recent
+                          transaction, with the exception of delayed financing.
+                        </p>
+                        <p className="mb-2">Max Cash in hand:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            LTV {">"} 60% = $1,000,000 or when DSCR is {">"}=.75
+                            unlimited Cash Out Refinance permitted with 18
+                            months reserves exclusive of cash back
+                          </li>
+                          <li>LTV {"<"}= 60% = Unlimited</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Insurance Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          In addition to property and title insurance, Rent Loss
+                          Insurance for the subject property is required and
+                          must equal at least 6 months of PITIA.
+                        </p>
+                        <p className="mb-2">
+                          Rent Loss Insurance may be waived with three
+                          additional months of PITIA reserves.
+                        </p>
+                        <p>
+                          Blanket policies covering the subject property are
+                          eligible.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Escrow Waivers
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Waiving escrows is eligible as follows:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>0x30x12 mortgage/housing history</li>
+                          <li>Maximum LTV 80%</li>
+                          <li>Minimum score 660</li>
+                          <li>
+                            Flood Insurance premiums for properties located in
+                            zones A or V must be escrowed. Note that it is
+                            permissible to waive taxes and insurance escrows in
+                            these instances when the above requirements are met
+                            and the loan is priced with an escrow waiver. In
+                            addition, elective flood policies are not required
+                            to be escrowed.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Prepayment Penalty
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Required where permitted. Refer to the "Business Purpose
+                        Licensing & PPP Restrictions" PDF in the Documents Tab
+                        in the Client Portal.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Age of Loan Documentation
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Credit: 120 days</li>
+                          <li>Assets: 90 days</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Supreme - Borrower Eligibility */}
+            <div
+              id="dscr-supreme-borrower-eligibility"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Supreme - Borrower Eligibility
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/50">
+                      <th className="px-6 py-3 text-left font-semibold text-foreground w-1/4"></th>
+                      <th className="px-6 py-3 text-left font-semibold text-foreground">
+                        Eligible:
+                      </th>
+                      <th className="px-6 py-3 text-left font-semibold text-foreground">
+                        Ineligible:
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Borrower Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>U.S. Citizens</li>
+                          <li>Permanent Resident Aliens</li>
+                          <li>Non-Permanent Resident Aliens</li>
+                        </ul>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>ITIN</li>
+                          <li>DACA</li>
+                          <li>
+                            LLCs, partnerships, or corporations (may qualify for
+                            vesting only)
+                          </li>
+                          <li>
+                            Trusts or Land Trusts (trusts may qualify for
+                            ownership vesting only)
+                          </li>
+                          <li>Foreign Nationals</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        First Time Homebuyer (FTHB)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Investor Experience
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Min DSCR 1.00
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Entity Vesting
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible per Guide.
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Supreme - Credit Requirements */}
+            <div
+              id="dscr-supreme-credit-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Supreme - Credit Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Credit Score
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">Minimum credit score is 720</p>
+                        <p className="mb-2">
+                          The Representative Score is as follows:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Lowest middle score of all borrowers</li>
+                          <li>A minimum of 2 scores required</li>
+                          <li>
+                            Borrowers with three credit scores: use the lowest
+                            middle score of all borrowers to qualify
+                          </li>
+                          <li>
+                            Borrowers with 2 credit scores: use the lower of the
+                            two scores to qualify
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Tradelines
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">All borrowers have 3 scores OR:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Minimum 2 open and reporting 24 months; OR</li>
+                          <li>3 open and reporting 12 months; OR</li>
+                          <li>24-months mortgage rating reporting on credit</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Evidence of Primary Residence
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          All borrowers must presently maintain a Primary
+                          Residence
+                        </p>
+                        <p className="mb-2">
+                          Borrowers who own a Primary Residence must provide
+                          proof of ownership or evidence they are living in a
+                          property owned or rented by their spouse/domestic
+                          partner
+                        </p>
+                        <p className="mb-2">
+                          Mortgage and/or rental payments on the subject and
+                          Primary Residence not reflected on the original credit
+                          report must be documented via an institutional
+                          third-party (Verification of Rent or Verification of
+                          Mortgage - VOR/VOM)
+                        </p>
+                        <p className="mb-2">
+                          Borrowers who rent a Primary Residence must provide
+                          evidence of an active lease in place
+                        </p>
+                        <p className="mb-2">
+                          Primary Residence should be supported by one of the
+                          following characteristics:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            In a different geographical location from the
+                            subject property; or
+                          </li>
+                          <li>
+                            General appeal and location of the Primary Residence
+                            is superior to subject property
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Housing History
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        0x30x12
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rent Free
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Rent-free circumstances in which the borrower is not
+                          residing with their spouse/domestic partner, will be
+                          considered as follows:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Refinance transactions: provided the borrower has an
+                            established address supported by a rent-free letter
+                            from the property owner and there is no suggestion
+                            of occupancy in the subject property.
+                          </li>
+                          <li>
+                            Purchase transactions:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                When the subject property is in a different
+                                geographic area from the residence, or
+                              </li>
+                              <li>
+                                The borrower is an experienced investor with
+                                existing REOs
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Credit/Housing Events
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Borrowers with significant derogatory credit events
+                          must meet the following criteria:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            All borrowers must have reestablished acceptable
+                            credit verified after the credit event.
+                          </li>
+                          <li>
+                            Borrowers with unrelated multiple significant credit
+                            events are ineligible
+                          </li>
+                          <li>
+                            Minimum 4 years must have elapsed from the date of
+                            the credit event
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Supreme - DSCR Ratio and Rental Income Requirements */}
+            <div
+              id="dscr-supreme-dscr-ratio-rental-income"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Supreme - DSCR Ratio and Rental Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        DSCR Ratio
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Min 1.00</li>
+                          <li>Min 1.15 Short Term Rentals</li>
+                          <li>Min 1.00 First Time Investors</li>
+                          <li>
+                            An experienced investor must have a history of
+                            owning and managing commercial or residential real
+                            estate for at least 1 year in the last 3 years,
+                            otherwise the borrower is considered a first time
+                            investor.
+                          </li>
+                          <li>
+                            DSCR Ratio = Gross Rental Income /PITIA Fully
+                            Amortizing or ITIA (for IO Loans).
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Lease and Occupancy Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="font-semibold mb-2">
+                          General Requirements:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            For all purchase transactions, it is acceptable for
+                            property to be vacant; gross market rents from the
+                            1007 / 1025 will be used.
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                If the property is currently tenant occupied,
+                                the 1007/1025 must reflect the terms of the
+                                current lease
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            All refinance transactions require the property to
+                            be leased. Vacant property is not eligible except
+                            for:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                Properties leased through short term rental
+                                agencies; or
+                              </li>
+                              <li>
+                                With evidence that property has been recently
+                                rehabbed and is currently listed for rent, or
+                              </li>
+                              <li>Delayed Financing.</li>
+                            </ul>
+                          </li>
+                          <li>
+                            Property cannot be occupied by the borrower(s), any
+                            member of the borrower's LLC or any family member.
+                          </li>
+                        </ul>
+                        <p className="font-semibold mb-2">
+                          Short Term Rentals (STR):
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            Defined as properties leased on a nightly, weekly,
+                            monthly, or seasonal basis.
+                          </li>
+                          <li>Min DSCR {">"}= 1.15</li>
+                          <li>Max LTV: Lesser of 75% or the Matrix LTV/CLTV</li>
+                          <li>
+                            Evidence is required from a third party vendor (such
+                            as Property Guard, Vrolio or equivalent) validating
+                            that the governing municipality where the subject
+                            property is located allows properties to be rented
+                            as STRs
+                          </li>
+                          <li>
+                            1007/1025 or Alternative Short Term Rental Analysis
+                            developed by an AMC is required, regardless of how
+                            the STR income is computed.
+                          </li>
+                          <li>
+                            Short Term Gross Rental Income Options:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>1007/1025 or</li>
+                              <li>
+                                Alternative Short Term Rent Analysis form
+                                developed by an AMC or
+                              </li>
+                              <li>
+                                12-month look back on rents received using bank
+                                statements or third party rental statements
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            When using the 1007/1025 or alternative Short Term
+                            Rent Analysis, the market rents must account for the
+                            seasonality of the subject property's rents.
+                          </li>
+                          <li>
+                            Geographic Restrictions:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                Not permitted in the five (5) New York City
+                                Boroughs
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p className="font-semibold mb-2">Long Term Rentals</p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Monthly gross rents are calculated as follows:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                If using the lesser of market rents or the
+                                lease, nothing further is required
+                              </li>
+                              <li>
+                                If using a higher lease amount, evidence of 2
+                                months of receipt is required, and the lease
+                                must be within 120% of the market rents. If the
+                                actual rent exceeds 120% of the market rents,
+                                the rents are capped at 120%.
+                              </li>
+                              <li>
+                                If using a higher estimated market rent from the
+                                1007/1025, it must be within 120% of the lease
+                                amount. If the estimated market rent exceeds the
+                                lease by more than 120%, the estimated market
+                                rent is capped at 120%
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                FNMA 1007/1025 required, along with one (1) of
+                                the following:
+                                <ul className="list-disc pl-5 mt-1">
+                                  <li>
+                                    Executed lease with no less than 1 month
+                                    remaining at time of closing is required for
+                                    all units in the subject property.
+                                  </li>
+                                  <li>
+                                    Month-to-month tenancy is not subject to
+                                    this requirement with sufficient evidence
+                                    (such as a signed extension letter, or 1007,
+                                    which includes a review of the current lease
+                                    confirming month-to-month)
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Supreme - Asset and Reserve Requirements */}
+            <div
+              id="dscr-supreme-asset-reserve-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Supreme - Asset and Reserve Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Assets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30-day asset verification required</li>
+                          <li>Atypical deposits do not need to be sourced</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Reserves
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Reserves PITIA or ITIA, as applicable:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>{"<"}= $500,000 = 3 months</li>
+                          <li>{">"} $500,000 to $2,000,000 = 6 months</li>
+                        </ul>
+                        <p className="mt-2">
+                          Cash Out proceeds can be used to satisfy reserves
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Gift Funds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Permitted after meeting 10% minimum borrower
+                            contribution, regardless of LTV.
+                          </li>
+                          <li>Cannot be used to meet reserve requirements.</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Supreme - Property Requirements */}
+            <div
+              id="dscr-supreme-property-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Supreme - Property Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Property Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="font-semibold mb-2">
+                          Single Family, PUD or Townhome (Attached or Detached)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>
+                            Single Family properties with 1 or more accessory
+                            dwelling units (ADU) are permitted if subject
+                            property is in a municipality that allows;
+                          </li>
+                          <li>
+                            The appraiser must specifically confirm compliance
+                            with local regulations and provide 2 similar
+                            comparables.
+                          </li>
+                          <li>Max 75% LTV</li>
+                        </ul>
+                        <p className="font-semibold mb-2">Warrantable Condos</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>Condominium leaseholds are ineligible</li>
+                          <li>Reduce Matrix LTV by 5%</li>
+                        </ul>
+                        <p className="font-semibold mb-2">2-4 Units</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            2-4 units with 1 ADU are permitted provided the
+                            subject property is in a municipality that allows;
+                          </li>
+                          <li>
+                            The appraiser must specifically confirm compliance
+                            with local regulations and provide 2 similar
+                            comparables
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rural Properties
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">Ineligible</p>
+                        <p className="mb-2">
+                          Websites such as the below will be reviewed to analyze
+                          whether the property should be classified as rural and
+                          subject to rural guidelines.
+                        </p>
+                        <ul className="list-disc pl-5">
+                          <li>
+                            https://www.consumerfinance.gov/rural-or-underserved-tool/
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Appraisals
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Appraisal Review Product to be ordered on all loans
+                            with a FNMA SSR over 2.5 unless there is a second
+                            appraisal
+                          </li>
+                          <li>
+                            1007/1025 or Short Term Rental Analysis developed by
+                            the AMC is required
+                          </li>
+                          <li>
+                            Second appraisal required for all loan amounts {">"}{" "}
+                            $2.0M
+                          </li>
+                          <li>
+                            C3 condition rating is generally required;
+                            Properties with a C4 rating must be sufficiently
+                            justified to determine marketability and acceptance.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Declining Markets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Declining markets, as identified by the appraiser,
+                        require a 5% LTV reduction off Matrix Max LTV when {">"}
+                        65% LTV
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Acreage
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 2 acres; Acreage and land value must be typical and
+                        common for the subject's market.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          {/* End of DSCR Supreme */}
+
+          {/* Investor DSCR */}
+          <div id="investor-dscr-overview" className="scroll-mt-20 mb-12 mt-16">
+            <h3 className="text-2xl font-semibold mb-4">
+              Investor DSCR Overview
+            </h3>
+            <p className="text-sm leading-relaxed mb-6">
+              The Investor DSCR Program is designed to cover the widest range of
+              options available to the DSCR investor. Refer to the Investor DSCR
+              Matrix for Matrix for specific program requirements.
+            </p>
+
+            {/* Investor DSCR - General Requirements */}
+            <div
+              id="investor-dscr-general-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR - General Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Exceptions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Permitted
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Product Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30 Year and 15 Year Fixed</li>
+                          <li>
+                            40-Year Fixed I/O (10 year I/O period, and remaining
+                            term fully amortizing) - Max 75% LTV
+                          </li>
+                          <li>
+                            30-Yr Fixed I/O (10 year I/O period, and remaining
+                            term fully amortizing) - Max 80% LTV
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interest Only
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Minimum Credit Score: 660 when DSCR {">"}= 1.00
+                          </li>
+                          <li>
+                            Minimum Credit Score: 700 when DSCR {"<"} 1.00
+                          </li>
+                          <li>
+                            Borrower to qualify using the IO payment based on
+                            the qualifying rate.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Amounts
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Minimum: $75,000 and Max $3,000,000</li>
+                          <li>
+                            Loan Amounts $75,000 to {"<"} $125,000: 1.00 DSCR
+                            Required
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interested Party Contributions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">6%</td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Subordinate Financing
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not Permitted
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Investment Properties (Business Purpose)
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Purpose
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Purchase, Rate & Term Refinance, and Cash Out Refinance
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        2-1 Buydown
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Purchase Only</li>
+                          <li>Seller Paid Buydown/Concession</li>
+                          <li>Minimum Score 680</li>
+                          <li>Minimum DSCR {">"}= .75</li>
+                          <li>
+                            Borrower qualifies at fully amortized rate
+                            (pre-buydown)
+                          </li>
+                          <li>
+                            Lender Paid or 3rd Party Paid Buydown (Excluding
+                            Real Estate Agents, Brokerages, Borrower, or
+                            relatives) permitted for Correspondent Clients only
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR - Borrower Eligibility */}
+            <div
+              id="investor-dscr-borrower-eligibility"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR - Borrower Eligibility
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/50">
+                      <th className="px-6 py-3 text-left font-semibold text-foreground w-1/4"></th>
+                      <th className="px-6 py-3 text-left font-semibold text-foreground">
+                        Eligible:
+                      </th>
+                      <th className="px-6 py-3 text-left font-semibold text-foreground">
+                        Ineligible:
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Borrower Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>U.S. Citizens</li>
+                          <li>Permanent Resident Aliens</li>
+                          <li>
+                            Non-Permanent Resident Alien (U.S. Credit only)
+                          </li>
+                        </ul>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>ITIN</li>
+                          <li>DACA</li>
+                          <li>
+                            Foreign National (Eligible under the Foreign
+                            National Program)
+                          </li>
+                          <li>
+                            LLCs, partnerships, or corporations (may qualify for
+                            vesting only)
+                          </li>
+                          <li>
+                            Trusts or Land Trusts (trusts may qualify for
+                            ownership vesting only)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        First Time Homebuyer (FTHB)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible with an established primary residence
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Investor Experience
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not Required
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Entity Vesting
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR - Credit Requirements */}
+            <div
+              id="investor-dscr-credit-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR - Credit Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Credit Score
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Minimum credit score is 660</li>
+                          <li>
+                            The Representative Score is the lowest middle score
+                            of all borrowers
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Tradelines
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">All borrowers have 3 scores OR:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Minimum 2 open and reporting 24 months; OR</li>
+                          <li>3 open and reporting 12 months; OR</li>
+                          <li>24-months mortgage rating reporting on credit</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Evidence of Primary Residence
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            All borrowers must presently maintain a Primary
+                            Residence
+                          </li>
+                          <li>
+                            Borrowers who own a Primary Residence must provide
+                            proof of ownership or evidence they are living in a
+                            property owned or rented by their spouse/domestic
+                            partner.
+                          </li>
+                          <li>
+                            Borrowers who rent a Primary Residence must provide
+                            evidence of an active lease in place
+                          </li>
+                          <li>
+                            Primary Residence should be supported by one of the
+                            following characteristics:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                In a different geographical location from the
+                                subject property; or
+                              </li>
+                              <li>
+                                General appeal and location of the Primary
+                                Residence is superior to subject property
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Housing History
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>0x30x12 No LTV reduction</li>
+                          <li>1x30x12 - 5% LTV reduction</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rent Free
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Rent-free circumstances in which the borrower is not
+                          residing with their spouse/domestic partner, will be
+                          considered as follows:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Refinance transactions, provided the borrower has an
+                            established address supported by a rent-free letter
+                            from the property owner and there is no suggestion
+                            of occupancy in the subject property.
+                          </li>
+                          <li>
+                            Purchase transactions:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                When the subject property is in a different
+                                geographic area from the residence, or
+                              </li>
+                              <li>
+                                The borrower is an experienced investor with
+                                existing REOs
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Credit/Housing Event
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          {">"}=36 Months: No LTV reductions
+                        </p>
+                        <p className="mb-2">{">"}=24 Months:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Max 75% LTV Purchase</li>
+                          <li>Max 70% LTV Rate & Term Refinance & Cash Out</li>
+                          <li>
+                            Discharged Chapter 13, use filing date; minimum 1
+                            year discharged
+                          </li>
+                          <li>Dismissed Chapter 13, use dismissal date</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR - DSCR & Rental Income Requirements */}
+            <div
+              id="investor-dscr-dscr-rental-income"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR - DSCR & Rental Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        DSCR Ratio
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Loan amounts {">"}= $75,000 - {"<"} $125,000 require
+                            a minimum DSCR of 1.00
+                          </li>
+                          <li>
+                            Loan amounts {">"}= $125,000 require a minimum DSCR
+                            of .75
+                          </li>
+                          <li>Minimum DSCR .75</li>
+                          <li>Short Term Rentals minimum DSCR {">"}= 1.15</li>
+                          <li>
+                            Debt-Service Coverage Ratio = Gross Rental Income
+                            /PITIA Fully Amortizing or ITIA (for IO Loans)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Lease and Occupancy Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="font-semibold mb-2">
+                          General Requirements:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            For all purchase transactions, it is acceptable for
+                            property to be vacant; gross market rents from the
+                            1007 / 1025 will be used.
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                If the property is currently tenant occupied,
+                                the 1007/1025 must reflect the terms of the
+                                current lease
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            All refinance transactions require the property to
+                            be leased. Vacant property is not eligible except
+                            for:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                Properties leased through short term rental
+                                agencies; or
+                              </li>
+                              <li>
+                                With evidence that property has been recently
+                                rehabbed and is currently listed for rent; or
+                              </li>
+                              <li>Delayed Financing.</li>
+                            </ul>
+                          </li>
+                          <li>
+                            Property cannot be occupied by the borrower(s), any
+                            member of the borrower's LLC or any family member.
+                          </li>
+                        </ul>
+                        <p className="font-semibold mb-2">
+                          Short Term Rentals (STR):
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            Defined as properties leased on a nightly, weekly,
+                            monthly, or seasonal basis.
+                          </li>
+                          <li>Min DSCR {">"}= 1.15</li>
+                          <li>Max LTV: Lesser of 75% or the Matrix LTV/CLTV</li>
+                          <li>
+                            Evidence is required from a third party vendor (such
+                            as Property Guard, Vrolio or equivalent) validating
+                            that the governing municipality where the subject
+                            property is located allows properties to be rented
+                            as STRs
+                          </li>
+                          <li>
+                            1007/1025 or Alternative Short Term Rental Analysis
+                            developed by an AMC is required, regardless of how
+                            the STR income is computed
+                          </li>
+                          <li>
+                            Short Term Gross Rental Income options:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>1007/1025 or</li>
+                              <li>
+                                Alternative Short Term Rent Analysis form
+                                developed by an AMC or
+                              </li>
+                              <li>
+                                12-month look back on rents received using bank
+                                statements or third party rental statements
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            When using the 1007/1025 or alternative Short Term
+                            Rent Analysis, the market rents must account for the
+                            seasonality of the subject property's rents.
+                          </li>
+                          <li>
+                            Geographic Restrictions:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                Not permitted in the five (5) New York City
+                                Boroughs
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p className="font-semibold mb-2">Long Term Rentals</p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Monthly gross rents are calculated as follows:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                If using the lesser of market rents or the
+                                lease, nothing further is required
+                              </li>
+                              <li>
+                                If using a higher lease amount, evidence of 2
+                                months of receipt is required, and the lease
+                                must be within 120% of the market rents. If the
+                                actual rent exceeds 120% of the market rents,
+                                the rents are capped at 120%
+                              </li>
+                              <li>
+                                If using a higher estimated market rent from the
+                                1007/1025, it must be within 120% of the lease
+                                amount. If the estimated market rent exceeds the
+                                lease by more than 120%, the estimated market
+                                rent is capped at 120%
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                FNMA 1007/1025 required, along with one (1) of
+                                the following:
+                                <ul className="list-disc pl-5 mt-1">
+                                  <li>
+                                    Executed lease with no less than 1 month
+                                    remaining at time of closing is required for
+                                    all units in the subject property.
+                                  </li>
+                                  <li>
+                                    Month-to-month tenancy is not subject to
+                                    this requirement with sufficient evidence
+                                    (such as a signed extension letter, or 1007,
+                                    which includes a review of the current lease
+                                    confirming month-to-month)
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR - Asset and Reserve Requirements */}
+            <div
+              id="investor-dscr-asset-reserve-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR - Asset and Reserve Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Assets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30-day asset verification required</li>
+                          <li>
+                            Atypical deposits do not need to be sourced on DSCR
+                            transactions
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Reserves
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Loan Amount to $500,000 and {"<"}=80% LTV = 3 months
+                            of PITIA
+                          </li>
+                          <li>
+                            Loan Amount to $500,000 and {">"} 80% LTV = 6 months
+                            of PITIA
+                          </li>
+                          <li>
+                            Loan Amount {">"}$500,000 to $2,000,000 = 6 months
+                            of PITIA
+                          </li>
+                          <li>
+                            Loan Amount {">"} $2,000,000 = 12 months of PITIA
+                          </li>
+                          <li>
+                            2-4 Units at 80% LTV requires greater of 6 months or
+                            reserves indicated above.
+                          </li>
+                          <li>
+                            Cash Out Refinance may be used to satisfy
+                            requirement
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Gift Funds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Permitted after meeting minimum 10% borrower
+                            contribution regardless of LTV.
+                          </li>
+                          <li>Cannot be used to meet reserve requirements</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR - Property Requirements */}
+            <div
+              id="investor-dscr-property-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR - Property Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Property Types
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="font-semibold mb-2">
+                          Single Family, PUD or Townhouse (Attached or Detached)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            Single family properties with 1 or more accessory
+                            dwelling units (ADU) or 2-4 units with 1 ADU are
+                            eligible if subject property is in a municipality
+                            that allows. The appraiser must specifically confirm
+                            compliance with local regulations and provide 2
+                            similar comparables.
+                          </li>
+                          <li>
+                            2 Units - Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>Max LTV: 80%</li>
+                            </ul>
+                          </li>
+                          <li>
+                            3-4 Units - Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>{">"}= 1.00 DSCR = Max LTV 75%</li>
+                              <li>{"<"} 1.00 DSCR = Max LTV 70%</li>
+                            </ul>
+                          </li>
+                          <li>
+                            Ineligible for {">"} 80% LTV Purchase and Rate &
+                            Term Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>720+ credit score / Max 80%</li>
+                              <li>{"<"}720 credit score / Max 75%</li>
+                            </ul>
+                            Cash Out Refinance
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>720+ credit score / Max 75%</li>
+                              <li>{"<"} 720 credit score / Max 70%</li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p className="font-semibold mb-2">
+                          Condos (Warrantable and Non-Warrantable)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2 mb-4">
+                          <li>
+                            Condominium leaseholds are ineligible Purchase or
+                            Rate & Term Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>700 credit core / Max LTV 70%</li>
+                              <li>680 credit score / Max LTV 65%</li>
+                            </ul>
+                            Cash Out Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>700 credit score / Max LTV 65%</li>
+                              <li>680 credit score / Max LTV 60%</li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p className="font-semibold mb-2">Condotels</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Min DSCR {">"}= .75</li>
+                          <li>Max Loan Amount: $1,500,000</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rural Properties
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Properties in a resort area will only be considered as
+                          follows:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>Maximum LTV of 65% and</li>
+                          <li>Min DSCR {">"}= 1.00</li>
+                          <li>
+                            Examples of acceptable resort areas include beach
+                            towns, ski resort areas, golf communities or
+                            communities with other major recreational activities
+                          </li>
+                        </ul>
+                        <p className="mb-2">
+                          If property is accessible by a gravel road and
+                          distance of comparable is {">"} 1 mile away, the
+                          property could be considered rural even if it is
+                          marked suburban, and then Max LTV is the lesser of 65%
+                          LTV or the applicable Matrix LTV
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>
+                            Properties must be accessible by roads that meet
+                            state/local minimum standards
+                          </li>
+                          <li>
+                            Properties must be suitable for year-round occupancy
+                            regardless of location
+                          </li>
+                        </ul>
+                        <p className="mb-2">
+                          Websites such as the below will be reviewed to analyze
+                          whether the property should be classified as rural and
+                          subject to rural guidelines.
+                        </p>
+                        <ul className="list-disc pl-5">
+                          <li>
+                            https://www.consumerfinance.gov/rural-or-underserved-tool/
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Appraisals
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Second appraisal required for all loan amounts {">"}{" "}
+                            $2.0M
+                          </li>
+                          <li>
+                            1007/1025 or Short Term Rental Analysis developed by
+                            the AMC is required
+                          </li>
+                          <li>
+                            Appraisal Review Product to be ordered on all loans
+                            with a FNMA SSR over 2.5 except for those with a
+                            full second appraisal
+                          </li>
+                          <li>
+                            C3 condition rating is generally required;
+                            Properties with a C4 rating must be sufficiently
+                            justified to determine marketability and acceptance.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Declining Markets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Declining markets, as identified by the appraiser,
+                        require a 5% LTV reduction off Matrix Max LTV, when{" "}
+                        {">"} 65% LTV
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Acreage
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 2 acres; Acreage and land value must be typical and
+                        common for the subject's market.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          {/* End of Investor DSCR */}
+
+          {/* Investor DSCR No Ratio */}
+          <div
+            id="investor-dscr-no-ratio-overview"
+            className="scroll-mt-20 mb-12 mt-16"
+          >
+            <h3 className="text-2xl font-semibold mb-4">
+              Investor DSCR No Ratio Overview
+            </h3>
+            <p className="text-sm leading-relaxed mb-6">
+              The Investor DSCR No Ratio Program is designed to offer certain
+              DSCR options when the rental income is not sufficient to cover the
+              cover the monthly payments. This program allows investors
+              additional options. Refer to the Investor DSCR No Ratio Matrix for
+              Matrix for specific program requirements.
+            </p>
+
+            {/* Investor DSCR No Ratio - General Requirements */}
+            <div
+              id="investor-dscr-no-ratio-general-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR No Ratio - General Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Exceptions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Product Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30 Year Fixed</li>
+                          <li>15 Year Fixed</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interest Only
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not permitted
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Amounts
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Min: $125,000 and Max $1,500,000
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interested Party Contributions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">6%</td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Subordinate Financing
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Investment Properties (Business Purpose)
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Purpose
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Purchase, Rate & Term Refinance, and Cash Out Refinance
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        2-1 Buydown
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not Permitted
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Refinances - Continuity of Obligation
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">
+                          Continuity of ownership is required on all refinance
+                          transactions, which occurs when at least one
+                          borrower(s) or member of the LLC on the existing
+                          mortgage is also a Borrower on the new refinance
+                          transaction.
+                        </p>
+                        <p className="mb-2">
+                          When an existing mortgage will be satisfied because of
+                          the refinance transaction, the following requirements
+                          must be met:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            At least one borrower on the refinance mortgage held
+                            title for the most recent six (6) month period and
+                            the mortgage file contains documentation evidencing
+                            the borrower has been making timely mortgage
+                            payments, including the payments for any secondary
+                            financing, for the most recent six (6) month period
+                          </li>
+                          <li>
+                            At least one borrower on the refinance mortgage
+                            inherited or was legally awarded the mortgaged
+                            premises by a court in the case of divorce,
+                            separation, or dissolution of domestic property
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Properties Listed for Sale
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        All Refinance transactions: property cannot be listed
+                        for sale in the last 12 months prior to the application
+                        date
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Cash-Out
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>LTV {">"} 60% = $1,000,000</li>
+                          <li>LTV {"<"}=60% = Unlimited</li>
+                          <li>
+                            Cash-in-hand limits do not apply to Delayed
+                            Financing Transactions
+                          </li>
+                          <li>
+                            Not permitted for Non-Permanent Resident Aliens
+                          </li>
+                          <li>
+                            Cash Out Refinance refinances on properties acquired
+                            within the past 12 months are ineligible, with the
+                            exception of Delayed Financing
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR No Ratio - Borrower Eligibility */}
+            <div
+              id="investor-dscr-no-ratio-borrower-eligibility"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR No Ratio - Borrower Eligibility
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/50">
+                      <th className="px-6 py-3 text-left font-semibold text-foreground w-1/4"></th>
+                      <th className="px-6 py-3 text-left font-semibold text-foreground">
+                        Eligible:
+                      </th>
+                      <th className="px-6 py-3 text-left font-semibold text-foreground">
+                        Ineligible:
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Borrower Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>U.S. Citizens</li>
+                          <li>Permanent Resident Aliens</li>
+                          <li>
+                            Non-Permanent Resident Alien
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>U.S. Credit only</li>
+                              <li>
+                                Below Visa Types only permitted: E-1, E-2, E-3,
+                                EB-5, G-1 through G-5, H1-B, L-1, NATO, O-1,
+                                R-1, TN NAFTA.
+                              </li>
+                              <li>Cash Out not permitted</li>
+                              <li>
+                                Tenants in common are ineligible unless all
+                                parties match the borrowers on the loan.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>ITIN</li>
+                          <li>DACA</li>
+                          <li>Foreign National</li>
+                          <li>
+                            LLCs, partnerships, or corporations (may qualify for
+                            vesting only)
+                          </li>
+                          <li>
+                            Trusts or Land Trusts (trusts may qualify for
+                            ownership vesting only)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        First Time Homebuyer (FTHB)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible with an established primary residence
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Investor Experience
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not Required
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Entity Vesting
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Tenants in Common are only permitted if all parties
+                            vested match the borrowers on the loan.
+                          </li>
+                          <li>Layering of entities not permitted</li>
+                        </ul>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR No Ratio - Credit Requirements */}
+            <div
+              id="investor-dscr-no-ratio-credit-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR No Ratio - Credit Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Credit Score
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Minimum credit score: 700</li>
+                          <li>
+                            The Representative Score is the lowest middle score
+                            of all borrowers
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Tradelines
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Each borrower must have a minimum of two (2) trades
+                            within 24 months that show a 12 month history OR a
+                            combined credit profile between both borrowers with
+                            a minimum of three (3) tradelines
+                          </li>
+                          <li>Tradeline activity is not required.</li>
+                          <li>
+                            Eligible trades cannot have delinquency in the past
+                            24 months
+                          </li>
+                          <li>
+                            Current housing, not reporting on credit may count
+                            as a trade if canceled checks/debits are provided.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Derogatory Credit
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            All derogatory revolving and installment accounts 60
+                            days delinquent within 4 years of closing requires a
+                            full explanation
+                          </li>
+                          <li>
+                            Non-title charge-offs and collections within three
+                            years and exceeding $5,000 (individually or
+                            aggregate) must be paid. Medical collections less
+                            than $15,000 are not required to be paid
+                          </li>
+                          <li>
+                            IRS tax payment plans approved by the IRS are
+                            permitted provided they are current and do not carry
+                            a lien on the property
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>
+                                A copy of the approved repayment plan is
+                                required
+                              </li>
+                              <li>
+                                A minimum of 2 months has elapsed on the plan
+                                and evidence of timely payments for the most
+                                recent 2 months is provided
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Credit/Housing Events
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>3 years seasoning is required</li>
+                          <li>
+                            Chapter 13 must be discharged or dismissed 2+ years
+                          </li>
+                          <li>Multiple bankruptcies are ineligible</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR No Ratio - DSCR and Rental Income Requirements */}
+            <div
+              id="investor-dscr-no-ratio-dscr-rental-income"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR No Ratio – DSCR and Rental Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        DSCR Ratio
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>0 to {"<"} .75</li>
+                          <li>
+                            Debt-Service Coverage Ratio = Gross Income / PITIA
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Lease and Occupancy Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            For purchase transactions, it is acceptable for the
+                            property to be vacant.
+                          </li>
+                          <li>
+                            Vacant properties on a refinance are not eligible.
+                          </li>
+                          <li>
+                            If the property is currently tenant occupied, the
+                            1007/1025 must reflect the terms of the lease.
+                          </li>
+                          <li>
+                            Gross market rents are calculated using the lesser
+                            of the lease amount or market rents from the
+                            1007/1025.
+                          </li>
+                          <li>A copy of the lease is not required.</li>
+                          <li>
+                            Property cannot be occupied by the borrower(s), any
+                            member of the borrower's LLC or any family member.
+                          </li>
+                          <li>Short term rentals are ineligible.</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR No Ratio - Asset and Reserve Requirements */}
+            <div
+              id="investor-dscr-no-ratio-asset-reserve-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR No Ratio - Asset and Reserve Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Assets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30-day asset verification required</li>
+                          <li>
+                            Business assets are permitted provided Borrower has
+                            100% ownership of the business.
+                          </li>
+                          <li>Atypical deposits do not need to be sourced</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Reserves
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Loan Amount {">"}=$75,000 to $500,000 – 3 months of
+                            PITIA
+                          </li>
+                          <li>
+                            Loan Amount {">"} $500,000 to $1,500,000 = 6 months
+                            of PITIA
+                          </li>
+                          <li>
+                            Cash Out Refinance may be used to satisfy
+                            requirement
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Gift Funds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Eligible after meeting minimum 10% borrower
+                            contribution regardless of LTV.
+                          </li>
+                          <li>Cannot be used to meet reserve requirements</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Investor DSCR No Ratio - Property Requirements */}
+            <div
+              id="investor-dscr-no-ratio-property-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                Investor DSCR No Ratio - Property Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Property Types
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="font-semibold mb-2">
+                          Single Family, PUD or Townhome (Attached or Detached)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>
+                            Single Family Residences with 1 or more accessory
+                            dwelling unit (ADU) or 2-4 units with 1 ADU are
+                            permitted if subject property is in a municipality
+                            that allows. The appraiser must specifically confirm
+                            compliance with local regulations and 2 similar
+                            comparables.
+                          </li>
+                          <li>
+                            Refinance:
+                            <ul className="list-disc pl-5 mt-1">
+                              <li>Max LTV 70%</li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p className="font-semibold mb-2">
+                          3-4 Units Restrictions
+                        </p>
+                        <p className="font-semibold mb-2">
+                          Condos (Warrantable and Non-Warrantable)
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-3">
+                          <li>Condominium leaseholds are ineligible</li>
+                        </ul>
+                        <p className="font-semibold mb-2">Condotel</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Ineligible</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rural Properties
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2">Not permitted</p>
+                        <p className="mb-2">
+                          Websites such as the below will be reviewed to analyze
+                          whether the property should be classified as rural and
+                          subject to rural guidelines.
+                        </p>
+                        <ul className="list-disc pl-5">
+                          <li>
+                            https://www.consumerfinance.gov/rural-or-underserved-tool/
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Appraisals
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>1 Full Appraisal is required</li>
+                          <li>
+                            Appraisal Review Product to be ordered on all loans
+                            with a FNMA SSR over 2.5
+                          </li>
+                          <li>
+                            C3 condition rating is generally required;
+                            Properties with a C4 rating must be sufficiently
+                            justified to determine marketability and acceptance.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Declining Markets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Declining markets, as identified by the appraiser,
+                        require a 5% LTV reduction off Matrix Max LTV, when{" "}
+                        {">"} 65% LTV
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Acreage
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max 2 acres; Acreage and land value must be typical and
+                        common for the subject's market.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          {/* End of Investor DSCR No Ratio */}
+
+          {/* DSCR Multi & Mixed */}
+          <div
+            id="dscr-multi-mixed-overview"
+            className="scroll-mt-20 mb-12 mt-16"
+          >
+            <h3 className="text-2xl font-semibold mb-4">
+              DSCR Multi & Mixed (5-10 Unit Multi, 2-8 Unit Mixed-Use) Overview
+            </h3>
+            <p className="text-sm leading-relaxed mb-6">
+              The DSCR Multi & Mixed Program is designed specifically for the
+              investors who want to use DSCR income for a multi-unit or mixed
+              use property. Refer to the DSCR Multi& Mixed Matrix for Matrix for
+              specific program requirements.
+            </p>
+
+            {/* DSCR Multi & Mixed - General Requirements */}
+            <div
+              id="dscr-multi-mixed-general-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Multi & Mixed - General Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Exceptions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Permitted
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Product Type
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>30 Year Fixed, 15 Year Fixed</li>
+                          <li>
+                            40 Year Fixed I/O (10 year I/O period, and remaining
+                            term fully amortizing)
+                          </li>
+                          <li>
+                            30 Year Fixed I/O (10 year I/O period, and remaining
+                            term fully amortizing)
+                          </li>
+                          <li>
+                            5/6 and 7/6 SOFR ARMs, 30 Year Term – Fully
+                            Amortizing
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interest Only
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max LTV: 75%
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Amounts
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Min: $250,000 and Max $3,000,000</li>
+                          <li>
+                            Loan sizes under $400,000 require a 5% reduction to
+                            LTV
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Interested Party Contributions
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">6%</td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Investment Properties (Business Purpose)
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Loan Purpose
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Purchase, Rate & Term Refinance, and Cash Out Refinance
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        2-1 Buydown
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Not permitted
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Cash-Out
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Max cash-out: $1,000,000
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Subordinate Financing
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Insurance Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            In addition to property and title insurance, Rent
+                            Loss Insurance for the subject property is required
+                            and must equal at least 6 months of PITIA.
+                          </li>
+                          <li>
+                            Blanket policies covering the subject property are
+                            permitted.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Escrow Waivers
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Prepayment Penalty
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Required where permitted. Refer to the "Business Purpose
+                        Licensing & PPP Restrictions" PDF in the Documents Tab
+                        in the Client Portal.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Age of Loan Documentation
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Credit: 120 days</li>
+                          <li>Assets: 90 days</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Multi & Mixed - Borrower Eligibility */}
+            <div
+              id="dscr-multi-mixed-borrower-eligibility"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Multi & Mixed - Borrower Eligibility
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-6 py-3 border-b border-border text-left font-semibold"></th>
+                      <th className="px-6 py-3 border-b border-border text-left font-semibold">
+                        Eligible:
+                      </th>
+                      <th className="px-6 py-3 border-b border-border text-left font-semibold">
+                        Ineligible:
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Borrower Eligibility
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>U.S. Citizens</li>
+                          <li>Permanent Resident Aliens</li>
+                          <li>Non-Permanent Resident Aliens</li>
+                          <li>Foreign Nationals</li>
+                        </ul>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>ITIN</li>
+                          <li>DACA</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        First Time Homebuyer (FTHB)
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Ineligible
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Investor Experience
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            First time investors are ineligible for Mixed-Use
+                            2-8 Units.
+                          </li>
+                          <li>
+                            Borrower must have a history of owning and managing
+                            commercial or residential real estate for at least 1
+                            year in the last 3 years
+                          </li>
+                          <li>
+                            First time investors are eligible on 5-10 Unit
+                            Residential properties with a 0x30x24 housing
+                            history or when the Primary Residence is owned free
+                            and clear.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Entity Vesting
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        Eligible
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground"></td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Foreign National
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Min DSCR &gt;= 1.00</li>
+                          <li>Foreign Credit is permitted.</li>
+                          <li>Reserves: 12 months PITIA</li>
+                        </ul>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <p className="mb-2 font-medium">LTV requirements:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            &le; $2,000,000 = Purch & Rate/Term: 70% LTV or
+                            Cash-Out: 65% LTV
+                          </li>
+                          <li>
+                            &gt; $2,000,000 - $2,500,000 = Purch & Rate/Term:
+                            65% LTV or Cash-Out: 60% LTV
+                          </li>
+                          <li>
+                            &gt; $2,500,000 - $3,000,000 = Purch & Rate/Term:
+                            60% LTV or Cash-Out: 55% LTV
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Multi & Mixed - Credit Requirements */}
+            <div
+              id="dscr-multi-mixed-credit-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Multi & Mixed - Credit Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Credit Score
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>Minimum credit score is 720</li>
+                          <li>
+                            The Representative Score is as follows:
+                            <ul className="list-circle pl-6 mt-1">
+                              <li>
+                                Middle of 3 scores or lower of 2 of all
+                                Borrowers
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Tradelines
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>All borrowers have 3 scores: or</li>
+                          <li>Minimum 2 open and reporting 24 months; or</li>
+                          <li>3 open and reporting 12-months.</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Housing History
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        0x30x24
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Credit / Housing Events
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        2 years seasoning is required
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Multi & Mixed - DSCR and Rental Income Requirements */}
+            <div
+              id="dscr-multi-mixed-dscr-rental-income"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Multi & Mixed – DSCR and Rental Income Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        DSCR Ratio
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Min 1.00</li>
+                          <li>
+                            Debt-Service Coverage Ratio = Gross Income / PITIA
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rental Income Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Use lower of Estimated market rent or lease
+                            agreement on a refinance.
+                          </li>
+                          <li>Purchases use the estimated market rent.</li>
+                          <li>
+                            For leases that have been converted month-to-month,
+                            provide 2 months bank statements to support rental
+                            income.
+                          </li>
+                          <li>
+                            Reduce qualifying rents by any management fee
+                            reflected on the appraisal report.
+                          </li>
+                          <li>
+                            2-8 Units Mixed Use:
+                            <ul className="list-circle pl-6 mt-1">
+                              <li>
+                                Income from commercial space must not exceed 49%
+                                of the total property income.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Lease Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            For Purchase, Rate & Term Refinance and Cash-Out
+                            transactions, all units must be either leased or in
+                            lease ready condition meaning the properties have
+                            been cleaned, no renovations or repairs to the
+                            properties are needed and the properties are
+                            immediately available to be leased to an eligible
+                            tenant.
+                          </li>
+                          <li>
+                            On purchase transactions, copies of the leases are
+                            not required.
+                          </li>
+                          <li>
+                            Properties with expired leases that have converted
+                            to month to month per the terms of the lease will
+                            require bank statements for the lesser of two months
+                            or the period after the lease expired.
+                          </li>
+                          <li>
+                            Corporate lease agreements are acceptable with lease
+                            terms consistent with typical market standards and
+                            will be subject to standard market rent
+                            verification.
+                          </li>
+                          <li>
+                            Lease agreements that allow single room occupancy or
+                            boarder leases are not permitted.
+                          </li>
+                          <li>
+                            Third party sale and leaseback agreements or
+                            contract for deed transactions will not be
+                            permitted.
+                          </li>
+                          <li>All leases must be in U.S. Dollars.</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Occupancy Requirements
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Vacant Unit(s) – Use 75% of the market rents to
+                            qualify.
+                          </li>
+                          <li>
+                            Max 1 vacancy on a refinance of a 2-3 Unit property.
+                          </li>
+                          <li>
+                            Max 2 vacancies on a refinance of a 4+ Unit
+                            property.
+                          </li>
+                          <li>
+                            On a purchase, and/or a refinance situation where a
+                            property was recently rehabbed, with evidence the
+                            property is currently listed for rent, it is not
+                            considered unleased, and it is permissible for all
+                            units to be vacant at the time of purchase or
+                            refinance, provided all units are in lease-ready
+                            condition.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Eligible Tenants
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Neither the borrower(s) nor the borrower's immediate
+                            family shall at any time occupy the residential
+                            units.
+                          </li>
+                          <li>
+                            Borrowers must attest that all residential tenants
+                            are non-borrower affiliated.
+                          </li>
+                          <li>
+                            Commercial units may be occupied by the borrower's
+                            business, however in that instance the lesser of
+                            market rents or the amount of rent from the lease
+                            will be used when calculating the DSCR for the
+                            borrower occupied units.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Multi & Mixed - Asset and Reserve Requirements */}
+            <div
+              id="dscr-multi-mixed-asset-reserve-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Multi & Mixed - Asset and Reserve Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4">
+                        Assets
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        30-day asset verification required
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Reserves
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Loan Amt &le; $1,500,000: 6 Months PITIA</li>
+                          <li>
+                            Loan Amt &gt; $1,500,000 - $2,000,000: 9 Months
+                            PITIA
+                          </li>
+                          <li>
+                            Loan Amt &gt; $2,000,000 - $2,500,000: 12 Months
+                            PITIA
+                          </li>
+                          <li>
+                            Loan Amt &gt; $2,500,000 - $3,000,000 12 Months
+                            PITIA
+                          </li>
+                          <li>
+                            Cash Out Refinance may be used to meet reserve
+                            requirements
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Gift Funds
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Eligible after meeting min 10% borrower contribution
+                            regardless of LTV.
+                          </li>
+                          <li>Cannot be used to meet reserve requirements</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* DSCR Multi & Mixed - Property Requirements */}
+            <div
+              id="dscr-multi-mixed-property-requirements"
+              className="mb-8 scroll-mt-20"
+            >
+              <h4 className="text-lg font-semibold mb-4 text-gray-900">
+                DSCR Multi & Mixed - Property Requirements
+              </h4>
+
+              <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-6 py-3 border-b border-border text-left font-semibold">
+                        Property Type
+                      </th>
+                      <th className="px-6 py-3 border-b border-border text-left font-semibold">
+                        Multi Family and Mixed-Use
+                      </th>
+                      <th className="px-6 py-3 border-b border-border text-left font-semibold"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/4"></td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>Residential 5-10 Units</li>
+                          <li>Mixed Use 2-8 units.</li>
+                          <li>
+                            For properties with less than 5 units, at least 1
+                            unit must be commercial.
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>2-3 Units: Max 1 commercial unit</li>
+                              <li>4-5 Units: Max 2 commercial units</li>
+                              <li>6-8 Units: Max 3 commercial units</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Rural Properties
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        <p className="mb-2">Ineligible</p>
+                        <p className="mb-2">
+                          Websites such as the below will be reviewed to analyze
+                          whether the property should be classified as rural and
+                          subject to rural guidelines.
+                        </p>
+                        <ul className="list-circle pl-6">
+                          <li>
+                            https://www.consumerfinance.gov/rural-or-underserved-tool/
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Property Requirements
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Minimum 400 square feet per unit</li>
+                          <li>
+                            Must be accessible for year-round residential use
+                          </li>
+                          <li>
+                            Each residential unit must contain a full kitchen
+                            and bath
+                          </li>
+                          <li>
+                            Represent the highest and best use of the property
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Prohibited Property Use
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        <p className="mb-2">
+                          Properties that contain one or more commercial
+                          establishments in any of the following businesses are
+                          prohibited:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            Adult Activities (including bars where food is not
+                            served and / or any establishment where one must be
+                            an Adult to enter).
+                          </li>
+                          <li>
+                            Any activity not permitted by law, ordinance, or
+                            regulation.
+                          </li>
+                          <li>Day care or childcare.</li>
+                          <li>Gambling activities.</li>
+                          <li>Manufacturing, distribution, and warehouse.</li>
+                          <li>Marijuana related activities.</li>
+                          <li>
+                            Medical activities not under the supervisor of a
+                            licensed doctor, dentist, chiropractor,
+                            psychologist, nurse practitioner, or nutritionist.
+                          </li>
+                          <li>Transient boarding, rooming house or similar.</li>
+                          <li>
+                            Vehicle repair or vehicle related included garages.
+                          </li>
+                          <li>Dry Cleaners or laundromats.</li>
+                          <li>
+                            Other property uses outside of character for the
+                            neighborhood in which the property is located, which
+                            present higher than ordinary risks for safety, or
+                            which are controversial within their community.
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Property Condition
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>No fair or poor ratings</li>
+                          <li>
+                            No environmental issues (Storage or use of hazardous
+                            material, ex. Dry Cleaners, Laundromat)
+                          </li>
+                          <li>
+                            No health or safety issues as noted by the appraiser
+                            (ex. Broken windows, stairs, etc.)
+                          </li>
+                          <li>
+                            No excessive deferred maintenance that could become
+                            a health or safety issue for tenants.
+                          </li>
+                          <li>
+                            No structural deferred maintenance (ex. Foundation,
+                            roof, electrical, plumbing)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        For Sale by Owner
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        Ineligible
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Appraisals
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        <p className="mb-2 font-medium">
+                          Residential 5-10 units:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>FHLMC 71A</li>
+                          <li>FHLMC 71B for loan amounts &lt; $750,000</li>
+                          <li>Narrative report</li>
+                        </ul>
+                        <p className="mb-2 font-medium">Mixed-Use 2-8 Units:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>FHLMC 71A</li>
+                          <li>FHLMC 71B for loan amounts &lt; $750,000</li>
+                          <li>
+                            General Purpose Commercial Forms (ex. GP Commercial
+                            Summary Form)
+                          </li>
+                          <li>Narrative report</li>
+                        </ul>
+                        <p className="mb-2 font-medium">Second Appraisal:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>
+                            Loans &gt; $2,000,000 require a second appraisal
+                            unless a 71A or Commercial Narrative report is
+                            provided.
+                          </li>
+                        </ul>
+                        <p className="mb-2 font-medium">Appraisal Review:</p>
+                        <ul className="list-disc pl-5 space-y-1 mb-4">
+                          <li>
+                            BPO required on all transactions except for those
+                            including two full appraisals.
+                          </li>
+                        </ul>
+                        <p className="mb-2 font-medium">
+                          Appraisal Requirements:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            The following are required with each report:
+                            <ul className="list-circle pl-6 mt-1 space-y-1">
+                              <li>Full Interior Inspection of each unit</li>
+                              <li>Rent roll</li>
+                              <li>Income and Expense Statement</li>
+                              <li>
+                                Photos of subject including exterior/interior
+                                and street scene
+                              </li>
+                              <li>Aerial photo</li>
+                              <li>Sketch or floor plan of typical units.</li>
+                              <li>Map</li>
+                              <li>Appraiser qualifications</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Transferred Appraisals
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        Not permitted
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Age of Appraisal
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        120 Days. Appraisals are not permitted to be extended. A
+                        new report is required after 120 days.
+                      </td>
+                    </tr>
+                    <tr className="border-b border-border">
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Declining Markets
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        Declining markets, as identified by the appraiser,
+                        require a 5% LTV reduction off Matrix Max LTV, when &gt;
+                        65% LTV.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                        Acreage
+                      </td>
+                      <td
+                        className="px-6 py-4 text-muted-foreground"
+                        colSpan={2}
+                      >
+                        Max 2 acres; Acreage and land value must be typical and
+                        common for the subject's market.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          {/* End of DSCR Multi & Mixed */}
         </section>
 
         <section id="general-underwriting" className="mb-16 scroll-mt-20">
           <h2 className="text-3xl font-bold border-b-2 border-gray-200 pb-4 mb-6">
             General Underwriting Requirements
           </h2>
-          <p className="text-sm">Content from PDF...</p>
+
+          <div className="prose prose-sm max-w-none space-y-6">
+            <p className="text-sm leading-relaxed">
+              These NQM Funding, LLC Non-QM and DSCR Underwriting Guidelines
+              ("the Guidelines"), coupled with each of the Program matrices,
+              provide the requirements for NQM Lending, LLC to close or purchase
+              a loan.
+            </p>
+          </div>
+
+          {/* Age of Loan Documentation */}
+          <div
+            id="age-of-loan-documentation"
+            className="mt-8 mb-8 scroll-mt-20"
+          >
+            <h3 className="text-xl font-semibold mb-4">
+              Age of Loan Documentation
+            </h3>
+            <div className="text-sm leading-relaxed space-y-2">
+              <p>
+                Credit reports must be dated within 120 days of the note date.
+              </p>
+              <p>
+                Income and Asset Documentation must be dated within 90 days of
+                the note date.
+              </p>
+            </div>
+          </div>
+
+          {/* Mortgage Insurance */}
+          <div id="mortgage-insurance" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Mortgage Insurance</h3>
+            <p className="text-sm leading-relaxed">
+              Mortgage Insurance is not required on any of our Programs.
+            </p>
+          </div>
+
+          {/* Daily Simple Interest */}
+          <div id="daily-simple-interest" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">
+              Daily Simple Interest
+            </h3>
+            <p className="text-sm leading-relaxed">
+              Loans where interested calculated based on daily simple interest
+              are not eligible on any of our Programs.
+            </p>
+          </div>
+
+          {/* Geographic Restrictions */}
+          <div id="geographic-restrictions" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">
+              Geographic Restrictions
+            </h3>
+
+            <div className="rounded-lg border border-border bg-card overflow-hidden shadow-sm mb-6">
+              <table className="w-full text-sm border-collapse">
+                <tbody>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50 w-1/6">
+                      DC
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      Investment Properties are ineligible, including DSCR.
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      FL
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>
+                          Foreign Nationals and Non-Permanent Resident Aliens
+                          from the Peoples Republic of China are ineligible.
+                        </li>
+                        <li>
+                          Charlotte, Lee, Hendry, and Glades Counties:
+                          Investment Properties are ineligible, including DSCR.
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      HI
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      Permitted for Delegated Correspondents only. Ineligible
+                      for Non-Delegated Correspondent and Wholesale.
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      IL
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>Cook County: all occupancies are ineligible.</li>
+                        <li>
+                          Kane, Peoria and Will Counties: Ineligible for TRID
+                          loans – Restriction does not apply to Correspondents.
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      IN
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      Indianapolis: Investment Properties are ineligible,
+                      including DSCR.
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      MD
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      Baltimore City: all occupancies are ineligible.
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      MS
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      Closed end second liens ineligible.
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      NJ
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>Closed end second liens are ineligible.</li>
+                        <li>
+                          Patterson: Investment Properties are ineligible,
+                          including DSCR.
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      NY
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <p className="mb-3">
+                        Effective July 29, 2025, NQMF has temporarily halted
+                        wholesale originations for all TRID loans in the state
+                        of New York. Please note that correspondent loans
+                        (delegated and non-delegated) and business purpose loans
+                        remain unaffected.
+                      </p>
+                      <p className="mb-2 font-medium">
+                        All originations are restricted as follows:
+                      </p>
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>Closed end second liens are ineligible.</li>
+                        <li>
+                          Brooklyn: Effective July 29, 2025, Investment
+                          Properties are ineligible, including DSCR.
+                        </li>
+                        <li>
+                          Orange County: Effective July 2, 2025, all occupancies
+                          are ineligible.
+                        </li>
+                        <li>
+                          No 5/6 ARMs on Investment Property loans below the
+                          FNMA loan limit.
+                          <ul className="list-circle pl-6 mt-1">
+                            <li>See NY Subprime section for requirements.</li>
+                          </ul>
+                        </li>
+                        <li>
+                          Short Term Rentals (STRs) are ineligible in the five
+                          (5) New York City Boroughs (Manhattan, Brooklyn, The
+                          Bronx, Queens and Staten Island).
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 font-semibold text-foreground bg-muted/50">
+                      TX
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>Second Liens are ineligible.</li>
+                        <li>
+                          Lubbock: Investment Properties are ineligible,
+                          including DSCR.
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Alternative Loan Program Analysis */}
+          <div
+            id="alternative-loan-program-analysis"
+            className="mb-8 scroll-mt-20"
+          >
+            <h3 className="text-xl font-semibold mb-4">
+              Alternative Loan Program Analysis
+            </h3>
+            <p className="text-sm leading-relaxed mb-3">
+              Loan applications are to be reviewed for approval under a
+              traditional conventional conforming or FHA loan Program available
+              to the Client. The NQM Funding, LLC Alternative Program Analysis
+              Form, or something similar, must be provided to ensure borrowers
+              are proceeding under the appropriate loan Program.
+            </p>
+            <p className="text-sm font-semibold mb-2">
+              The following loans are exempt from this requirement:
+            </p>
+            <ul className="list-disc pl-6 space-y-1 text-sm">
+              <li>Business Purpose Loans</li>
+              <li>Foreign National Loans</li>
+              <li>Loans qualified using Alternative Documentation</li>
+            </ul>
+          </div>
+
+          {/* Escrow Waivers */}
+          <div id="escrow-waivers-general" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Escrow Waivers</h3>
+            <p className="text-sm font-semibold mb-2">
+              Waiving escrows is permitted as follows:
+            </p>
+            <ul className="list-disc pl-6 space-y-1 text-sm mb-4">
+              <li>Non-HPML loans</li>
+              <li>0x30x12 housing/rental history</li>
+              <li>
+                Flex Supreme: O/O and 2nd Homes, 680 Min Score up to 80% LTV
+              </li>
+              <li>
+                Flex Select: O/O and 2nd Homes, 660 Min Score up to 80% LTV
+              </li>
+              <li>
+                CA: In addition to the above, escrows may be waived up to a 90%
+                LTV with a Min 700 Score
+              </li>
+              <li>
+                Investment Properties: 660 Min Score. Not permitted on No Ratio
+                or DSCR Mixed/Multi loans.
+              </li>
+            </ul>
+            <p className="text-sm font-semibold mb-2">Flood Insurance:</p>
+            <ul className="list-disc pl-6 space-y-2 text-sm">
+              <li>
+                Flood Insurance premiums for properties located in zones A or V
+                must be escrowed. It is permissible to waive taxes and insurance
+                escrows in these instances provided the above requirements are
+                met and the loan is priced with an escrow waiver.
+              </li>
+              <li>
+                In addition, elective flood policies are not required to be
+                escrowed.
+              </li>
+            </ul>
+          </div>
+
+          {/* Exposure */}
+          <div id="exposure" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Exposure</h3>
+            <p className="text-sm leading-relaxed mb-3">
+              NQMF tracks exposure to individual borrowers, which includes
+              entities and guarantors, by social security number or EIN number,
+              and applies the following exposure limits:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-sm">
+              <li>
+                All Programs except Investor DSCR – No Ratio, the limits are
+                capped at the lesser of the amounts listed below.
+                <ul className="list-circle pl-6 mt-1 space-y-1">
+                  <li>Max $10M or 10 loans in aggregate</li>
+                  <li>
+                    Max $5M or 5 any cash-out transaction & DSCR Multi- Mixed
+                    Program loans.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Investor DSCR No Ratio:
+                <ul className="list-circle pl-6 mt-1 space-y-1">
+                  <li>Max $7.5M or 10 loans in aggregate</li>
+                  <li>Maximum $5M or 5 cash-out transactions</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          {/* Exceptions */}
+          <div id="exceptions" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Exceptions</h3>
+            <p className="text-sm leading-relaxed mb-3">
+              Exceptions to published guidelines are considered on a
+              case-by-case basis. Exception Requests must be submitted in
+              writing using the NQM Funding, LLC (NQMF) Exception Request Form
+              and must include a minimum of two compensating factors.
+            </p>
+            <p className="text-sm leading-relaxed mb-3">
+              It is in the sole discretion of NQMF to approve or deny any
+              exception request. Approval of the exception does not guarantee
+              final loan approval. The loan must still undergo a full
+              underwriting review for final approval.
+            </p>
+            <p className="text-sm leading-relaxed mb-3">
+              Credit committee may grant a maximum 5% LTV exception but never
+              more than 5% above the related cohort (i.e., credit score, loan
+              amount and LTV) as per the related Program Matrix.
+            </p>
+            <p className="text-sm leading-relaxed mb-4">
+              Exceptions are not eligible for Flex Supreme, DSCR Supreme, Flex
+              Select - P&L Only, Flex Select Express (DU), Super Jumbo and the
+              Second Lien Select Programs.
+            </p>
+            <h4 className="text-md font-semibold mb-2">
+              Top Compensating Factors for Exception Consideration
+            </h4>
+            <ul className="list-disc pl-6 space-y-1 text-sm">
+              <li>Significant Gross Disposable Income</li>
+              <li>DSCR Ratio Above 1.15%</li>
+              <li>Significant Reserves (beyond requirements)</li>
+              <li>DTI well below Program max</li>
+              <li>Lengthy & deep credit history of solid performance</li>
+              <li>
+                Demonstrated capacity to carry a heavy debt load with on time
+                performance
+              </li>
+              <li>
+                Credit score well above Program minimum with solid performance
+              </li>
+              <li>LTV well below Program Max</li>
+              <li>Long, Clean Mortgage History</li>
+              <li>Significant time on the same job</li>
+            </ul>
+          </div>
+
+          {/* Compliance */}
+          <div id="compliance" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Compliance</h3>
+
+            {/* HPML */}
+            <div id="hpml" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">
+                Higher Priced Mortgage Loans (HPML)
+              </h4>
+              <p className="text-sm leading-relaxed mb-3">
+                Higher Priced Mortgage Loans are permitted with certain
+                restrictions:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-sm mb-4">
+                <li>Escrow accounts are required.</li>
+                <li>
+                  A Full Interior/Exterior Appraisal is required to include a
+                  certification from the appraiser indicating that the appraisal
+                  was prepared in accordance with the requirements of title XI
+                  of the Financial Institutions Reform, Recovery and Enforcement
+                  Act of 1989, as amended (12 U.S.C. 3331 ET SEQ.), and any
+                  implementing regulations.
+                </li>
+                <li>
+                  On a purchase transaction, a second appraisal is required if:
+                  <ul className="list-circle pl-6 mt-2 space-y-1">
+                    <li>
+                      If the seller acquired the property within the past 90
+                      days and the new purchase price is more than 10% of the
+                      seller's acquisition price OR
+                    </li>
+                    <li>
+                      If the seller acquired the property within the past 91 to
+                      180 days and the new purchase price is more than 20% of
+                      the seller's acquisition price.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  The second appraisal must be obtained prior to the note date.
+                  <ul className="list-circle pl-6 mt-1 space-y-1">
+                    <li>
+                      The second appraisal must be provided to the borrower
+                      (standard delivery requirements apply).
+                    </li>
+                    <li>
+                      The cost of the second appraisal may not be passed along
+                      to the borrower.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Note that the timelines are measured from the date the seller
+                  became the legal owner of the property and the date all
+                  parties signed the purchase agreement.
+                </li>
+                <li>
+                  If the seller acquired the property through the following
+                  methods, a second appraisal is not required:
+                  <ul className="list-circle pl-6 mt-2 space-y-1">
+                    <li>Bridge loans (for 12 months or less),</li>
+                    <li>Reverse mortgages,</li>
+                    <li>
+                      Loans for the initial construction of a dwelling – note
+                      that this is for a true construction loan, not for the end
+                      loan purchase of a newly constructed property,
+                    </li>
+                    <li>A local, state, or federal government agency,</li>
+                    <li>Through a foreclosure or deed in lieu, or</li>
+                    <li>
+                      Inheritance or through a dissolution of marriage, civil
+                      union or domestic partnership, or through the partition of
+                      the seller's joint or marital assets.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            {/* State and Federal High Cost Loans */}
+            <div id="state-federal-high-cost" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">
+                State and Federal High Cost Loans
+              </h4>
+              <p className="text-sm leading-relaxed mb-3">
+                NQM Funding, LLC does not permit high cost mortgages, except for
+                certain Second Lien loans. See Second Lien Select Program -
+                General Requirements for restrictions and requirements.
+              </p>
+              <p className="text-sm leading-relaxed mb-3">
+                In addition, except for loans that comply with New York Subprime
+                regulations, any loan that meets the definition of "high cost,"
+                "high risk," "covered," "subprime" or any similar designation
+                under state or local law is not permitted.
+              </p>
+              <p className="text-sm leading-relaxed">
+                States may impose different definitions of points and fees,
+                rate/APR, or prepayment penalties than apply under HOEPA. States
+                may also use different triggers in each category for determining
+                whether a loan will be a "high-cost mortgage" (or equivalent
+                terms) under state law. As a matter of policy, NQM Funding, LLC,
+                does not purchase or originate 1st Lien loans defined as
+                high-cost mortgages (or equivalent terms) under Federal or state
+                law, regardless of the basis for the loan's treatment as such.
+              </p>
+            </div>
+
+            {/* NY Subprime Loans */}
+            <div id="ny-subprime" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">
+                New York Subprime Loans
+              </h4>
+              <p className="text-sm leading-relaxed mb-3">
+                NY Subprime loans will be eligible provided ALL the following
+                requirements are met:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-sm">
+                <li>
+                  Disclosures requirements:
+                  <ul className="list-circle pl-6 mt-1 space-y-1">
+                    <li>Borrower's Choice of Attorney Disclosure</li>
+                    <li>
+                      Consumer Caution and Homeownership Counseling Notice
+                    </li>
+                    <li>
+                      NYSDFS List of Approved Housing Counselors (no signature
+                      required)
+                    </li>
+                    <li>
+                      All the above must be delivered to the borrower prior to
+                      Closing.
+                    </li>
+                    <li>
+                      Signature on the first two (2) documents will be required
+                      or if mailed out, evidence of mailing at least three (3)
+                      days prior to Closing.
+                    </li>
+                    <li>
+                      Signatures/evidence of delivery must be for all borrowers
+                      on the loan.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Mavent:
+                  <ul className="list-circle pl-6 mt-1 space-y-1">
+                    <li>
+                      Loan must NOT fail the High Cost (NY Part 41) test. NQM
+                      Funding, LLC does not allow NY High-Cost Loans.
+                    </li>
+                    <li>
+                      Loans must NOT fail the High Cost (NY) test. NQM Funding,
+                      LLC does not allow NY High-Cost Loans.
+                      <ul className="list-square pl-6 mt-1">
+                        <li>Note, these are two separate Mavent tests.</li>
+                      </ul>
+                    </li>
+                    <li>
+                      Higher Rate review is where the subprime designation will
+                      show up:
+                      <ul className="list-square pl-6 mt-1 space-y-1">
+                        <li>
+                          A "fail" is permitted for the Fixed Loan &gt; 15 Year
+                          Term test (63900)
+                        </li>
+                        <li>
+                          ALL other tests under the Higher-Rate Review must PASS
+                          for the loan to be eligible.
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Closing Documentation Requirements:
+                  <ul className="list-circle pl-6 mt-1">
+                    <li>
+                      Must include a legend on the top of the mortgage in
+                      12-point/font type stating, "This mortgage is a subprime
+                      home loan subject to New York's subprime home loan laws."
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Loan Program Requirements:
+                  <ul className="list-circle pl-6 mt-1 space-y-1">
+                    <li>Fixed Rate</li>
+                    <li>No PPP</li>
+                    <li>Escrow impounds for taxes /insurance are required.</li>
+                    <li>
+                      Refinance loans:
+                      <ul className="list-square pl-6 mt-1 space-y-1">
+                        <li>Must have a documented sufficient NTB, AND</li>
+                        <li>
+                          Must not be a flip of a loan originated within 6
+                          months, AND
+                        </li>
+                        <li>
+                          May not pay off a special mortgage guaranteed through
+                          a state, tribal or local government, or nonprofit
+                          organization, which either bears a below-market
+                          interest rate at the time of origination, or has
+                          nonstandard payment terms beneficial to the borrower,
+                          and where, because of refinancing, the borrower will
+                          lose 1 or more of the special benefits.
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Correspondent Clients:
+                  <ul className="list-circle pl-6 mt-1">
+                    <li>
+                      Must ensure the correct Disclosures are generated with
+                      their Disclosure Package. Fillable PDFs of the required NY
+                      Subprime Disclosure are posted on the Portal.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Prepayment Penalties, Points, and Fees */}
+          <div
+            id="prepayment-penalties-points-fees"
+            className="mb-8 scroll-mt-20"
+          >
+            <h3 className="text-xl font-semibold mb-4">
+              Prepayment Penalties, Points, and Fees
+            </h3>
+            <p className="text-sm leading-relaxed mb-3">
+              Total points, fees, and APR may not exceed current state and
+              federal high-cost thresholds. In addition, except for Investment
+              Property transactions, points and fees may not exceed the lesser
+              of state regulations or 5%, excluding prepayment penalties.
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-sm mb-4">
+              <li>
+                Prepayment penalties are required on Investment Property
+                transactions where permitted by applicable local law.
+              </li>
+              <li>
+                Correspondents may treat Investment Properties as Non-TRID
+                however, an LLPA will be charged for not having a prepayment
+                penalty as per the Rate Sheet.
+              </li>
+              <li>
+                Buydown options are available to reduce or remove prepayment
+                penalties. Refer to the appropriate NQM Funding, LLC Rate Sheet
+                for details.
+              </li>
+              <li>
+                Prepayment penalties on Primary Residence and Second Home
+                transactions are prohibited.
+              </li>
+            </ul>
+            <p className="text-sm leading-relaxed mb-3">
+              <strong>Note:</strong> States may impose different definitions of
+              points and fees, rate/APR, or prepayment penalties than apply
+              under HOEPA. States may also use different triggers in each
+              category for determining whether a loan will be a "high-cost
+              mortgage" (or equivalent terms) under state law. As a matter of
+              policy, NQM Funding, LLC, does not purchase loans defined as
+              high-cost mortgages (or equivalent terms) under Federal or state
+              law, regardless of the basis for the loan's treatment as such.
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-sm">
+              <li>
+                Refer to the Business Purpose Licensing & PPP Restrictions PDF
+                in the Documents Tab of our Client Portal for all state
+                requirements.
+              </li>
+              <li>
+                Refer to the respective rate sheet for minimum requirements for
+                prepayment penalties.
+              </li>
+            </ul>
+          </div>
+
+          {/* Principal Curtailment */}
+          <div id="principal-curtailment" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">
+              Principal Curtailment
+            </h3>
+            <p className="text-sm leading-relaxed mb-3">
+              A curtailment may be applied to refund the overpayment of fees or
+              charges paid by the borrower, in any amount.
+            </p>
+            <p className="text-sm leading-relaxed">
+              If the borrower receives more cash back than is permitted for Cash
+              Out Refinance refinances, a curtailment to reduce the amount of
+              cash back to the borrower to bring the loan in compliance may be
+              applied however the maximum amount of the curtailment cannot
+              exceed the lesser of $2,500 or 2% of the original loan amount.
+            </p>
+          </div>
+
+          {/* Maximum Interest Credit */}
+          <div id="maximum-interest-credit" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">
+              Maximum Interest Credit
+            </h3>
+            <p className="text-sm leading-relaxed">
+              NQM Funding allows an interest credit through the 5th of the
+              month.
+            </p>
+          </div>
+
+          {/* Occupancy Types */}
+          <div id="occupancy-types" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Occupancy Types</h3>
+
+            {/* Primary Residence */}
+            <div id="primary-residence-occupancy" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">Primary Residence</h4>
+              <p className="text-sm leading-relaxed mb-3">
+                A Primary Residence (or owner-occupied property) is a dwelling
+                occupied by the borrower as his or her principal residence.
+              </p>
+              <p className="text-sm leading-relaxed mb-2">
+                To qualify as a Primary Residence, the transaction must meet
+                each of the following criteria:
+              </p>
+              <ul className="list-disc pl-6 space-y-1 text-sm">
+                <li>
+                  Property is in the same general area as the borrower's
+                  employment.
+                </li>
+                <li>
+                  Borrower intends to occupy the subject property for the
+                  majority of the year.
+                </li>
+                <li>
+                  Property possesses physical characteristics that accommodate
+                  the borrower's family.
+                </li>
+              </ul>
+            </div>
+
+            {/* Second Home */}
+            <div id="second-home-occupancy" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">Second Home</h4>
+              <p className="text-sm leading-relaxed mb-3">
+                A Second Home is a dwelling occupied by the borrower in addition
+                to their Primary Residence (may also be referred to as a
+                vacation home). Second homes are restricted to a 1-unit
+                dwelling.
+              </p>
+              <p className="text-sm leading-relaxed mb-2">
+                Typical Second Homes should meet the following criteria:
+              </p>
+              <ul className="list-disc pl-6 space-y-1 text-sm">
+                <li>
+                  Be located a reasonable distance away from the borrower's
+                  Primary Residence.
+                </li>
+                <li>
+                  Must be occupied by the borrower or members of the borrower's
+                  family for a portion of the year.
+                </li>
+                <li>Suitable for year-round occupancy</li>
+                <li>Borrower must have exclusive control over the property.</li>
+                <li>
+                  Must not be subject to any timeshare arrangements, rental
+                  pools or other agreements which require the borrower to rent
+                  the subject property or otherwise give control of the subject
+                  property to a management firm.
+                </li>
+              </ul>
+            </div>
+
+            {/* Investment Property & Business Purpose */}
+            <div id="investment-property-occupancy" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">
+                Investment Property & Business Purpose Loans
+              </h4>
+              <p className="text-sm leading-relaxed mb-3">
+                An Investment Property (or non-owner-occupied property) is an
+                income-producing property that the borrower does not occupy.
+              </p>
+              <p className="text-sm leading-relaxed mb-3">
+                A business purpose loan is an Investment Property where funds
+                are used solely for business purposes and is considered a
+                Non-TRID transaction. The Property must not and cannot be
+                occupied by a borrower, any member of the borrower's LLC, or any
+                family member.
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-sm">
+                <li>
+                  Retail / Wholesale
+                  <ul className="list-circle pl-6 mt-1 space-y-1">
+                    <li>
+                      Investment properties and all DSCR loans must be Business
+                      Purpose and processed as non-TRID transactions.
+                    </li>
+                    <li>
+                      The Business Rider to the Mortgage/Deed of Trust must be
+                      executed at closing.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Correspondent
+                  <ul className="list-circle pl-6 mt-1">
+                    <li>
+                      Loans may be processed as TRID or non-TRID transactions
+                      (Business Purpose Loans).
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Business Purpose Forms
+                  <ul className="list-circle pl-6 mt-1">
+                    <li>
+                      Business Purpose & Occupancy Affidavit is required on all
+                      Business Purpose loans (all borrowers are required to sign
+                      to declare that the property is, or will be, for
+                      commercial business or investment purpose only).
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Transaction Types */}
+          <div id="transaction-types" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Transaction Types</h3>
+
+            {/* Purchase */}
+            <div id="purchase-transaction" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">Purchase</h4>
+              <p className="text-sm leading-relaxed mb-3">
+                A purchase transaction is one which allows a buyer to acquire a
+                property from a seller. A copy of the fully executed purchase
+                contract and all attachments or addenda is required.
+              </p>
+              <p className="text-sm leading-relaxed mb-3">
+                The lesser of the purchase price or appraised value of the
+                subject property is used to calculate the loan-to-value.
+              </p>
+              <p className="text-sm leading-relaxed">
+                An assignment of the purchase contract is not permitted unless
+                the individual assigning the contract is assigning the rights to
+                an entity in which the individual has an ownership interest.
+              </p>
+            </div>
+
+            {/* Refinance General */}
+            <div id="refinance-general" className="mb-6">
+              <h4 className="text-lg font-semibold mb-3">Refinance General</h4>
+              <p className="text-sm leading-relaxed mb-3">
+                Rate & Term Refinance, cash-out refinance, and debt
+                consolidation transactions are allowed.
+              </p>
+              <p className="text-sm leading-relaxed">
+                Debt Consolidation available on Flex Select only. See Debt
+                Consolidation.
+              </p>
+            </div>
+          </div>
+
+          {/* Benefit to Borrower */}
+          <div id="benefit-to-borrower" className="mb-8 scroll-mt-20">
+            <h3 className="text-xl font-semibold mb-4">Benefit to Borrower</h3>
+            <p className="text-sm leading-relaxed mb-3">
+              In keeping with the commitment of responsible lending, all Primary
+              Residence and Second Home refinance transactions must have a
+              measurable benefit to the borrower.
+            </p>
+            <p className="text-sm leading-relaxed mb-2">
+              When determining the benefit on a refinance transaction, one or
+              more of the following must exist to support the benefit to the
+              borrower:
+            </p>
+            <ul className="list-disc pl-6 space-y-1 text-sm mb-3">
+              <li>Balloon payoff</li>
+              <li>Title transfer</li>
+              <li>Property retention</li>
+              <li>Rate reduction</li>
+              <li>P&I reduction</li>
+              <li>Debt reduction</li>
+              <li>Uncontrolled cash-out</li>
+            </ul>
+            <p className="text-sm leading-relaxed">
+              State-specific and/or federal benefit to borrower compliance
+              requirements must be adhered to.
+            </p>
+          </div>
         </section>
 
         <section id="property-considerations" className="mb-16 scroll-mt-20">
