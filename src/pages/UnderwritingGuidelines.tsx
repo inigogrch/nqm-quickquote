@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { FileText, ExternalLink, Download, BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -9,13 +9,23 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 const UnderwritingGuidelines = () => {
   const [activeTocPage, setActiveTocPage] = useState(1);
+  const [activeTocAnchor, setActiveTocAnchor] = useState<string | null>(
+    "title-page"
+  );
   const [visiblePage, setVisiblePage] = useState(1);
   const [numPages, setNumPages] = useState<number>(0);
+  const [renderedPages, setRenderedPages] = useState<Set<number>>(
+    new Set([1, 2, 3, 4, 5])
+  );
   const tocRef = useRef<HTMLDivElement>(null);
   const pdfContainerRef = useRef<HTMLDivElement>(null);
   const pendingScrollRef = useRef<{ page: number; anchor?: string } | null>(
     null
   );
+  const isNavigatingRef = useRef(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const pageHeightRef = useRef(1200); // Estimated page height
+  const renderedPagesCountRef = useRef(0); // Track how many pages have rendered
 
   const pdfUrl = "/guidelines/underwriting-guidelines.pdf";
 
@@ -27,68 +37,236 @@ const UnderwritingGuidelines = () => {
     if (anchor) {
       const section = sections.find((s) => s.anchor === anchor);
       if (section) {
+        // Prevent auto-updating anchor during initial navigation
+        isNavigatingRef.current = true;
         setActiveTocPage(section.page);
+        setActiveTocAnchor(section.anchor);
         setVisiblePage(section.page);
         pendingScrollRef.current = { page: section.page, anchor };
+
+        // Ensure the target page and surrounding pages are rendered
+        setRenderedPages((prev) => {
+          const newSet = new Set(prev);
+          for (
+            let i = Math.max(1, section.page - 2);
+            i <= Math.min(195, section.page + 2);
+            i++
+          ) {
+            newSet.add(i);
+          }
+          return newSet;
+        });
+
+        // Clear navigation flag after states are set
+        setTimeout(() => {
+          isNavigatingRef.current = false;
+        }, 1000);
       }
     } else if (page) {
       const pageNum = parseInt(page);
+      isNavigatingRef.current = true;
       setActiveTocPage(pageNum);
       setVisiblePage(pageNum);
+      // Set anchor to the first section on this page
+      const firstSectionOnPage = sections.find((s) => s.page === pageNum);
+      setActiveTocAnchor(firstSectionOnPage?.anchor || null);
       pendingScrollRef.current = { page: pageNum };
+
+      // Ensure the target page and surrounding pages are rendered
+      setRenderedPages((prev) => {
+        const newSet = new Set(prev);
+        for (
+          let i = Math.max(1, pageNum - 2);
+          i <= Math.min(195, pageNum + 2);
+          i++
+        ) {
+          newSet.add(i);
+        }
+        return newSet;
+      });
+
+      // Clear navigation flag after states are set
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+      }, 1000);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount to check URL params
 
   const goToPage = (page: number, anchor?: string) => {
     setActiveTocPage(page);
+    setActiveTocAnchor(anchor || null);
+    isNavigatingRef.current = true;
+
+    // Ensure the target page is rendered before scrolling
+    setRenderedPages((prev) => {
+      const newSet = new Set(prev);
+      for (
+        let i = Math.max(1, page - 2);
+        i <= Math.min(numPages || 195, page + 2);
+        i++
+      ) {
+        newSet.add(i);
+      }
+      return newSet;
+    });
+
     if (anchor) {
       window.history.pushState({}, "", `?anchor=${anchor}`);
     } else {
       window.history.pushState({}, "", `?page=${page}`);
     }
 
-    const pageElement = pdfContainerRef.current?.querySelector(
-      `[data-page-number="${page}"]`
-    );
-    if (pageElement && pdfContainerRef.current) {
-      pageElement.scrollIntoView({
-        behavior: "auto",
-        block: "start",
-      });
-    }
+    // Wait for the page to render, then scroll
+    requestAnimationFrame(() => {
+      const pageElement = pdfContainerRef.current?.querySelector(
+        `[data-page-number="${page}"]`
+      );
+      if (pageElement && pdfContainerRef.current) {
+        pageElement.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        });
+      }
+    });
+
+    // Clear the navigation flag after scroll completes
+    setTimeout(() => {
+      isNavigatingRef.current = false;
+    }, 500);
   };
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
+    // Don't scroll immediately - wait for pages to render
+    // The scroll will happen after the target pages render
+  };
 
-    if (pendingScrollRef.current) {
-      const { page, anchor } = pendingScrollRef.current;
-      requestAnimationFrame(() => {
-        const pageElement = pdfContainerRef.current?.querySelector(
-          `[data-page-number="${page}"]`
-        );
-        if (pageElement && pdfContainerRef.current) {
-          pageElement.scrollIntoView({ behavior: "auto", block: "start" });
-        }
+  const handlePageRenderSuccess = useCallback(
+    (page: { height: number }, pageNum: number) => {
+      // Store actual page height for placeholders
+      pageHeightRef.current = page.height;
+      renderedPagesCountRef.current += 1;
 
-        if (anchor && tocRef.current) {
-          const activeButton = tocRef.current.querySelector(
-            `[data-anchor="${anchor}"]`
+      // If we have a pending scroll and this is the target page, scroll to it
+      if (pendingScrollRef.current?.page === pageNum) {
+        // Give a small delay to ensure DOM is fully updated
+        setTimeout(() => {
+          const pageElement = pdfContainerRef.current?.querySelector(
+            `[data-page-number="${pageNum}"]`
           );
-          if (activeButton) {
-            activeButton.scrollIntoView({ behavior: "auto", block: "center" });
+          if (pageElement && pdfContainerRef.current) {
+            pageElement.scrollIntoView({ behavior: "auto", block: "start" });
           }
+
+          const { anchor } = pendingScrollRef.current!;
+          if (anchor && tocRef.current) {
+            const activeButton = tocRef.current.querySelector(
+              `[data-anchor="${anchor}"]`
+            );
+            if (activeButton) {
+              activeButton.scrollIntoView({
+                behavior: "auto",
+                block: "center",
+              });
+            }
+          }
+
+          pendingScrollRef.current = null;
+        }, 100);
+      }
+    },
+    []
+  );
+
+  const handlePageVisible = useCallback(
+    (pageNumber: number) => {
+      setVisiblePage(pageNumber);
+      setActiveTocPage(pageNumber);
+
+      // Update rendered pages to include visible page + buffer
+      setRenderedPages((prev) => {
+        const newSet = new Set(prev);
+        // Add current page and 2 pages before/after as buffer
+        for (
+          let i = Math.max(1, pageNumber - 2);
+          i <= Math.min(numPages || 195, pageNumber + 2);
+          i++
+        ) {
+          newSet.add(i);
         }
-
-        pendingScrollRef.current = null;
+        return newSet;
       });
-    }
-  };
 
-  const handlePageVisible = (pageNumber: number) => {
-    setVisiblePage(pageNumber);
-    setActiveTocPage(pageNumber);
-  };
+      // Only auto-set anchor if we're not in the middle of a programmatic navigation
+      if (!isNavigatingRef.current) {
+        // Set anchor to the first section on this page
+        const firstSectionOnPage = sections.find((s) => s.page === pageNumber);
+        setActiveTocAnchor(firstSectionOnPage?.anchor || null);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [numPages] // sections is a constant array defined below
+  );
+
+  // Set up a single IntersectionObserver for all pages
+  useEffect(() => {
+    if (!numPages || !pdfContainerRef.current) return;
+
+    // Clean up existing observer
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    // Create a single observer for all page containers
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const pageNum = parseInt(
+            entry.target.getAttribute("data-page-number") || "1"
+          );
+
+          // When page becomes visible, mark it for rendering and tracking
+          if (entry.isIntersecting) {
+            setRenderedPages((prev) => {
+              const newSet = new Set(prev);
+              // Add current page and buffer pages
+              for (
+                let i = Math.max(1, pageNum - 2);
+                i <= Math.min(numPages, pageNum + 2);
+                i++
+              ) {
+                newSet.add(i);
+              }
+              return newSet;
+            });
+
+            // Track active page if significantly visible
+            if (entry.intersectionRatio > 0.5) {
+              handlePageVisible(pageNum);
+            }
+          }
+        });
+      },
+      {
+        threshold: [0, 0.5],
+        root: pdfContainerRef.current,
+        rootMargin: "500px", // Load pages 500px before they come into view
+      }
+    );
+
+    // Observe all page container elements
+    const pageContainers =
+      pdfContainerRef.current.querySelectorAll("[data-page-number]");
+    pageContainers.forEach((el) => observerRef.current?.observe(el));
+
+    // Cleanup on unmount
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [numPages, handlePageVisible]);
 
   const sections = [
     { title: "Title Page", page: 1, anchor: "title-page" },
@@ -1790,7 +1968,7 @@ const UnderwritingGuidelines = () => {
         </div>
 
         <div className="border rounded-lg overflow-hidden shadow-lg bg-card">
-          <div className="flex h-[calc(100vh-280px)]">
+          <div className="flex h-[calc(100vh-100px)]">
             <div className="w-80 border-r bg-muted/30">
               <div className="bg-muted/50 border-b px-4 py-3">
                 <h2 className="text-lg font-bold">Table of Contents</h2>
@@ -1806,7 +1984,7 @@ const UnderwritingGuidelines = () => {
                       data-anchor={section.anchor}
                       onClick={() => goToPage(section.page, section.anchor)}
                       className={`w-full text-left px-3 py-2 rounded transition-colors ${
-                        activeTocPage === section.page
+                        activeTocAnchor === section.anchor
                           ? "bg-primary/10 text-primary font-semibold"
                           : "text-blue-600 hover:text-blue-800 hover:bg-gray-50"
                       }`}
@@ -1862,38 +2040,45 @@ const UnderwritingGuidelines = () => {
                       </div>
                     }
                   >
-                    {Array.from(new Array(numPages), (_, index) => (
-                      <div key={`page_${index + 1}`} className="mb-4">
-                        <Page
-                          pageNumber={index + 1}
-                          renderTextLayer={true}
-                          renderAnnotationLayer={true}
-                          width={Math.min(window.innerWidth - 400, 900)}
-                          onRenderSuccess={() => {
-                            const pageElement =
-                              pdfContainerRef.current?.querySelector(
-                                `[data-page-number="${index + 1}"]`
-                              );
-                            if (pageElement) {
-                              const observer = new IntersectionObserver(
-                                (entries) => {
-                                  entries.forEach((entry) => {
-                                    if (
-                                      entry.isIntersecting &&
-                                      entry.intersectionRatio > 0.5
-                                    ) {
-                                      handlePageVisible(index + 1);
-                                    }
-                                  });
-                                },
-                                { threshold: 0.5 }
-                              );
-                              observer.observe(pageElement);
-                            }
+                    {Array.from(new Array(numPages), (_, index) => {
+                      const pageNum = index + 1;
+                      const shouldRender = renderedPages.has(pageNum);
+
+                      return (
+                        <div
+                          key={`page_${pageNum}`}
+                          data-page-number={pageNum}
+                          className="mb-4"
+                          style={{
+                            minHeight: shouldRender
+                              ? "auto"
+                              : `${pageHeightRef.current}px`,
                           }}
-                        />
-                      </div>
-                    ))}
+                        >
+                          {shouldRender ? (
+                            <Page
+                              pageNumber={pageNum}
+                              renderTextLayer={false}
+                              renderAnnotationLayer={false}
+                              width={Math.min(window.innerWidth - 400, 900)}
+                              onRenderSuccess={(page) => {
+                                handlePageRenderSuccess(page, pageNum);
+                              }}
+                            />
+                          ) : (
+                            <div
+                              className="bg-gray-200 flex items-center justify-center text-gray-400"
+                              style={{
+                                width: Math.min(window.innerWidth - 400, 900),
+                                height: pageHeightRef.current,
+                              }}
+                            >
+                              Page {pageNum}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </Document>
                 </div>
               </div>
