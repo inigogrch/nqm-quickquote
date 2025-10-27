@@ -10,6 +10,7 @@ import Programs from "./pages/Programs";
 import Docs from "./pages/Docs";
 // Agent Screen Implementation for future use
 // import Agents from './pages/Agents';
+import Summary from "./pages/Summary";
 import UnderwritingGuidelines from "./pages/UnderwritingGuidelines";
 import NotFound from "./pages/NotFound";
 
@@ -55,6 +56,14 @@ const App = () => (
           />
           {/* Agent Screen Implementation for future use */}
           {/* <Route path="/agents" element={<AppLayout><Agents /></AppLayout>} /> */}
+          <Route
+            path="/summary"
+            element={
+              <AppLayout>
+                <Summary />
+              </AppLayout>
+            }
+          />
           <Route
             path="/guidelines"
             element={
