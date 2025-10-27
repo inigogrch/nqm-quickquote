@@ -17,15 +17,19 @@ const UnderwritingGuidelines = () => {
   const [renderedPages, setRenderedPages] = useState<Set<number>>(
     new Set([1, 2, 3, 4, 5])
   );
+  const [pageWidth, setPageWidth] = useState(() =>
+    Math.min(Math.max(window.innerWidth - 400, 0), 900)
+  );
   const tocRef = useRef<HTMLDivElement>(null);
   const pdfContainerRef = useRef<HTMLDivElement>(null);
   const pendingScrollRef = useRef<{ page: number; anchor?: string } | null>(
     null
   );
   const isNavigatingRef = useRef(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const ioRef = useRef<IntersectionObserver | null>(null);
   const pageHeightRef = useRef(1200); // Estimated page height
   const renderedPagesCountRef = useRef(0); // Track how many pages have rendered
+  const pageRefsMap = useRef<Map<number, HTMLDivElement>>(new Map());
 
   const pdfUrl = "/guidelines/underwriting-guidelines.pdf";
 
@@ -117,11 +121,9 @@ const UnderwritingGuidelines = () => {
       window.history.pushState({}, "", `?page=${page}`);
     }
 
-    // Wait for the page to render, then scroll
+    // Wait for the page to render, then scroll using direct ref
     requestAnimationFrame(() => {
-      const pageElement = pdfContainerRef.current?.querySelector(
-        `[data-page-number="${page}"]`
-      );
+      const pageElement = pageRefsMap.current.get(page);
       if (pageElement && pdfContainerRef.current) {
         pageElement.scrollIntoView({
           behavior: "auto",
@@ -152,9 +154,7 @@ const UnderwritingGuidelines = () => {
       if (pendingScrollRef.current?.page === pageNum) {
         // Give a small delay to ensure DOM is fully updated
         setTimeout(() => {
-          const pageElement = pdfContainerRef.current?.querySelector(
-            `[data-page-number="${pageNum}"]`
-          );
+          const pageElement = pageRefsMap.current.get(pageNum);
           if (pageElement && pdfContainerRef.current) {
             pageElement.scrollIntoView({ behavior: "auto", block: "start" });
           }
@@ -214,12 +214,12 @@ const UnderwritingGuidelines = () => {
     if (!numPages || !pdfContainerRef.current) return;
 
     // Clean up existing observer
-    if (observerRef.current) {
-      observerRef.current.disconnect();
+    if (ioRef.current) {
+      ioRef.current.disconnect();
     }
 
     // Create a single observer for all page containers
-    observerRef.current = new IntersectionObserver(
+    ioRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const pageNum = parseInt(
@@ -255,18 +255,42 @@ const UnderwritingGuidelines = () => {
       }
     );
 
-    // Observe all page container elements
-    const pageContainers =
-      pdfContainerRef.current.querySelectorAll("[data-page-number]");
-    pageContainers.forEach((el) => observerRef.current?.observe(el));
+    // Observe all page container elements using stored refs
+    pageRefsMap.current.forEach((element) => {
+      if (ioRef.current && element) {
+        ioRef.current.observe(element);
+      }
+    });
 
     // Cleanup on unmount
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
+      if (ioRef.current) {
+        ioRef.current.disconnect();
+        ioRef.current = null;
       }
     };
   }, [numPages, handlePageVisible]);
+
+  // Update page width on window resize
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const handleResize = () => {
+      // Debounce resize events to avoid excessive re-renders
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const newWidth = Math.min(Math.max(window.innerWidth - 400, 0), 900);
+        setPageWidth(newWidth);
+      }, 150);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const sections = [
     { title: "Title Page", page: 1, anchor: "title-page" },
@@ -2047,6 +2071,22 @@ const UnderwritingGuidelines = () => {
                       return (
                         <div
                           key={`page_${pageNum}`}
+                          ref={(el) => {
+                            if (el) {
+                              pageRefsMap.current.set(pageNum, el);
+                              // Observe the element when it's mounted
+                              if (ioRef.current) {
+                                ioRef.current.observe(el);
+                              }
+                            } else {
+                              // Unobserve when unmounting
+                              const existingEl = pageRefsMap.current.get(pageNum);
+                              if (existingEl && ioRef.current) {
+                                ioRef.current.unobserve(existingEl);
+                              }
+                              pageRefsMap.current.delete(pageNum);
+                            }
+                          }}
                           data-page-number={pageNum}
                           className="mb-4"
                           style={{
@@ -2060,7 +2100,7 @@ const UnderwritingGuidelines = () => {
                               pageNumber={pageNum}
                               renderTextLayer={false}
                               renderAnnotationLayer={false}
-                              width={Math.min(window.innerWidth - 400, 900)}
+                              width={pageWidth}
                               onRenderSuccess={(page) => {
                                 handlePageRenderSuccess(page, pageNum);
                               }}
@@ -2069,7 +2109,7 @@ const UnderwritingGuidelines = () => {
                             <div
                               className="bg-gray-200 flex items-center justify-center text-gray-400"
                               style={{
-                                width: Math.min(window.innerWidth - 400, 900),
+                                width: pageWidth,
                                 height: pageHeightRef.current,
                               }}
                             >
