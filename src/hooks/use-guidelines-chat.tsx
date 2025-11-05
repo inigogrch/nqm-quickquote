@@ -81,54 +81,32 @@ export function useEnhancedRAG(): UseEnhancedRAGReturn {
     setMessages(prev => [...prev, loadingMessage]);
 
     try {
-      // Prepare API request with conversation history
-      const apiMessages: ChatMessage[] = messages
-        .filter(msg => !msg.isLoading && msg.message_id !== 'initial')
-        .map(msg => ({
-          role: msg.role,
-          content: msg.content,
-          message_id: msg.message_id,
-          timestamp: msg.timestamp
-        }));
-
-      // Add the new user message
-      apiMessages.push({
-        role: userMessage.role,
-        content: userMessage.content,
-        message_id: userMessage.message_id,
-        timestamp: userMessage.timestamp
-      });
-
+      // Prepare API request with simplified format
       const requestPayload = {
-        conversation_id: conversationIdRef.current,
-        messages: apiMessages,
-        include_citations: true,
-        message: content // Add the current message for Lambda compatibility
+        message: content,
+        conversation_id: conversationIdRef.current
       };
       
       console.log('🔍 DEBUG: Sending request to API:', requestPayload);
-      console.log('🔍 DEBUG: Latest message content:', content);
-      console.log('🔍 DEBUG: Full API messages:', apiMessages);
       
       const response: ChatResponse = await enhancedRAGAPI.sendMessage(requestPayload);
 
-      // Handle nested response structure - the API returns { response: ChatResponseData, stats: ... }
-      console.log('🔍 DEBUG: API Response received:', response);
-      console.log('🔍 DEBUG: Response data:', response.response);
-      console.log('🔍 DEBUG: Actual response text:', response.response?.response);
-      
-      const responseData = response.response;
+      console.log('✅ DEBUG: Response received from API');
+      console.log('💬 Response text:', response.response);
+      console.log('⏱️  Processing time:', response.processing_time, 'seconds');
+      console.log('📊 Confidence:', response.confidence);
+      console.log('📚 Citations:', response.citations);
       
       // Create bot response message
       const botMessage: ExtendedMessage = {
         id: `bot_${Date.now()}`,
         role: 'assistant',
         type: 'bot',
-        content: responseData.response,
-        message_id: responseData.message_id,
-        timestamp: responseData.timestamp,
-        timestamp_display: new Date(responseData.timestamp),
-        citations: responseData.citations
+        content: response.response,
+        message_id: response.message_id,
+        timestamp: response.timestamp,
+        timestamp_display: new Date(response.timestamp),
+        citations: response.citations
       };
 
       // Replace loading message with actual response
