@@ -13,7 +13,7 @@ interface CitationsProps {
 export function Citations({ citations, className = '' }: CitationsProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  const totalCitations = citations.guidelines_tree.length + citations.neo4j_database.length;
+  const totalCitations = citations.guidelines_tree_citations.length + citations.neo4j_database_citations.length;
   
   if (totalCitations === 0) {
     return null;
@@ -37,16 +37,16 @@ export function Citations({ citations, className = '' }: CitationsProps) {
         <Card className="mt-2 p-3 bg-slate-50/50 border-slate-200 max-w-full">
           <div className="space-y-3 break-words">
             {/* Guidelines Tree Sources */}
-            {citations.guidelines_tree.length > 0 && (
+            {citations.guidelines_tree_citations.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <FileText className="w-4 h-4 text-blue-600" />
                   <span className="text-sm font-medium text-slate-700">
-                    Guidelines ({citations.guidelines_tree.length})
+                    Guidelines ({citations.guidelines_tree_citations.length})
                   </span>
                 </div>
                 <div className="space-y-2 pl-6">
-                  {citations.guidelines_tree.map((citation, index) => (
+                  {citations.guidelines_tree_citations.map((citation, index) => (
                     <div key={`guidelines-${index}`} className="text-xs break-words">
                       <div className="font-medium text-slate-800 mb-1 break-words">
                         {citation.metadata.title}
@@ -60,10 +60,10 @@ export function Citations({ citations, className = '' }: CitationsProps) {
                           Node {citation.node_id}
                         </Badge>
                         <Badge variant="outline" className="text-xs px-1 py-0">
-                          {Math.round(citation.confidence * 100)}% match
+                          {Math.round(citation.confidence * 100)}% confidence
                         </Badge>
                         <Badge variant="outline" className="text-xs px-1 py-0">
-                          Score {citation.metadata.mcts_score.toFixed(2)}
+                          {Math.round(citation.metadata.relevance_score * 100)}% relevance
                         </Badge>
                       </div>
                     </div>
@@ -73,16 +73,16 @@ export function Citations({ citations, className = '' }: CitationsProps) {
             )}
 
             {/* Neo4j Database Sources */}
-            {citations.neo4j_database.length > 0 && (
+            {citations.neo4j_database_citations.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Database className="w-4 h-4 text-green-600" />
                   <span className="text-sm font-medium text-slate-700">
-                    Database ({citations.neo4j_database.length})
+                    Database ({citations.neo4j_database_citations.length})
                   </span>
                 </div>
                 <div className="space-y-2 pl-6">
-                  {citations.neo4j_database.map((citation, index) => (
+                  {citations.neo4j_database_citations.map((citation, index) => (
                     <div key={`neo4j-${index}`} className="text-xs break-words">
                       <div className="font-medium text-slate-800 mb-1 break-words">
                         {citation.metadata.properties.name || citation.node_id}
@@ -97,10 +97,10 @@ export function Citations({ citations, className = '' }: CitationsProps) {
                           {citation.metadata.labels.join(', ')}
                         </Badge>
                         <Badge variant="outline" className="text-xs px-1 py-0">
-                          {Math.round(citation.metadata.entity_match_confidence * 100)}% entity
+                          {Math.round(citation.confidence * 100)}% confidence
                         </Badge>
                         <Badge variant="outline" className="text-xs px-1 py-0">
-                          {Math.round(citation.metadata.trigger_confidence * 100)}% trigger
+                          {citation.metadata.result_type}
                         </Badge>
                       </div>
                     </div>
