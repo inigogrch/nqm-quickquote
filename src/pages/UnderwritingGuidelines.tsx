@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { underwritingGuidelines } from "@/data/underwritingGuidelines";
+import { underwritingGuidelines } from "@/data/underwritingGuidelines_updated_11_03_2025";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -34,7 +34,7 @@ const UnderwritingGuidelines = () => {
   const pageRefsMap = useRef<Map<number, HTMLDivElement>>(new Map());
   const isInitialLoadRef = useRef(true);
 
-  const pdfUrl = "/guidelines/underwriting-guidelines.pdf";
+  const pdfUrl = "/guidelines/underwriting-guidelines-11-03-2025.pdf";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -55,7 +55,7 @@ const UnderwritingGuidelines = () => {
           const newSet = new Set(prev);
           for (
             let i = Math.max(1, section.page - 2);
-            i <= Math.min(195, section.page + 2);
+            i <= Math.min(145, section.page + 2);
             i++
           ) {
             newSet.add(i);
@@ -79,7 +79,7 @@ const UnderwritingGuidelines = () => {
         const newSet = new Set(prev);
         for (
           let i = Math.max(1, pageNum - 2);
-          i <= Math.min(195, pageNum + 2);
+          i <= Math.min(145, pageNum + 2);
           i++
         ) {
           newSet.add(i);
@@ -103,7 +103,7 @@ const UnderwritingGuidelines = () => {
       const newSet = new Set(prev);
       for (
         let i = Math.max(1, page - 2);
-        i <= Math.min(numPages || 195, page + 2);
+        i <= Math.min(numPages || 145, page + 2);
         i++
       ) {
         newSet.add(i);
@@ -182,7 +182,7 @@ const UnderwritingGuidelines = () => {
         const newSet = new Set(prev);
         for (
           let i = Math.max(1, pageNumber - 2);
-          i <= Math.min(numPages || 195, pageNumber + 2);
+          i <= Math.min(numPages || 145, pageNumber + 2);
           i++
         ) {
           newSet.add(i);
@@ -294,10 +294,10 @@ const UnderwritingGuidelines = () => {
           <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
             <Badge variant="outline" className="gap-1">
               <FileText className="h-3 w-3" />
-              Effective 10/06/2025
+              Effective 11/03/2025
             </Badge>
             <span>•</span>
-            <span>{numPages || 195} Pages</span>
+            <span>{numPages || 145} Pages</span>
             <span>•</span>
             <div className="flex gap-2">
               <button
@@ -358,7 +358,7 @@ const UnderwritingGuidelines = () => {
               <div className="bg-muted/50 border-b px-4 py-3 flex items-center justify-between">
                 <span className="text-sm font-medium flex items-center gap-2">
                   <FileText className="h-4 w-4" />
-                  Page {visiblePage} of {numPages || 195}
+                  Page {visiblePage} of {numPages || 145}
                 </span>
               </div>
 
